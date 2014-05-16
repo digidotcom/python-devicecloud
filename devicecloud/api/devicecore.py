@@ -30,7 +30,7 @@ class Device(object):
 
         connected = (int(device_json.get("dpConnectionStatus")) > 0)
 
-        return cls(mac, connectware_id, device_id, ip, tags)
+        return cls(mac, connectware_id, device_id, ip, tags, connected)
 
     def __init__(self, mac, connectware_id, device_id, ip, tags, connected):
         self.mac = mac
