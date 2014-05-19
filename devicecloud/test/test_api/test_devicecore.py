@@ -1,5 +1,5 @@
-import json
-from devicecloud import DeviceCloudByEtherios
+from devicecloud import DeviceCloud
+from devicecloud.test.test_utilities import prepare_json_response
 import httpretty
 import unittest
 
@@ -74,45 +74,34 @@ EXAMPLE_GET_DEVICES = {
 
 
 
-def _cloud_uri(path):
-    return "http://login.etherios.com{}".format(path)
-
-
 class TestDeviceCore(unittest.TestCase):
 
     def setUp(self):
         httpretty.enable()
-        self.dc = DeviceCloudByEtherios('user', 'pass')
-
-    def _prepare_json_response(self, path, data):
-        # TODO: should probably assert on more request headers and respond with
-        # correct content type, etc.
-        httpretty.register_uri(
-            httpretty.GET,
-            _cloud_uri(path),
-            json.dumps(data))
+        self.dc = DeviceCloud('user', 'pass')
 
     def tearDown(self):
         httpretty.disable()
         httpretty.reset()
 
     def test_dc_get_devices(self):
-        self._prepare_json_response("/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
-        devices = self.dc.dc_get_devices()
+        prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
+        devices = self.dc.list_devices()
         self.assertEqual(len(devices), 2)
 
         # get a ref to device with mac "00:40:9D:58:17:5B"
         for device in devices:
-            if device.mac == "00:40:9D:58:17:5B":
+            if device.get_mac() == "00:40:9D:58:17:5B":
                 break
         else:
             self.fail("No device with expected MAC address")
 
-        self.assertEqual(device.mac, "00:40:9D:58:17:5B")
-        self.assertEqual(device.device_id, "702077")
-        self.assertEqual(device.ip, "10.35.1.107")
-        self.assertEqual(device.tags, [])
-
+        self.assertEqual(device.get_mac(), "00:40:9D:58:17:5B")
+        self.assertEqual(device.get_mac_last4(), "175B")
+        self.assertEqual(device.get_device_id(), "702077")
+        self.assertEqual(device.get_connectware_id(), "00000000-00000000-00409DFF-FF58175B")
+        self.assertEqual(device.get_ip(), "10.35.1.107")
+        self.assertEqual(device.get_tags(), [])
 
 
 if __name__ == '__main__':

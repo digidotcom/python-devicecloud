@@ -11,12 +11,8 @@ import time
 __all__ = (
     'DeviceCloudByEtherios',
     'DeviceCloudHttpException',
-    'HOSTNAME',
-    'HOSTNAME_SECURE',
 )
 
-HOSTNAME = "http://login.etherios.com"
-HOSTNAME_SECURE = "https://login.etherios.com"
 OK_RESPONSE_CODES = [
     200,
     201
@@ -53,9 +49,9 @@ def retryhttp(fn):
 
 
 class DeviceCloudConnection(object):
-    def __init__(self, auth, https):
+    def __init__(self, auth, base_url):
         self._auth = auth
-        self._https = https
+        self._base_url = base_url
 
     def start(self):
         """Start and establish a Device Cloud connection
@@ -67,10 +63,7 @@ class DeviceCloudConnection(object):
     def _make_url(self, path):
         if not path.startswith("/"):
             path = "/" + path
-        if self._https:
-            return "%s%s" % (HOSTNAME_SECURE, path)
-        else:
-            return "%s%s" % (HOSTNAME, path)
+        return "%s%s" % (self._base_url, path)
 
     @retryhttp
     def get(self, path, **kwargs):
@@ -103,9 +96,11 @@ class DeviceCloudConnection(object):
             raise DeviceCloudHttpException(err)
 
 
-class DeviceCloudByEtherios(object):
-    def __init__(self, username, password, https=False):
-        self._conn = DeviceCloudConnection(HTTPBasicAuth(username, password), https)
+class DeviceCloud(object):
+    """Provides access to information/operations on a device cloud account"""
+
+    def __init__(self, username, password, base_url="https://login.etherios.com"):
+        self._conn = DeviceCloudConnection(HTTPBasicAuth(username, password), base_url)
 
         # Api Components
         self._file_data = FileDataAPI(self._conn)
@@ -151,8 +146,14 @@ class DeviceCloudByEtherios(object):
     #---------------------------------------------------------------------------
     # API - DeviceCore
     #---------------------------------------------------------------------------
-    def dc_get_devices(self):
-        return self._device_core.get_devices()
+    def list_devices(self):
+        """Get information about all devices associated with this device cloud account
+
+        This method will return a list of :class:`.Device` instances.  Additional operations
+        can be performed on these instances.
+
+        """
+        return self._device_core.list_devices()
 
     #---------------------------------------------------------------------------
     # API - Devices (SCI)
