@@ -1,3 +1,4 @@
+import copy
 import datetime
 from devicecloud import DeviceCloud
 from devicecloud.test.test_utilities import prepare_json_response
@@ -85,7 +86,6 @@ class TestDeviceCore(unittest.TestCase):
         httpretty.reset()
 
     def _get_device(self, mac):
-        prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
         devices = self.dc.list_devices()
         self.assertEqual(len(devices), 2)
 
@@ -136,6 +136,17 @@ class TestDeviceCore(unittest.TestCase):
         self.assertEqual(dev1.get_server_id(), '')
         self.assertEqual(dev1.get_provision_id(), None)
         self.assertEqual(dev1.get_current_connect_pw(), None)
+
+    def test_refresh_from_cache(self):
+        get_devices_update = copy.deepcopy(EXAMPLE_GET_DEVICES)
+        get_devices_update["items"][0]["dpDeviceType"] = "Turboencabulator"
+        del get_devices_update["items"][1]  # remove the other item... close enough
+        prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
+        device = self._get_device("00:40:9D:58:17:5B")
+        prepare_json_response("GET", "/ws/DeviceCore/702077/.json", get_devices_update)
+        self.assertEqual(device.get_device_type(), "ConnectPort X5 R")
+        self.assertEqual(device.get_device_type(False), "Turboencabulator")
+        self.assertEqual(device.get_device_type(), "Turboencabulator")  # make sure cache updated
 
 if __name__ == '__main__':
     unittest.main()

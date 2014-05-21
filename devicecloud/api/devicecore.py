@@ -16,7 +16,7 @@ class DeviceCoreAPI(APIBase):
         json_dump = json.loads(devicecore_response)["items"]
         devices = []
         for device_json in json_dump:
-            devices.append(Device(self._sci, device_json))
+            devices.append(Device(self._conn, self._sci, device_json))
         return devices
 
 
@@ -29,7 +29,8 @@ class Device(object):
     # TODO: remove device from a group
     # TODO: provision a new device (probably add top-level method for this)
 
-    def __init__(self, sci, device_json):
+    def __init__(self, conn, sci, device_json):
+        self._conn = conn
         self._sci = sci
         self._device_json = device_json
 
