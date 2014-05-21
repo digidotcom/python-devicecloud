@@ -4,6 +4,7 @@ import base64
 import hashlib
 import json
 import datetime
+from devicecloud.util import iso8601_to_dt
 
 PUT_FILE_TEMPLATE = """
 <FileData>
@@ -78,6 +79,6 @@ class FileData(object):
     def get_last_modified(self, dt=False):
         """Return dt string, use dt=True to return datetime obj"""
         if dt:
-            return datetime.strptime(self.last_modified, "%Y-%m-%dT%H:%M:%S.%fZ")
+            return iso8601_to_dt(self.last_modified)
         else:
             return self.last_modified

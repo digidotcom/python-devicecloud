@@ -1,3 +1,5 @@
+from devicecloud.api.sci import ServerCommandInterfaceAPI
+
 __version__ = "0.1"
 
 from devicecloud.api.devicecore import DeviceCoreAPI
@@ -105,7 +107,8 @@ class DeviceCloud(object):
         # Api Components
         self._file_data = FileDataAPI(self._conn)
         self._streams = StreamAPI(self._conn)
-        self._device_core = DeviceCoreAPI(self._conn)
+        self._sci = ServerCommandInterfaceAPI(self._conn)
+        self._device_core = DeviceCoreAPI(self._conn, self._sci)
 
     #---------------------------------------------------------------------------
     # API - Streams

@@ -1,3 +1,4 @@
+import datetime
 from devicecloud import DeviceCloud
 from devicecloud.test.test_utilities import prepare_json_response
 import httpretty
@@ -73,7 +74,6 @@ EXAMPLE_GET_DEVICES = {
 }
 
 
-
 class TestDeviceCore(unittest.TestCase):
 
     def setUp(self):
@@ -84,25 +84,58 @@ class TestDeviceCore(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    def test_dc_get_devices(self):
+    def _get_device(self, mac):
         prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
         devices = self.dc.list_devices()
         self.assertEqual(len(devices), 2)
 
         # get a ref to device with mac "00:40:9D:58:17:5B"
         for device in devices:
-            if device.get_mac() == "00:40:9D:58:17:5B":
+            if device.get_mac() == mac:
                 break
         else:
             self.fail("No device with expected MAC address")
 
-        self.assertEqual(device.get_mac(), "00:40:9D:58:17:5B")
-        self.assertEqual(device.get_mac_last4(), "175B")
-        self.assertEqual(device.get_device_id(), "702077")
-        self.assertEqual(device.get_connectware_id(), "00000000-00000000-00409DFF-FF58175B")
-        self.assertEqual(device.get_ip(), "10.35.1.107")
-        self.assertEqual(device.get_tags(), [])
+        return device
 
+    def test_dc_get_devices(self):
+        prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
+        devices = self.dc.list_devices()
+        self.assertEqual(len(devices), 2)
+        dev1 = self._get_device("00:40:9D:58:17:5B")
+        dev2 = self._get_device("00:1d:09:2b:7d:8c")
+
+        self.assertEqual(dev1.get_mac(), "00:40:9D:58:17:5B")
+        self.assertEqual(dev1.get_mac_last4(), "175B")
+        self.assertEqual(dev1.get_device_id(), "702077")
+        self.assertEqual(dev1.get_connectware_id(), "00000000-00000000-00409DFF-FF58175B")
+        self.assertEqual(dev1.get_ip(), "10.35.1.107")
+        self.assertEqual(dev1.get_tags(), [])
+        self.assertEqual(dev1.get_registration_dt(),
+                         datetime.datetime(2013, 2, 28, 19, 54))
+        self.assertEqual(dev1.get_meid(), '354374042391400')
+        self.assertEqual(dev1.get_customer_id(), '1872')
+        self.assertEqual(dev1.get_group_id(), '2331')
+        self.assertEqual(dev1.get_group_path(), '')
+        self.assertEqual(dev1.get_vendor_id(), '4261412864')
+        self.assertEqual(dev1.get_device_type(), 'ConnectPort X5 R')
+        self.assertEqual(dev1.get_firmware_level(), '34537482')
+        self.assertEqual(dev1.get_firmware_level_description(), '2.15.0.10')
+        self.assertEqual(dev1.get_restricted_status(), "0")
+        self.assertEqual(dev1.get_last_known_ip(), '10.35.1.107')
+        self.assertEqual(dev1.get_global_ip(), '204.182.3.237')
+        self.assertEqual(dev1.get_last_connected_dt(),
+                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633000))
+        self.assertEqual(dev1.get_contact(), '')
+        self.assertEqual(dev1.get_description(), '')
+        self.assertEqual(dev1.get_location(), '')
+        self.assertEqual(dev1.get_latlon(), (34.964465, 40.268198))
+        self.assertEqual(dev1.get_user_metadata(), None)
+        self.assertEqual(dev1.get_zb_pan_id(), None)
+        self.assertEqual(dev1.get_zb_extended_address(), None)
+        self.assertEqual(dev1.get_server_id(), '')
+        self.assertEqual(dev1.get_provision_id(), None)
+        self.assertEqual(dev1.get_current_connect_pw(), None)
 
 if __name__ == '__main__':
     unittest.main()
