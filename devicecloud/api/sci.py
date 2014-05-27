@@ -5,14 +5,14 @@ from types import NoneType
 
 SCI_TEMPLATE = """\
 <sci_request version="1.0">
-  <{operation} {synchronous} {cache} {syncTimeout} {allowOffline} {waitForReconnect}>
+  <{operation}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
     <targets>
       {targets}
     </targets>
     {payload}
-  </send_message>
-</{operation}>
-""".replace(" ", "")  # strip whitespace from template to reduce bandwidth
+  </{operation}>
+</sci_request>
+""".replace("  ", "").replace("\r", "").replace("\n", "")  # two spaces is indentation
 
 
 class TargetABC(object):
@@ -84,13 +84,13 @@ class ServerCommandInterfaceAPI(APIBase):
             targets = [target, ]
         if not all(isinstance(t, TargetABC) for t in targets):
             raise TypeError("Target(s) must each be instances of TargetABC")
-        targets_xml = "<targets>{}</targets>".format("".join(t.to_xml() for t in targets))
+        targets_xml = "".join(t.to_xml() for t in targets)
 
         # reply argument
         if not isinstance(reply, (NoneType, basestring)):
             raise TypeError("reply must be either None or a string")
         if reply is not None:
-            reply_xml = 'reply="{}"'.format(reply)
+            reply_xml = ' reply="{}"'.format(reply)
         else:
             reply_xml = ''
 
@@ -98,7 +98,7 @@ class ServerCommandInterfaceAPI(APIBase):
         if not isinstance(synchronous, (NoneType, bool)):
             raise TypeError("synchronous expected to be either None or a boolean")
         if synchronous is not None:
-            synchronous_xml = 'synchronous="{}"'.format('true' if synchronous else 'false')
+            synchronous_xml = ' synchronous="{}"'.format('true' if synchronous else 'false')
         else:
             synchronous_xml = ''
 
@@ -107,7 +107,7 @@ class ServerCommandInterfaceAPI(APIBase):
         if not isinstance(sync_timeout, (NoneType, int, long)):
             raise TypeError("sync_timeout expected to either be None or a number")
         if sync_timeout is not None:
-            sync_timeout_xml = 'syncTimeout="{}"'.format(sync_timeout)
+            sync_timeout_xml = ' syncTimeout="{}"'.format(sync_timeout)
         else:
             sync_timeout_xml = ''
 
@@ -115,7 +115,7 @@ class ServerCommandInterfaceAPI(APIBase):
         if not isinstance(cache, (NoneType, bool)):
             raise TypeError("cache expected to either be None or a boolean")
         if cache is not None:
-            cache_xml = 'cache="{}"'.format('true' if cache else 'false')
+            cache_xml = ' cache="{}"'.format('true' if cache else 'false')
         else:
             cache_xml = ''
 
@@ -123,7 +123,7 @@ class ServerCommandInterfaceAPI(APIBase):
         if not isinstance(allow_offline, (NoneType, bool)):
             raise TypeError("allow_offline is expected to be either None or a boolean")
         if allow_offline is not None:
-            allow_offline_xml = 'allowOffline="{}"'.format('true' if allow_offline else 'false')
+            allow_offline_xml = ' allowOffline="{}"'.format('true' if allow_offline else 'false')
         else:
             allow_offline_xml = ''
 
@@ -131,11 +131,12 @@ class ServerCommandInterfaceAPI(APIBase):
         if not isinstance(wait_for_reconnect, (NoneType, bool)):
             raise TypeError("wait_for_reconnect expected to be either None or a boolean")
         if wait_for_reconnect is not None:
-            wait_for_reconnect_xml = 'waitForReconnect="{}"'.format('true' if wait_for_reconnect else 'false')
+            wait_for_reconnect_xml = ' waitForReconnect="{}"'.format('true' if wait_for_reconnect else 'false')
         else:
             wait_for_reconnect_xml = ''
 
         full_request = SCI_TEMPLATE.format(
+            operation=operation,
             targets=targets_xml,
             reply=reply_xml,
             synchronous=synchronous_xml,
