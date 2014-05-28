@@ -3,7 +3,6 @@ from xml.etree import ElementTree
 import base64
 import hashlib
 import json
-import datetime
 from devicecloud.util import iso8601_to_dt
 
 PUT_FILE_TEMPLATE = """
