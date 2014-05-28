@@ -1,4 +1,4 @@
-from devicecloud import DeviceCloud
+from devicecloud import DeviceCloud, PING_URL
 import unittest
 import json
 import httpretty
@@ -7,6 +7,8 @@ import httpretty
 class HttpTestBase(unittest.TestCase):
     def setUp(self):
         httpretty.enable()
+        # setup the Device cloud ping response
+        self.prepare_response("GET", PING_URL, "", status=200)
         self.dc = DeviceCloud('user', 'pass')
 
     def tearDown(self):

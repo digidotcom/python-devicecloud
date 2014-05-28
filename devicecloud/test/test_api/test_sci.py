@@ -10,15 +10,6 @@ EXAMPLE_SCI_DEVICE_NOT_CONNECTED = """\
 
 
 class TestSCI(HttpTestBase):
-
-    def setUp(self):
-        httpretty.enable()
-        self.dc = DeviceCloud('user', 'pass')
-
-    def tearDown(self):
-        httpretty.disable()
-        httpretty.reset()
-
     def _prepare_sci_response(self, response, status=200):
         self.prepare_response("POST", "/ws/sci", response, status)
 

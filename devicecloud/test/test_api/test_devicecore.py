@@ -74,7 +74,6 @@ EXAMPLE_GET_DEVICES = {
 
 
 class TestDeviceCore(HttpTestBase):
-
     def _get_device(self, mac):
         devices = self.dc.list_devices()
         self.assertEqual(len(devices), 2)

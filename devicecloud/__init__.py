@@ -16,8 +16,13 @@ __all__ = (
     'DeviceCloudHttpException',
 )
 
-ONE_DAY = 86400
-HTTP_RETRIES = 3
+SUCCESSFUL_STATUS_CODES = [
+    200,
+    201
+]
+
+PING_URL = "/ws/DeviceCore?size=1"
+ONE_DAY = 86400  # in seconds
 
 logger = logging.getLogger("dc")
 
@@ -34,16 +39,11 @@ class DeviceCloudHttpException(DeviceCloudException):
 
 
 class _DeviceCloudConnection(object):
-    SUCCESSFUL_STATUS_CODES = [
-        200,
-        201
-    ]
-
     def __init__(self, auth, base_url):
         self._auth = auth
         self._base_url = base_url
 
-    def start(self):
+    def connect(self):
         """Establish/Verify a connection with the Device Cloud"""
 
         # Ping the device cloud, raises exception if it fails
@@ -58,7 +58,7 @@ class _DeviceCloudConnection(object):
         remaining_attempts = retries + 1
         while remaining_attempts > 0:
             response = requests.request(method, url, auth=self._auth, **kwargs)
-            if response.status_code in self.SUCCESSFUL_STATUS_CODES:
+            if response.status_code in SUCCESSFUL_STATUS_CODES:
                 return response
             remaining_attempts -= 1
             time.sleep(1)
@@ -68,6 +68,7 @@ class _DeviceCloudConnection(object):
 
     def ping(self):
         """Ping the Device Cloud using the authorization provided"""
+        self.get(PING_URL)  # TODO: Is this sufficient, valid?
 
     def get(self, path, retries=0, **kwargs):
         url = self._make_url(path)
@@ -91,6 +92,7 @@ class DeviceCloud(object):
 
     def __init__(self, username, password, base_url="https://login.etherios.com"):
         self._conn = _DeviceCloudConnection(HTTPBasicAuth(username, password), base_url)
+        self._conn.connect()
 
         # API Components
         self._file_data = FileDataAPI(self._conn)
@@ -98,23 +100,16 @@ class DeviceCloud(object):
         self._sci = ServerCommandInterfaceAPI(self._conn)
         self._device_core = DeviceCoreAPI(self._conn, self._sci)
 
-    def start(self):
-        # Start connection, verifies credentials
-        self._conn.start()
-
-        # Start the API
-        self._file_data.start()
-        self._streams.start()
-        self._sci.start()
-        self._device_core.start()
-
     #---------------------------------------------------------------------------
     # API - Streams
     #---------------------------------------------------------------------------
     def create_data_stream(self, name, data_type, description=None,
                                                   data_ttl=(ONE_DAY * 2),
                                                   rollup_ttl=(ONE_DAY * 5)):
-        """Create and return a DataStream object from the Device Cloud"""
+        """Create and return a DataStream object from the Device Cloud
+
+        TODO: Describe the usage of `data_ttl` and `rollup_ttl`
+        """
         return self._streams.create_data_stream(name, data_type, description,
                                                 data_ttl, rollup_ttl)
 
@@ -122,16 +117,16 @@ class DeviceCloud(object):
         """Return a list of all available streams"""
         return self._streams.get_streams(cached)
 
-    def get_stream(self, name, cached=False):
-        return self._streams.get_stream(name, cached)
+    def get_stream(self, stream_id, cached=False):
+        return self._streams.get_stream(stream_id, cached)
 
-    def stream_write(self, stream, data):
+    def stream_write(self, stream_id, data):
         """Write a DataPoint to a previously opened DataStream"""
-        self._streams.stream_write(stream, data)
+        self._streams.stream_write(stream_id, data)
 
-    def stream_read(self, stream):
+    def stream_read(self, stream_id):
         """Return data from some stream"""
-        return self._streams.stream_read(stream)
+        return self._streams.stream_read(stream_id)
 
     #---------------------------------------------------------------------------
     # API - FileData

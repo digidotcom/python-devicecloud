@@ -68,7 +68,7 @@ class TestStreams(HttpTestBase):
                                             description="My Test",
                                             data_ttl=1234,
                                             rollup_ttl=5678)
-        self.assertEqual(stream.get_name(), "teststream")
+        self.assertEqual(stream.get_stream_id(), "teststream")
         self.assertEqual(stream.get_data_type(), "string")
         self.assertEqual(stream.get_description(), "My Test")
         self.assertEqual(stream.get_data_ttl(), 1234)
@@ -82,13 +82,11 @@ class TestStreams(HttpTestBase):
 
     def test_get_available_streams_empty(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
-        self.dc.start()
         streams = self.dc.get_available_streams()
         self.assertEqual(streams, [])
 
     def test_get_available_streams(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        self.dc.start()
         streams = self.dc.get_available_streams()
         self.assertEqual(len(streams), 2)
         self.assertIsInstance(streams[0], DataStream)
