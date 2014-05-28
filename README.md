@@ -23,12 +23,6 @@ Connector: http://www.etherios.com/products/devicecloud/connector.
 That being said, this library could also be used on devices if deemed
 suitable.
 
-License
--------
-
-This library is released as open source under the Mozile Public
-License v2.0.  Please see the LICENSE file for additional details.
-
 Example
 -------
 
@@ -95,3 +89,37 @@ Roadmap and History
 --------------------
 
 Roadmap TBD
+
+License
+-------
+
+This software is open-source software.
+
+Copyright (c) 2014, Etherios, Inc. All rights reserved.
+Etherios, Inc. is a Division of Digi International.
+
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this file,
+you can obtain one at http://mozilla.org/MPL/2.0/.
+
+Digi, Digi International, the Digi logo, the Digi website, Etherios,
+the Etherios logo, the Etherios website, Device Cloud by Etherios, and
+Etherios Cloud Connector are trademarks or registered trademarks of
+Digi International, Inc. in the United States and other countries
+worldwide. All other trademarks are the property of their respective
+owners.
+
+THE SOFTWARE AND RELATED TECHNICAL INFORMATION IS PROVIDED "AS IS"
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL DIGI OR ITS
+SUBSIDIARIES BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE SOFTWARE AND TECHNICAL INFORMATION
+HEREIN, INCLUDING ALL SOURCE AND OBJECT CODES, IRRESPECTIVE OF HOW IT
+IS USED. YOU AGREE THAT YOU ARE NOT PROHIBITED FROM RECEIVING THIS
+SOFTWARE AND TECHNICAL INFORMATION UNDER UNITED STATES AND OTHER
+APPLICABLE COUNTRY EXPORT CONTROL LAWS AND REGULATIONS AND THAT YOU
+WILL COMPLY WITH ALL APPLICABLE UNITED STATES AND OTHER COUNTRY EXPORT
+LAWS AND REGULATIONS WITH REGARD TO USE AND EXPORT OR RE-EXPORT OF THE
+SOFTWARE AND TECHNICAL INFORMATION.
