@@ -1,7 +1,7 @@
 import unittest
 from devicecloud import DeviceCloud
 from devicecloud.api.sci import DeviceTarget
-from devicecloud.test.test_utilities import prepare_json_response, prepare_response
+from devicecloud.test.test_utilities import HttpTestBase
 import httpretty
 
 EXAMPLE_SCI_DEVICE_NOT_CONNECTED = """\
@@ -9,18 +9,9 @@ EXAMPLE_SCI_DEVICE_NOT_CONNECTED = """\
 """
 
 
-class TestSCI(unittest.TestCase):
-
-    def setUp(self):
-        httpretty.enable()
-        self.dc = DeviceCloud('user', 'pass')
-
-    def tearDown(self):
-        httpretty.disable()
-        httpretty.reset()
-
+class TestSCI(HttpTestBase):
     def _prepare_sci_response(self, response, status=200):
-        prepare_response("POST", "/ws/sci", response, status)
+        self.prepare_response("POST", "/ws/sci", response, status)
 
     def test_sci_successful_error(self):
         self._prepare_sci_response(EXAMPLE_SCI_DEVICE_NOT_CONNECTED)

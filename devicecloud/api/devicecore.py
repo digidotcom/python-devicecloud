@@ -13,7 +13,7 @@ class DeviceCoreAPI(APIBase):
     def list_devices(self):
         """Retrieve a list of :class:`Device` objects for this device cloud account"""
         devicecore_response = self._conn.get("/ws/DeviceCore/.json")
-        json_dump = json.loads(devicecore_response)["items"]
+        json_dump = json.loads(devicecore_response.content)["items"]
         devices = []
         for device_json in json_dump:
             devices.append(Device(self._conn, self._sci, device_json))
@@ -47,7 +47,7 @@ class Device(object):
         """
         if not use_cached:
             devicecore_response = self._conn.get("/ws/DeviceCore/{}/.json".format(self.get_device_id()))
-            self._device_json = json.loads(devicecore_response)["items"][0]  # should only be 1
+            self._device_json = json.loads(devicecore_response.content)["items"][0]  # should only be 1
         return self._device_json
 
     def get_tags(self, use_cached=True):
