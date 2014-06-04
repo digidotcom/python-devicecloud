@@ -1,4 +1,3 @@
-import devicecloud
 from setuptools import setup, find_packages
 
 
@@ -31,7 +30,7 @@ def get_long_description():
 
 setup(
     name="devicecloud",
-    version=devicecloud.__version__,
+    version="0.1",
     description="Python API to the Device Cloud by Etherios",
     long_description=get_long_description(),
     url="https://github.com/etherios/python-devicecloud",
