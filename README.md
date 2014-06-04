@@ -1,25 +1,32 @@
-Python Devicecloud API
-======================
+# Python Device Cloud API
+A verbose library for making web service calls to the [Etherios Device Cloud](https://login.etherios.com).
+
+Installation
+------------
+
+This library can be installed using [pip](https://github.com/pypa/pip).
+
+```sh
+pip install python-devicecloud
+```
 
 Overview
 --------
 
 Python-devicecloud is a library providing simple, intuitive access to
-the Device Cloud by Etherios
-(http://www.etherios.com/products/devicecloud/) for clients written in
+the [Device Cloud by Etherios](http://www.etherios.com/products/devicecloud/) for clients written in
 Python.
 
-The library wraps the Device Cloud REST API and hides the details of
-forming HTTP requests in order to gain access to device information,
+The library wraps the Device Cloud REST API and hides the details of forming HTTP requests in order to gain access to device information,
 file data, streams, and other features of the device cloud.  The API
-wrapped can be found here:
-http://ftp1.digi.com/support/documentation/90002008_redirect.htm
+wrapped can be found [here](http://ftp1.digi.com/support/documentation/90002008_redirect.htm).
+
 
 The primary target audience for this library is individuals
 interfacing with the device cloud from the server side or developers
 writing tools to aid device development.  For efficient connectivity
-from devices, we suggest that you first look at using the Device Cloud
-Connector: http://www.etherios.com/products/devicecloud/connector.
+from devices, we suggest that you first look at using the [Device Cloud
+Connector](http://www.etherios.com/products/devicecloud/connector).
 That being said, this library could also be used on devices if deemed
 suitable.
 
