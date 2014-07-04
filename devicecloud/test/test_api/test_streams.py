@@ -14,62 +14,72 @@ CREATE_DATA_STREAM_BAD_TYPE = {
 }
 
 GET_DATA_STREAMS = """
-<result>
-  <resultSize>2</resultSize>
-  <requestedSize>1000</requestedSize>
-  <pageCursor>adf3b6ba-3-99f589f4</pageCursor>
-  <DataStream>
-    <cstId>7383</cstId>
-    <streamId>mystream</streamId>
-    <dataType>STRING</dataType>
-    <forwardTo/>
-    <currentValue>
-      <id>db1169a0-e5eb-11e3-80d7-fa163ecf1de4</id>
-      <timestamp>1401228690667</timestamp>
-      <timestampISO>2014-05-27T22:11:30.667Z</timestampISO>
-      <serverTimestamp>1401228690667</serverTimestamp>
-      <serverTimestampISO>2014-05-27T22:11:30.667Z</serverTimestampISO>
-      <data>525</data>
-      <description/>
-      <quality>0</quality>
-    </currentValue>
-    <description/>
-    <units/>
-    <dataTtl>86400</dataTtl>
-    <rollupTtl>86400</rollupTtl>
-  </DataStream>
-  <DataStream>
-    <cstId>7383</cstId>
-    <streamId>streamname</streamId>
-    <dataType>STRING</dataType>
-    <forwardTo/>
-    <description/>
-    <units/>
-    <dataTtl>123</dataTtl>
-    <rollupTtl>123</rollupTtl>
-  </DataStream>
-</result>
+{
+    "resultSize": "2",
+    "requestedSize": "1000",
+    "pageCursor": "9d870afb-2-af668f74",
+    "items": [
+        {
+            "cstId": "7603",
+            "streamId": "another\/test",
+            "dataType": "INTEGER",
+            "forwardTo": "",
+            "description": "Some Integral Thing",
+            "units": "",
+            "dataTtl": "172800",
+            "rollupTtl": "432000"
+        },
+        {
+            "cstId": "7603",
+            "streamId": "test",
+            "dataType": "FLOAT",
+            "forwardTo": "",
+            "description": "some description",
+            "units": "",
+            "dataTtl": "172800",
+            "rollupTtl": "432000"
+        }
+    ]
+}
 """
 
 GET_DATA_STREAMS_EMPTY = """
-<result>
-  <resultSize>0</resultSize>
-  <requestedSize>1000</requestedSize>
-  <pageCursor>adf3b6ba-3-99f589f4</pageCursor>
-</result>
+{
+    "resultSize": "0",
+    "requestedSize": "1000",
+    "pageCursor": "baefe8fa-0-58fd947b",
+    "items": []
+}
 """
 
+GET_STREAM_RESULT = {
+    u'items': [
+        {u'cstId': u'7603',
+         u'dataTtl': u'1234',
+         u'dataType': u'STRING',
+         u'description': u'My Test',
+         u'forwardTo': u'',
+         u'rollupTtl': u'5678',
+         u'streamId': u'teststream',
+         u'units': u''}
+    ],
+    u'pageCursor': u'b8773c45-1-5a7afea7',
+    u'requestedSize': u'1000',
+    u'resultSize': u'1'
+}
 
 class TestStreams(HttpTestBase):
     def test_create_data_stream(self):
         self.prepare_json_response("POST", "/ws/DataStream", CREATE_DATA_STREAM)
-        stream = self.dc.create_data_stream("teststream",
+        self.prepare_json_response("GET", "/ws/DataStream/teststream", GET_STREAM_RESULT)
+        streams = self.dc.get_streams_api()
+        stream = streams.create_data_stream("teststream",
                                             "string",
                                             description="My Test",
                                             data_ttl=1234,
                                             rollup_ttl=5678)
         self.assertEqual(stream.get_stream_id(), "teststream")
-        self.assertEqual(stream.get_data_type(), "string")
+        self.assertEqual(stream.get_data_type(), "STRING")
         self.assertEqual(stream.get_description(), "My Test")
         self.assertEqual(stream.get_data_ttl(), 1234)
         self.assertEqual(stream.get_rollup_ttl(), 5678)
@@ -77,17 +87,20 @@ class TestStreams(HttpTestBase):
     def test_create_data_stream_bad_type(self):
         self.prepare_json_response("POST", "/ws/DataStream",
                                    CREATE_DATA_STREAM_BAD_TYPE, status=400)
+        streams = self.dc.get_streams_api()
         self.assertRaises(DeviceCloudHttpException,
-                          self.dc.create_data_stream, "teststream", "string")
+                          streams.create_data_stream, "teststream", "string")
 
-    def test_get_available_streams_empty(self):
+    def test_get_streams_empty(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
-        streams = self.dc.get_available_streams()
+        streamsapi = self.dc.get_streams_api()
+        streams = streamsapi.get_streams()
         self.assertEqual(streams, [])
 
-    def test_get_available_streams(self):
+    def test_get_streams(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streams = self.dc.get_available_streams()
+        streamsapi = self.dc.get_streams_api()
+        streams = streamsapi.get_streams()
         self.assertEqual(len(streams), 2)
         self.assertIsInstance(streams[0], DataStream)
         self.assertIsInstance(streams[1], DataStream)

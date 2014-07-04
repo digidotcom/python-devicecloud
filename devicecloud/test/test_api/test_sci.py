@@ -15,7 +15,7 @@ class TestSCI(HttpTestBase):
 
     def test_sci_successful_error(self):
         self._prepare_sci_response(EXAMPLE_SCI_DEVICE_NOT_CONNECTED)
-        self.dc._sci.send_sci(
+        self.dc.get_sci_api().send_sci(
             operation="send_message",
             target=DeviceTarget("00000000-00000000-00409DFF-FF58175B"),
             payload="<reset/>")
