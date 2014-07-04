@@ -1,3 +1,54 @@
+"""Module providing classes for interacting with device cloud data streams
+
+
+Data Streams on the device cloud provide a mechanism for storing time-series
+values over a long period of time.  Each individual value in the time series
+is known as a Data Point.
+
+There are a few basic operations supported by the device cloud on streams which
+are supported by the device cloud and this library.  Here we give examples of
+each.
+
+Creating a Stream
+^^^^^^^^^^^^^^^^^
+
+Streams can be created in two ways, both of which are supported by this library.
+
+1. Create a stream explicitly using :py:meth:`~.StreamAPI.create_data_stream`
+2. Write a data point to a stream that does not yet exist but include information key'
+   to the stream using :py:meth:`~.StreamAPI.stream_write`.
+
+Here's examples of these two methods for creating a new stream::
+
+    from devicecloud import DeviceCloud
+
+    dc = DeviceCloud('user', 'pass')
+    streams = dc.get_streams_api()
+
+    # explicitly create a new data stream
+    humidity_stream = streams.create_data_stream(
+        stream_id="/%s/hudidity" % some_id,
+        data_type="float",
+        description="Humidity")
+    humidity_stream.write(81.2)
+
+    # create data stream implicitly
+    temperature_stream = streams.get_stream("/%s/temperature" % some_id)
+    temperature_stream.write(Datapoint(
+            path="/%s/temperature" % some_id,
+            data=74.1,
+            description="Outside Air Temperature in F",
+            data_type="FLOAT",
+            unit="Deigrees Fahrenheit"
+    ))
+
+Getting Information About A Stream
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+"""
+
 from StringIO import StringIO
 from apibase import APIBase
 import logging
@@ -38,41 +89,7 @@ class NoSuchStreamException(StreamException):
 class StreamAPI(APIBase):
     """Provide interface for interacting with device cloud streams API
 
-    Data Streams on the device cloud provide a mechanism for storing time-series
-    values over a long period of time.  Each individual value in the time series
-    is known as a Data Point.
-
-    There are a few basic operations supported by the device cloud on streams which
-    are supported by the device cloud and this library.  Here we give examples of
-    each.
-
-    Creating a Stream
-    ^^^^^^^^^^^^^^^^^
-
-    Streams can be created in two ways, both of which are supported by this library.
-
-    1. Create a stream explicitly using :py:meth:`~.StreamAPI.create_data_stream`
-    2. Write a data point to a stream that does not yet exist but include information key'
-       to the stream using :py:meth:`~.StreamAPI.stream_write`.
-
-    Here's examples of these two methods for creating a new stream::
-
-        from devicecloud import DeviceCloud
-
-        dc = DeviceCloud('user', 'pass')
-        streams = dc.get_streams_api()
-
-        # explicitly create a new data stream
-        humidity_stream = streams.create_data_stream(
-            stream_id="/%s/hudidity" % some_id,
-            data_type="float",
-            description="Humidity")
-        humidity_stream.write(81.2)
-
-        # create data stream implicitly
-        temperature_stream = streams.stream_write(
-            stream_id=
-        )
+    For further information, see :mod:`devicecloud.api.streams`.
 
     """
 
@@ -118,7 +135,7 @@ class StreamAPI(APIBase):
 
         :param use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :rtype: list of :class:`.DataStream` instances
+        :returns:  list of :class:`.DataStream` instances
 
         """
         return self._get_streams(use_cached).values()
@@ -134,8 +151,7 @@ class StreamAPI(APIBase):
         :param stream_id: The path of the stream on the device cloud
         :raises: :class:`TypeError` if the stream_id provided is the wrong type
         :raises: :class:`ValueError` if the stream_id is not properly formed
-        :returns: :class:`.DataStream` instance with the provided stream_id
-        :rtype: :class:`.DataStream` instance
+        :returns: (:class:`.DataStream`) datastream instance with the provided stream_id
 
         """
         if self._streams_cache_valid:
@@ -154,8 +170,7 @@ class StreamAPI(APIBase):
         :param stream_id: The path of the stream on the device cloud
         :raises: :class:`TypeError` if the stream_id provided is the wrong type
         :raises: :class:`ValueError` if the stream_id is not properly formed
-        :returns: :class:`.DataStream` instance with the provided stream_id
-        :rtype: :class:`.DataStream` instance or None
+        :returns: (:class:`.DataStream`) :class:`.DataStream` instance with the provided stream_id
 
         """
         stream = self.get_stream(stream_id)
@@ -173,7 +188,7 @@ class DataPoint(object):
         :param stream: The :class:`~DataStream` out of which this data is coming
         :param json_data: Deserialized JSON data from the device cloud about this device
         :raises: ValueError if the data is malformed
-        :rtype: :class:`~DataPoint`
+        :returns: (:class:`~DataPoint`) newly created :class:`~DataPoint`
 
         """
         return cls(
@@ -257,8 +272,7 @@ class DataStream(object):
     def get_stream_id(self):
         """Get the id/path of this stream
 
-        :returns: id/path of this stream
-        :rtype: string containing stream path
+        :returns: (strong) id/path of this stream
 
         """
         return self._stream_id
@@ -282,8 +296,7 @@ class DataStream(object):
 
         :param use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :rtype: string
-        :returns: The data type of this stream as a string
+        :returns: (str) The data type of this stream as a string
 
         """
         dtype = self._get_stream_metadata(use_cached).get("dataType")
@@ -298,8 +311,7 @@ class DataStream(object):
             If True, the device will not make a request if it already has cached data.
         :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
         :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: The description associated with this stream
-        :rtype: string
+        :returns: (string) The description associated with this stream
 
         """
         return self._get_stream_metadata(use_cached).get("description")
@@ -314,8 +326,7 @@ class DataStream(object):
             If True, the device will not make a request if it already has cached data.
         :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
         :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: The dataTtl associated with this stream in seconds
-        :rtype: int or None
+        :returns: (int or None) The dataTtl associated with this stream in seconds
 
         """
 
@@ -333,9 +344,7 @@ class DataStream(object):
             If True, the device will not make a request if it already has cached data.
         :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
         :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: The rollupTtl associated with this stream in seconds
-        :rtype: int or None
-
+        :returns: (int or None) The rollupTtl associated with this stream in seconds
         """
         rollup_ttl_text = self._get_stream_metadata(use_cached).get("rollupTtl")
         return int(rollup_ttl_text)
@@ -349,8 +358,8 @@ class DataStream(object):
             If True, the device will not make a request if it already has cached data.
         :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
         :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: The most recent value written to this stream (or None if nothing has been written)
-        :rtype:
+        :returns: (:class:`~DataPoint` or None) The most recent value written to this
+            stream (or None if nothing has been written)
 
         """
         current_value = self._get_stream_metadata(use_cached).get("currentValue")

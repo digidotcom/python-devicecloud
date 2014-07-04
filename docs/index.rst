@@ -1,8 +1,8 @@
 python-devicecloud
-==================
+******************
 
 Introduction
-------------
+============
 
 Python-devicecloud is a library providing simple, intuitive access to
 the `Device Cloud by Etherios
@@ -48,66 +48,23 @@ quick example of what the API looks like::
             print "%s -> %s" % (stream.get_name(), stream.get_current_value())
 
 
-API Documentation
------------------
-
-Core API
-^^^^^^^^
-
-The `devicecloud.DeviceCloud` class contains the core interface which
-will be used by all clients using the devicecloud library.
-
-.. automodule:: devicecloud
-   :members:
-
-DeviceCore
-^^^^^^^^^^
-
-DeviceCore provides access to core device information such as which
-devices are in a given device cloud account, which of those are
-connected, etc.
-
-.. automodule:: devicecloud.api.devicecore
-   :members:
-
-FileData
-^^^^^^^^
-
-The filedata module provides function for reading, writing, and
-deleting "files" from the device cloud FileData store.
-
-.. automodule:: devicecloud.api.filedata
-   :members:
-
-SCI
-^^^
-
-Provide access to the device cloud Server Command Interface used for
-sending messages to devices connected to the device cloud.
-
-.. automodule:: devicecloud.api.sci
-   :members:
-
-Streams
-^^^^^^^
-
-Provides programmatic access to the device cloud streams API.
-
-.. automodule:: devicecloud.api.streams
-   :members:
-
-
-API Documentation
------------------
+Documention Map
+===============
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
+   core
+   devicecore
+   streams
+   filedata
+   sci
+
 
 Indices and tables
-------------------
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`
