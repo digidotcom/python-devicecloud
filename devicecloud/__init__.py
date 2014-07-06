@@ -113,8 +113,7 @@ class DeviceCloud(object):
 
         dc = DeviceCloud('user', 'pass')
         if dc.has_valid_credentials():
-            devicecore = dc.get_devicecore_api()
-            print devicecore.list_devices()
+            print dc.devicecore.list_devices()
 
     From there, access to all of the device clouds features are possible.  In some cases, methods
     for quickly performing selected actions may be provided directly via the ``DeviceCloud`` object
@@ -124,6 +123,10 @@ class DeviceCloud(object):
 
     def __init__(self, username, password, base_url="https://login.etherios.com"):
         self._conn = _DeviceCloudConnection(HTTPBasicAuth(username, password), base_url)
+        self._streams_api = None  # streams property api ref
+        self._filedata_api = None  # filedata property api ref
+        self._devicecore_api = None  # devicecore property api ref
+        self._sci_api = None  # sci property api ref
 
     def has_valid_credentials(self):
         """Verify that the device cloud url, username, and password are valid
@@ -141,8 +144,39 @@ class DeviceCloud(object):
         else:
             return True
 
+    @property
+    def streams(self):
+        """Get access to the :class:`~StreamsAPI`"""
+        if self._streams_api is None:
+            self._streams_api = self.get_streams_api()
+        return self._streams_api
+
+    @property
+    def filedata(self):
+        """Get access to the :class:`~FileDataAPI`"""
+        if self._filedata_api is None:
+            self._filedata_api = self.get_filedata_api()
+        return self._filedata_api
+
+    @property
+    def devicecore(self):
+        """Get access to the :class:`~DevicecoreAPI`"""
+        if self._devicecore_api is None:
+            self._devicecore_api = self.get_devicecore_api()
+        return self._devicecore_api
+
+    @property
+    def sci(self):
+        """Get access to the :class:`~ServerCommandInterfaceAPI`"""
+        if self._sci_api is None:
+            self._sci_api = self.get_sci_api()
+        return self._sci_api
+
     def get_streams_api(self):
         """Returns a :class:`.StreamAPI` bound to this device cloud instance
+
+        This provides access to the same API as :py:attr:`streams` but will create
+        a new object (with a new cache) each time called.
 
         :returns: :class:`.StreamAPI` object bound to this device cloud account
 
@@ -154,7 +188,10 @@ class DeviceCloud(object):
     def get_filedata_api(self):
         """Returns a :class:`.FileDataAPI` bound to this device cloud instance
 
-        :returns: :class:`.FileDataAPI` bound to this device cloud account
+        This provides access to the same API as :py:attr:`filedata` but will create
+        a new object (with a new cache) each time called.
+
+         :returns: :class:`.FileDataAPI` bound to this device cloud account
 
         """
         from devicecloud.filedata import FileDataAPI  # prevent circular imports
@@ -163,6 +200,9 @@ class DeviceCloud(object):
 
     def get_devicecore_api(self):
         """Returns a :class:`.DeviceCoreAPI` bound to this device cloud instance
+
+        This provides access to the same API as :py:attr:`devicecore` but will create
+        a new object (with a new cache) each time called.
 
         :returns: :class:`.DeviceCoreAPI` bound to this device cloud account
 
@@ -174,7 +214,10 @@ class DeviceCloud(object):
     def get_sci_api(self):
         """Returns a :class:`.ServerCommandInterfaceAPI` bound to this device cloud instance
 
-        :returns: :class:`.ServerCommandInterfaceAPI` bound to this device cloud account
+        This provides access to the same API as :py:attr:`sci` but will create
+        a new object (with a new cache) each time called.
+
+         :returns: :class:`.ServerCommandInterfaceAPI` bound to this device cloud account
 
         """
         from devicecloud.sci import ServerCommandInterfaceAPI
