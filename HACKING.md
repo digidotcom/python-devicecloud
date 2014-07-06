@@ -23,9 +23,13 @@ test-requirements.txt).  From the project root:
 
     $ nosetests .
 
+To run the unit tests with coverage results (view cover/index.html),
+do the following:
+
+    $ nosetests --with-coverage --cover-html --cover-package=devicecloud .
+
 New contributions to the library will only be accepted if they include
 unit test coverage (with some exceptions).
-
 
 Open Source License Header
 --------------------------
