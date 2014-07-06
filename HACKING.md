@@ -31,6 +31,23 @@ do the following:
 New contributions to the library will only be accepted if they include
 unit test coverage (with some exceptions).
 
+
+Build the Documentation
+-----------------------
+
+Documentation (outside of this file and the README) is done via
+Sphinx.  To build the docs, just do the following (with virtualenv
+activated):
+
+    $ cd docs
+    $ make html
+
+The docs that are build will be located at
+docs/_build/html/index.html.  Eventually, something will be rigged up
+so that these get released to the web on something like
+readthedocs.org.
+
+
 Open Source License Header
 --------------------------
 
