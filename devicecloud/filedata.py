@@ -5,12 +5,14 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
-from apibase import APIBase
 from xml.etree import ElementTree
 import base64
 import hashlib
 import json
+
+from devicecloud.apibase import APIBase
 from devicecloud.util import iso8601_to_dt
+
 
 PUT_FILE_TEMPLATE = """
 <FileData>

@@ -6,9 +6,11 @@
 # Etherios, Inc. is a Division of Digi International.
 
 import unittest
-from devicecloud.api.sci import DeviceTarget
+
+from devicecloud.sci import DeviceTarget
 from devicecloud.test.test_utilities import HttpTestBase
 import httpretty
+
 
 EXAMPLE_SCI_DEVICE_NOT_CONNECTED = """\
 <sci_reply version="1.0"><reboot><device id="00000000-00000000-00409DFF-FF58175B"><error id="2001"><desc>Device Not Connected</desc></error></device></reboot></sci_reply>

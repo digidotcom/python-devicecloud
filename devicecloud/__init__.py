@@ -147,7 +147,7 @@ class DeviceCloud(object):
         :returns: :class:`.StreamAPI` object bound to this device cloud account
 
         """
-        from devicecloud.api.streams import StreamAPI
+        from devicecloud.streams import StreamAPI
 
         return StreamAPI(self._conn)
 
@@ -157,7 +157,7 @@ class DeviceCloud(object):
         :returns: :class:`.FileDataAPI` bound to this device cloud account
 
         """
-        from devicecloud.api.filedata import FileDataAPI  # prevent circular imports
+        from devicecloud.filedata import FileDataAPI  # prevent circular imports
 
         return FileDataAPI(self._conn)
 
@@ -167,7 +167,7 @@ class DeviceCloud(object):
         :returns: :class:`.DeviceCoreAPI` bound to this device cloud account
 
         """
-        from devicecloud.api.devicecore import DeviceCoreAPI
+        from devicecloud.devicecore import DeviceCoreAPI
 
         return DeviceCoreAPI(self._conn, self.get_sci_api())
 
@@ -177,6 +177,6 @@ class DeviceCloud(object):
         :returns: :class:`.ServerCommandInterfaceAPI` bound to this device cloud account
 
         """
-        from devicecloud.api.sci import ServerCommandInterfaceAPI
+        from devicecloud.sci import ServerCommandInterfaceAPI
 
         return ServerCommandInterfaceAPI(self._conn)

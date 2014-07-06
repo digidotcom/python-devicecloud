@@ -28,6 +28,7 @@ Streams can be created in two ways, both of which are supported by this library.
 Here's examples of these two methods for creating a new stream::
 
     from devicecloud import DeviceCloud
+    from devicecloud.streams import Datapoint, STREAM_TYPE_FLOAT
 
     dc = DeviceCloud('user', 'pass')
     streams = dc.get_streams_api()
@@ -42,11 +43,11 @@ Here's examples of these two methods for creating a new stream::
     # create data stream implicitly
     temperature_stream = streams.get_stream("/%s/temperature" % some_id)
     temperature_stream.write(Datapoint(
-            path="/%s/temperature" % some_id,
+            stream_id="/%s/temperature" % some_id,
             data=74.1,
             description="Outside Air Temperature in F",
-            data_type="FLOAT",
-            unit="Deigrees Fahrenheit"
+            data_type=STREAM_TYPE_FLOAT,
+            unit="Degrees Fahrenheit"
     ))
 
 Getting Information About A Stream
@@ -57,11 +58,14 @@ Getting Information About A Stream
 """
 
 from StringIO import StringIO
-from apibase import APIBase
+import datetime
 import logging
+
+from devicecloud.apibase import APIBase
 from devicecloud import DeviceCloudException, DeviceCloudHttpException
 from devicecloud.util import iso8601_to_dt
 from types import NoneType
+
 
 DATA_POINT_TEMPLATE = """\
 <DataPoint>
@@ -80,9 +84,55 @@ DATA_STREAM_TEMPLATE = """\
 </DataStream>
 """
 
+STREAM_TYPE_INTEGER = "INTEGER"
+STREAM_TYPE_LONG = "LONG"
+STREAM_TYPE_FLOAT = "FLOAT"
+STREAM_TYPE_DOUBLE = "DOUBLE"
+STREAM_TYPE_STRING = "STRING"
+STREAM_TYPE_BINARY = "BINARY"
+STREAM_TYPE_UNKNOWN = "UNKNOWN"
+
+# Mapping in the following form:
+# <dc-type> -> (<dc-to-python-fn>, <python-to-dc-fn>)
+DSTREAM_TYPE_MAP = {
+    STREAM_TYPE_INTEGER: (int, str),
+    STREAM_TYPE_LONG: (int, str),
+    STREAM_TYPE_FLOAT: (float, str),
+    STREAM_TYPE_DOUBLE: (float, str),
+    STREAM_TYPE_STRING: (str, str),
+    STREAM_TYPE_BINARY: (str, str),
+    STREAM_TYPE_UNKNOWN: (str, str),
+}
+
+
 ONE_DAY = 86400  # in seconds
 
 logger = logging.getLogger("dc.streams")
+
+
+#--- Helper Functions
+def _validate_type(input, *types):
+    if not isinstance(input, *types):
+        raise TypeError("Input expected to one of following types: %s" % (types, ))
+    return input
+
+
+def _to_none_or_dt(input):
+    """Convert string/None to None or a datetime object"""
+    # if this is already None or a datetime, just use that
+    if isinstance(input, (NoneType, datetime.datetime)):
+        return input
+
+    if isinstance(input, basestring):
+        # try to convert from ISO8601
+        try:
+            return iso8601_to_dt(input)
+        except ValueError:
+            # finally, try unix... if this fails just-reraise ValueError
+            unix_seconds = float(input)
+            return datetime.datetime.fromtimestamp(unix_seconds)
+    else:
+        raise TypeError()
 
 
 class StreamException(DeviceCloudException):
@@ -96,7 +146,7 @@ class NoSuchStreamException(StreamException):
 class StreamAPI(APIBase):
     """Provide interface for interacting with device cloud streams API
 
-    For further information, see :mod:`devicecloud.api.streams`.
+    For further information, see :mod:`devicecloud.streams`.
 
     """
 
@@ -190,6 +240,14 @@ class StreamAPI(APIBase):
 
 
 class DataPoint(object):
+    """Encapsulate information about a single data point
+
+    This class encapsulates the data required for both pushing data points to the
+    device cloud as well as for storing and provding methods to access data from
+    streams that has been retrieved from the device cloud.
+
+    """
+
     @classmethod
     def from_json(cls, stream, json_data):
         """Create a new DataPoint object from device cloud JSON data
@@ -214,52 +272,217 @@ class DataPoint(object):
             location=json_data.get("location"),
         )
 
-    def __init__(self, path, data, description=None, timestamp=None,
-                 quality=None, location=None, data_type=None, unit=None):
-        self.path = path
-        self.data = data
-        self.description = description
-        self.timestamp = timestamp
-        self.quality = quality
-        self.location = location
-        self.data_type = data_type
-        self.unit = unit
+    def __init__(self, data, stream_id=None, description=None, timestamp=None,
+                 quality=None, location=None, data_type=None, unit=None, dp_id=None,
+                 customer_id=None, server_timestamp=None):
+        self._stream_id = None  # invariant: always string or None
+        self._data = None  # invariant: could be any type, with conversion applied lazily
+        self._description = None  # invariant: always string or None
+        self._timestamp = None  # invariant: always datetime object or None
+        self._quality = None  # invariant: always integer (32-bit) or None
+        self._location = None  # invariant: 3-tuple<float> or None
+        self._data_type = None  # invariant: always string in set of types or None
+        self._unit = None  # invariant: always string or None
+        self._dp_id = None  # invariant: always string or None
+        self._customer_id = None  # invariant: always string or None
+        self._server_timestamp = None  # invariant: always None or datetime
+
+        # all of these could be set via public API
+        self.set_stream_id(stream_id)
+        self.set_data(data)
+        self.set_description(description)
+        self.set_timestamp(timestamp)
+        self.set_quality(quality)
+        self.set_location(location)
+        self.set_data_type(data_type)
+        self.set_unit(unit)
+
+        # these should only ever be read by the public API
+        self._dp_id = _validate_type(dp_id, NoneType, basestring)
+        self._customer_id = _validate_type(customer_id, NoneType, basestring)
+        self._server_timestamp = _to_none_or_dt(server_timestamp)
+
+    def get_id(self):
+        """Get the ID of this data point if available
+
+        The ID will only exist for data points retrieved from the data point and should
+        not be set on data points that are being created.  This value is not designed
+        to be set when creating data points.
+
+        """
+        return self._dp_id
+
+    def get_data(self):
+        """Get the actual data value associated with this data point"""
+        data = self._data
+        if self._data_type is not None:
+            type_converters = DSTREAM_TYPE_MAP.get(self._data_type.upper())
+            if type_converters:
+                data = type_converters[0](self._data)
+        return data
+
+    def set_data(self, data):
+        """Set the data for this data point
+
+        This data may be converted upon access at a later point in time based
+        on the data type of this stream (if set).
+
+        """
+        self._data = data
+
+    def get_stream_id(self):
+        """Get the stream ID for this data point if available"""
+        return self._stream_id
+
+    def set_stream_id(self, stream_id):
+        """Set the stream id associated with this data point"""
+        self._stream_id = _validate_type(stream_id, NoneType, basestring)
+
+    def get_description(self):
+        """Get the description associated with this data point if available"""
+        return self._description
+
+    def set_description(self, description):
+        """Set the description for this data point"""
+        self._description = _validate_type(description, NoneType, basestring)
+
+    def get_timestamp(self):
+        """Get the timestamp of this datapoint as a :class:`datetime.datetime` object
+
+        This is the client assigned timestamp for this datapoint.  If this was not
+        set by the client, it will be the same as the server timestamp.
+
+        """
+        return self._timestamp
+
+    def set_timestamp(self, timestamp):
+        """Set the timestamp for this data point
+
+        The provided value should be either None, a datetime.datetime object, or a
+        string with either ISO8601 or unix timestamp form.
+
+        """
+        self._timestamp = _to_none_or_dt(timestamp)
+
+    def get_quality(self):
+        """Get the quality as an integer
+
+        This is a user-defined value whose meaning (if any) could vary per stream.  May
+        not always be set.
+
+        """
+        return self._quality
+
+    def set_quality(self, quality):
+        """Set the quality for this sample
+
+        Quality is stored on the device cloud as a 32-bit integer, so the input
+        to this function should be either None, an integer, or a string that can
+        be converted to an integer.
+
+        """
+        if isinstance(quality, basestring):
+            quality = int(quality)
+        elif isinstance(quality, float):
+            quality = int(quality)
+
+        self._quality = _validate_type(quality, NoneType, int, long)
+
+    def get_location(self):
+        """Get the location for this data point
+
+        The location will be either None or a 3-tuple of floats in the form
+        (latitude-degrees, longitude-degrees, altitude-meters).
+
+        """
+        return self._location
+
+    def set_location(self, location):
+        """Set the location for this data point
+
+        The location must be either None (if no location data is known) or a
+        3-tuple of floating point values in the form
+        (latitude-degrees, longitude-degrees, altitude-meters).
+
+        """
+        if location is None:
+            self._location = location
+
+        if isinstance(location, basestring):  # from device cloud, convert from csv
+            parts = map(float, str(location).split(","))
+            if len(parts) == 3:
+                self._location = tuple(map(float, parts))
+            else:
+                raise ValueError("Location string %r has unexpected format" % location)
+
+        if (isinstance(location, tuple)
+                and len(location) == 3
+                and all([isinstance(x, float) for x in location])):
+            self._location = location
+        else:
+            raise TypeError("Location must be None or 3-tuple of floats")
+
+        self._location = location
+
+    def set_data_type(self, data_type):
+        """Set the data type for ths data point
+
+        The data type is actually associated with the stream itself and should
+        not (generally) vary on a point-per-point basis.  That being said, if
+        creating a new stream by writing a datapoint, it may be beneficial to
+        include this information.
+
+        The data type provided should be in the set of available data types of
+        { INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }.
+
+        """
+        _validate_type(data_type, NoneType, basestring)
+        if isinstance(data_type, basestring):
+            data_type = str(data_type).upper()
+        if not data_type in set([None] + DSTREAM_TYPE_MAP.keys()):
+            raise ValueError("Provided data type not in available set of types")
+        self._data_type = data_type
+
+    def set_unit(self, unit):
+        """Set the unit for this data point
+
+        Unit, as with data_type, are actually associated with the stream and not
+        the individual data point.  As such, changing this within a stream is
+        not encouraged.  Setting the unit on the data point is useful when the
+        stream might be created with the write of a data point.
+
+        """
+        self._unit = _validate_type(unit, NoneType, basestring)
 
     def to_xml(self):
+        """Convert this datapoint into a form suitable for pushing to device cloud
+
+        An XML string will be returned that will contain all pieces of information
+        set on this datapoint.  Values not set (e.g. quality) will be ommitted.
+
+        """
         out = StringIO()
         out.write("<DataPoint>")
-        out.write("<streamId>%s</streamId>" % (self.path[1:] if self.path.startswith('/') else self.path))
-        out.write("<data>%s</data>" % self.data)
-        if self.description is not None:
-            out.write("<description>%s</description>" % self.description)
-        if self.timestamp is not None:
-            out.write("<timestamp>%s</timestamp>" % self.timestamp)
-        if self.quality is not None:
-            out.write("<quality>%s</quality>" % self.quality)
-        if self.location is not None:
-            out.write("<location>%s</location>" % self.location)
-        if self.data_type:
-            out.write("<streamType>%s</streamType>" % self.data_type)
-        if self.unit:
-            out.write("<streamUnits>%s</streamUnits>" % self.unit)
+        out.write("<streamId>%s</streamId>" % (self._stream_id[1:] if self._stream_id.startswith('/') else self._stream_id))
+        out.write("<data>%s</data>" % self.get_data())
+        if self._description is not None:
+            out.write("<description>%s</description>" % self._description)
+        if self._timestamp is not None:
+            out.write("<timestamp>%s</timestamp>" % self._timestamp)
+        if self._quality is not None:
+            out.write("<quality>%s</quality>" % self._quality)
+        if self._location is not None:
+            out.write("<location>%s</location>" % self._location)
+        if self._data_type:
+            out.write("<streamType>%s</streamType>" % self._data_type)
+        if self._unit:
+            out.write("<streamUnits>%s</streamUnits>" % self._unit)
         out.write("</DataPoint>")
         return out.getvalue()
 
 
 class DataStream(object):
     """Encapsulation of a DataStream's methods and attributes"""
-
-    # Mapping in the following form:
-    # <dc-type> -> (<dc-to-python-fn>, <python-to-dc-fn>)
-    TYPE_MAP = {
-        "integer": (int, str),
-        "long": (int, str),
-        "float": (float, str),
-        "double": (float, str),
-        "string": (str, str),
-        "binary": (str, str),
-        "unknown": (str, str),
-    }
 
     def __init__(self, conn, stream_id, cached_data=None):
         if not isinstance(cached_data, (NoneType, dict)):
@@ -381,17 +604,27 @@ class DataStream(object):
         else:
             return None
 
-    def write(self, data):
+    def write_datapoint(self, datapoint):
         """Write some raw data to a stream using the DataPoint API
 
-        Type checking/conversion will be applied here.
+        This method will mutate the datapoint provided to populate it with information
+        available from the stream as it is available (but without making any new HTTP
+        requests).  For instance, we will add in information about the stream data
+        type if it is available so that proper type conversion happens.
+
+        Values already set on the datapoint will not be overridden (except for path)
+
+        :param datapoint: The :class:`.DataPoint` that should be written to the device cloud
 
         """
+        if not isinstance(datapoint, DataPoint):
+            raise TypeError("First argument must be a DataPoint object")
 
-        # TODO: Handle optional DataPoint arguments
+        datapoint._stream_id = self.get_stream_id()
+        if self._cached_data is not None and datapoint._data_type:
+            datapoint._data_type = self.get_data_type()
 
-        data = DATA_POINT_TEMPLATE.format(data=data, stream=self._stream_id)
-        self._conn.post("/ws/DataPoint/%s" % self._stream_id, data)
+        self._conn.post("/ws/DataPoint/%s" % self.get_stream_id(), datapoint.to_xml())
 
     def read(self):
         """Read one or more DataPoints from a stream"""

@@ -6,7 +6,7 @@
 # Etherios, Inc. is a Division of Digi International.
 
 """Server Command Interface functionality"""
-from devicecloud.api.apibase import APIBase
+from devicecloud.apibase import APIBase
 from types import NoneType
 
 

@@ -5,10 +5,12 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
-from devicecloud.api.streams import DataStream
+import unittest
+
+from devicecloud.streams import DataStream
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
-import unittest
+
 
 # Example HTTP Responses
 
