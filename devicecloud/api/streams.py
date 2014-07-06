@@ -59,7 +59,7 @@ Getting Information About A Stream
 from StringIO import StringIO
 from apibase import APIBase
 import logging
-from devicecloud import DeviceCloudException
+from devicecloud import DeviceCloudException, DeviceCloudHttpException
 from devicecloud.util import iso8601_to_dt
 from types import NoneType
 
@@ -185,6 +185,8 @@ class StreamAPI(APIBase):
             stream.get_data_type(use_cached=True)
         except NoSuchStreamException:
             return None
+        else:
+            return stream
 
 
 class DataPoint(object):
@@ -271,9 +273,13 @@ class DataStream(object):
 
     def _get_stream_metadata(self, use_cached):
         """Retrieve metadata about this stream from the device cloud"""
-        # TODO: detect if the stream does not exist here
         if self._cached_data is None or not use_cached:
-            self._cached_data = self._conn.get_json("/ws/DataStream/%s" % self._stream_id)["items"][0]
+            try:
+                self._cached_data = self._conn.get_json("/ws/DataStream/%s" % self._stream_id)["items"][0]
+            except DeviceCloudHttpException, http_exception:
+                if http_exception.response.status_code == 404:
+                    raise NoSuchStreamException("Stream with id %r has not been created", self._stream_id)
+                raise http_exception
         return self._cached_data
 
     def get_stream_id(self):
