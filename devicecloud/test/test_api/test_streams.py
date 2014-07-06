@@ -89,7 +89,8 @@ GET_STREAM_RESULT = {
     u'resultSize': u'1'
 }
 
-class TestStreams(HttpTestBase):
+
+class TestStreamsAPI(HttpTestBase):
 
     def test_create_data_stream(self):
         self.prepare_json_response("POST", "/ws/DataStream", CREATE_DATA_STREAM)
@@ -109,53 +110,48 @@ class TestStreams(HttpTestBase):
     def test_create_data_stream_bad_type(self):
         self.prepare_json_response("POST", "/ws/DataStream",
                                    CREATE_DATA_STREAM_BAD_TYPE, status=400)
-        streams = self.dc.get_streams_api()
         self.assertRaises(DeviceCloudHttpException,
-                          streams.create_data_stream, "teststream", "string")
+                          self.dc.streams.create_data_stream, "teststream", "string")
 
     def test_get_streams_empty(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
-        streamsapi = self.dc.get_streams_api()
-        streams = streamsapi.get_streams()
+        streams = self.dc.streams.get_streams()
         self.assertEqual(streams, [])
 
     def test_get_streams(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streamsapi = self.dc.get_streams_api()
-        streams = streamsapi.get_streams()
+        streams = self.dc.streams.get_streams()
         self.assertEqual(len(streams), 2)
         self.assertIsInstance(streams[0], DataStream)
         self.assertIsInstance(streams[1], DataStream)
 
     def test_get_stream_no_cache(self):
         # Get a stream by ID when there is no cache
-        stream = self.dc.get_streams_api().get_stream("/test/stream")
+        stream = self.dc.streams.get_stream("/test/stream")
         self.assert_(isinstance(stream, DataStream))
         self.assertEqual(stream.get_stream_id(), "/test/stream")
 
     def test_get_stream_cache_miss(self):
         # Fill (empty) cache
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
-        streamsapi = self.dc.get_streams_api()
-        streams = streamsapi.get_streams()
+        streams = self.dc.streams.get_streams()
         self.assertEqual(streams, [])
 
         # Now get a stream by ID
-        stream = streamsapi.get_stream("/test/stream")
+        stream = self.dc.streams.get_stream("/test/stream")
         self.assert_(isinstance(stream, DataStream))
         self.assertEqual(stream.get_stream_id(), "/test/stream")
 
     def test_get_stream_cache_hit(self):
         # Fill cache by doing a get_steams() call
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streamsapi = self.dc.get_streams_api()
-        streams = streamsapi.get_streams()
+        streams = self.dc.streams.get_streams()
         self.assertEqual(len(streams), 2)
         self.assertIsInstance(streams[0], DataStream)
         self.assertIsInstance(streams[1], DataStream)
 
         # Now, let's do a get_stream for stream 0
-        test_stream = streamsapi.get_stream("test")
+        test_stream = self.dc.streams.get_stream("test")
         self.assertEqual(test_stream.get_stream_id(), "test")
         self.assertEqual(test_stream.get_data_ttl(), 172800)  # no HTTP request to retrieve
 
@@ -163,8 +159,7 @@ class TestStreams(HttpTestBase):
         # In this test, we try to get a stream that does not exist from a state in
         # which no cache exists.  The stream does not exist, so we give a 404
         self.prepare_response("GET", "/ws/DataStream/test", "", status=404)
-        streamsapi = self.dc.get_streams_api()
-        self.assertEqual(streamsapi.get_stream_if_exists("test"), None)
+        self.assertEqual(self.dc.streams.get_stream_if_exists("test"), None)
 
     def test_get_stream_if_exists_cache_miss_does_not_exist(self):
         # In this test, we try to get a stream that does not exist from a state in
@@ -172,17 +167,15 @@ class TestStreams(HttpTestBase):
         # the device cloud to be made, but we will return a 404
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
         self.prepare_response("GET", "/ws/DataStream/test", "", status=404)
-        streamsapi = self.dc.get_streams_api()
-        streamsapi.get_streams()
-        self.assertEqual(streamsapi.get_stream_if_exists("test"), None)
+        self.dc.streams.get_streams()
+        self.assertEqual(self.dc.streams.get_stream_if_exists("test"), None)
 
     def test_get_stream_if_exists_cache_hit(self):
         # In this case, we request to get a stream if it exists.  We have a
         # cache containing the stream, so we just provide that stream
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streamsapi = self.dc.get_streams_api()
-        streams = streamsapi.get_streams()
-        stream = streamsapi.get_stream_if_exists("test")
+        streams = self.dc.streams.get_streams()
+        stream = self.dc.streams.get_stream_if_exists("test")
         self.assert_(stream is not None)
         self.assertEqual(stream.get_stream_id(), "test")
         self.assertEqual(stream.get_rollup_ttl(), 432000)
@@ -191,13 +184,12 @@ class TestStreams(HttpTestBase):
         # In this case, there is no cache but we have requested a stream that
         # does in fact exist
         self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        streamsapi = self.dc.get_streams_api()
-        stream = streamsapi.get_stream_if_exists("test")
+        stream = self.dc.streams.get_stream_if_exists("test")
         self.assert_(stream is not None)
         self.assertEqual(stream.get_stream_id(), "test")
         self.assertEqual(stream.get_data_type(), "FLOAT")
         self.assertEqual(stream.get_description(), "some description")
-        self.assertEqual(stream.get_current_value(), 0)
+        self.assertEqual(stream.get_current_value(), None)
 
 if __name__ == "__main__":
     unittest.main()
