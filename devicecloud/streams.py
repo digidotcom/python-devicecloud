@@ -112,7 +112,7 @@ logger = logging.getLogger("dc.streams")
 
 #--- Helper Functions
 def _validate_type(input, *types):
-    if not isinstance(input, *types):
+    if not isinstance(input, types):
         raise TypeError("Input expected to one of following types: %s" % (types, ))
     return input
 
@@ -125,14 +125,9 @@ def _to_none_or_dt(input):
 
     if isinstance(input, basestring):
         # try to convert from ISO8601
-        try:
-            return iso8601_to_dt(input)
-        except ValueError:
-            # finally, try unix... if this fails just-reraise ValueError
-            unix_seconds = float(input)
-            return datetime.datetime.fromtimestamp(unix_seconds)
+        return iso8601_to_dt(input)
     else:
-        raise TypeError()
+        raise TypeError("Not a string, NoneType, or datetime object")
 
 
 class StreamException(DeviceCloudException):
@@ -260,20 +255,22 @@ class DataPoint(object):
         """
         return cls(
             # these are actually properties of the stream, not the data point
-            path=stream.get_stream_id(),
+            stream_id=stream.get_stream_id(),
             data_type=stream.get_data_type(),
-            unit=stream.get_unit(),
+            units=stream.get_units(),
 
             # and these are part of the data point itself
             data=json_data.get("data"),
             description=json_data.get("description"),
-            timestamp=iso8601_to_dt(json_data.get("timestampISO")),
+            timestamp=json_data.get("timestampISO"),
+            server_timestamp=json_data.get("serverTimestampISO"),
             quality=json_data.get("quality"),
             location=json_data.get("location"),
+            dp_id=json_data.get("id"),
         )
 
     def __init__(self, data, stream_id=None, description=None, timestamp=None,
-                 quality=None, location=None, data_type=None, unit=None, dp_id=None,
+                 quality=None, location=None, data_type=None, units=None, dp_id=None,
                  customer_id=None, server_timestamp=None):
         self._stream_id = None  # invariant: always string or None
         self._data = None  # invariant: could be any type, with conversion applied lazily
@@ -282,7 +279,7 @@ class DataPoint(object):
         self._quality = None  # invariant: always integer (32-bit) or None
         self._location = None  # invariant: 3-tuple<float> or None
         self._data_type = None  # invariant: always string in set of types or None
-        self._unit = None  # invariant: always string or None
+        self._units = None  # invariant: always string or None
         self._dp_id = None  # invariant: always string or None
         self._customer_id = None  # invariant: always string or None
         self._server_timestamp = None  # invariant: always None or datetime
@@ -295,7 +292,7 @@ class DataPoint(object):
         self.set_quality(quality)
         self.set_location(location)
         self.set_data_type(data_type)
-        self.set_unit(unit)
+        self.set_units(units)
 
         # these should only ever be read by the public API
         self._dp_id = _validate_type(dp_id, NoneType, basestring)
@@ -364,6 +361,10 @@ class DataPoint(object):
         """
         self._timestamp = _to_none_or_dt(timestamp)
 
+    def get_server_timestamp(self):
+        """Get the date and time at which the server received this data point"""
+        return self._server_timestamp
+
     def get_quality(self):
         """Get the quality as an integer
 
@@ -408,21 +409,34 @@ class DataPoint(object):
         if location is None:
             self._location = location
 
-        if isinstance(location, basestring):  # from device cloud, convert from csv
+        elif isinstance(location, basestring):  # from device cloud, convert from csv
             parts = map(float, str(location).split(","))
             if len(parts) == 3:
                 self._location = tuple(map(float, parts))
+                return
             else:
                 raise ValueError("Location string %r has unexpected format" % location)
 
-        if (isinstance(location, tuple)
+        # TODO: could maybe try to allow any iterable but this covers the most common cases
+        elif (isinstance(location, (tuple, list))
                 and len(location) == 3
-                and all([isinstance(x, float) for x in location])):
-            self._location = location
+                and all([isinstance(x, (float, int, long)) for x in location])):
+            self._location = tuple(map(float, location))  # coerce ints to float
         else:
             raise TypeError("Location must be None or 3-tuple of floats")
 
         self._location = location
+
+    def get_data_type(self):
+        """Get the data type for this data point
+
+        The data type is associted with the stream itself but may also be
+        included in data point writes.  The data type information in the point
+        is also used to determine which type conversions should be applied to
+        the data.
+
+        """
+        return self._data_type
 
     def set_data_type(self, data_type):
         """Set the data type for ths data point
@@ -443,7 +457,11 @@ class DataPoint(object):
             raise ValueError("Provided data type not in available set of types")
         self._data_type = data_type
 
-    def set_unit(self, unit):
+    def get_units(self):
+        """Get the units of this datapoints stream if available"""
+        return self._units
+
+    def set_units(self, unit):
         """Set the unit for this data point
 
         Unit, as with data_type, are actually associated with the stream and not
@@ -452,7 +470,7 @@ class DataPoint(object):
         stream might be created with the write of a data point.
 
         """
-        self._unit = _validate_type(unit, NoneType, basestring)
+        self._units = _validate_type(unit, NoneType, basestring)
 
     def to_xml(self):
         """Convert this datapoint into a form suitable for pushing to device cloud
@@ -465,18 +483,19 @@ class DataPoint(object):
         out.write("<DataPoint>")
         out.write("<streamId>%s</streamId>" % (self._stream_id[1:] if self._stream_id.startswith('/') else self._stream_id))
         out.write("<data>%s</data>" % self.get_data())
-        if self._description is not None:
-            out.write("<description>%s</description>" % self._description)
-        if self._timestamp is not None:
-            out.write("<timestamp>%s</timestamp>" % self._timestamp)
-        if self._quality is not None:
-            out.write("<quality>%s</quality>" % self._quality)
-        if self._location is not None:
-            out.write("<location>%s</location>" % self._location)
-        if self._data_type:
-            out.write("<streamType>%s</streamType>" % self._data_type)
-        if self._unit:
-            out.write("<streamUnits>%s</streamUnits>" % self._unit)
+        if self.get_description() is not None:
+            out.write("<description>%s</description>" % self.get_description())
+        if self.get_timestamp() is not None:
+            # TODO: convert to ISO8601
+            out.write("<timestamp>%s</timestamp>" % self.get_timestamp())
+        if self.get_quality() is not None:
+            out.write("<quality>%s</quality>" % self.get_quality())
+        if self.get_location() is not None:
+            out.write("<location>%s</location>" % ",".join(map(str, self.get_location())))
+        if self.get_data_type():
+            out.write("<streamType>%s</streamType>" % self.get_data_type())
+        if self._units:
+            out.write("<streamUnits>%s</streamUnits>" % self._units)
         out.write("</DataPoint>")
         return out.getvalue()
 
@@ -492,7 +511,7 @@ class DataStream(object):
         self._cached_data = cached_data
 
     def __repr__(self):
-        return "DataStream(%s)" % (self._stream_id, )
+        return "DataStream(%r)" % (self._stream_id, )
 
     def _get_stream_metadata(self, use_cached):
         """Retrieve metadata about this stream from the device cloud"""
@@ -508,7 +527,7 @@ class DataStream(object):
     def get_stream_id(self):
         """Get the id/path of this stream
 
-        :returns: (strong) id/path of this stream
+        :returns: (string) id/path of this stream
 
         """
         return self._stream_id
@@ -539,6 +558,18 @@ class DataStream(object):
         if dtype is not None:
             dtype = dtype.upper()
         return dtype
+
+    def get_units(self, use_cached=True):
+        """Get the unit of this stream if it exists
+
+        Units are a user-defined field stored as a string
+
+        :param use_cached: If False, the function will always request the latest from the device cloud.
+            If True, the device will not make a request if it already has cached data.
+        :returns: (str) The unit of this stream as a string
+
+        """
+        return self._get_stream_metadata(use_cached).get("units")
 
     def get_description(self, use_cached=True):
         """Get the description associated with this data stream
@@ -621,7 +652,7 @@ class DataStream(object):
             raise TypeError("First argument must be a DataPoint object")
 
         datapoint._stream_id = self.get_stream_id()
-        if self._cached_data is not None and datapoint._data_type:
+        if self._cached_data is not None and datapoint.get_data_type() is None:
             datapoint._data_type = self.get_data_type()
 
         self._conn.post("/ws/DataPoint/%s" % self.get_stream_id(), datapoint.to_xml())

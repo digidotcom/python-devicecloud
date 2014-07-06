@@ -6,13 +6,15 @@
 # Etherios, Inc. is a Division of Digi International.
 
 import unittest
+import datetime
 
-from devicecloud.streams import DataStream
+from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
 
 
 # Example HTTP Responses
+import httpretty
 
 CREATE_DATA_STREAM = {
     "location": "teststream"
@@ -21,6 +23,13 @@ CREATE_DATA_STREAM = {
 CREATE_DATA_STREAM_BAD_TYPE = {
     "error": "POST DataStream error. Invalid dataType: foobar"
 }
+
+CREATE_DATAPOINT_RESPONSE = """\
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<result>
+  <location>DataPoint/test/07d77854-0557-11e4-ab44-fa163e7ebc6b</location>
+</result>
+"""
 
 GET_DATA_STREAMS = """
 {
@@ -44,7 +53,7 @@ GET_DATA_STREAMS = """
             "dataType": "FLOAT",
             "forwardTo": "",
             "description": "some description",
-            "units": "",
+            "units": "light years",
             "dataTtl": "172800",
             "rollupTtl": "432000"
         }
@@ -65,9 +74,39 @@ GET_TEST_DATA_STREAM = """\
 {
 "resultSize": "1",
 "requestedSize": "1000",
-"pageCursor": "3bff891c-1-ffa063ca",
+"pageCursor": "88afa98e-1-7efbf125",
 "items": [
-{ "cstId": "7603", "streamId": "test", "dataType": "FLOAT", "forwardTo": "", "description": "some description", "units": "", "dataTtl": "172800", "rollupTtl": "432000"}
+{
+    "cstId": "7603",
+    "streamId": "test",
+    "dataType": "FLOAT",
+    "forwardTo": "",
+    "currentValue": {
+        "id": "07d77854-0557-11e4-ab44-fa163e7ebc6b",
+        "timestamp": "1404683207981",
+        "timestampISO": "2014-07-06T21:46:47.981Z",
+        "serverTimestamp": "1404683207981",
+        "serverTimestampISO": "2014-07-06T21:46:47.981Z",
+        "data": "123.1",
+        "description": "Test",
+        "quality": "20",
+        "location": "1.0,2.0,3.0"
+    },
+    "description": "some description",
+    "units": "light years",
+    "dataTtl": "172800",
+    "rollupTtl": "432000"}
+]
+}
+"""
+
+GET_TEST_DATA_STREAM_NO_CURRENT_VALUE = """\
+{
+"resultSize": "1",
+"requestedSize": "1000",
+"pageCursor": "88afa98e-1-7efbf125",
+"items": [
+{ "cstId": "7603", "streamId": "test", "dataType": "FLOAT", "forwardTo": "", "description": "some description", "units": "light years", "dataTtl": "172800", "rollupTtl": "432000"}
 ]
 }
 """
@@ -189,7 +228,136 @@ class TestStreamsAPI(HttpTestBase):
         self.assertEqual(stream.get_stream_id(), "test")
         self.assertEqual(stream.get_data_type(), "FLOAT")
         self.assertEqual(stream.get_description(), "some description")
+        current_value = stream.get_current_value()
+        self.assertEqual(current_value.get_data(), 123.1)
+
+
+class TestDataStream(HttpTestBase):
+
+    def _get_stream(self, stream_id="test", with_cached_data=False):
+        if with_cached_data:
+            self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
+            self.dc.streams.get_streams()
+            return self.dc.streams.get_stream(stream_id)
+        else:
+            return self.dc.streams.get_stream(stream_id)
+
+    def test_bad_cached_data(self):
+        # mostly for branch coverage
+        self.assertRaises(TypeError, DataStream, self.dc._conn, "test", 3)
+
+    def test_repr(self):
+        self.assertEqual(repr(self._get_stream()), "DataStream('test')")
+
+    def test_accessors(self):
+        stream = self._get_stream("test", with_cached_data=True)
+
+        # all of these should be cached
+        self.assertEqual(stream.get_stream_id(), "test")
+        self.assertEqual(stream.get_data_ttl(), 172800)
+        self.assertEqual(stream.get_rollup_ttl(), 432000)
+        self.assertEqual(stream.get_description(), "some description")
+        self.assertEqual(stream.get_units(), "light years")
+        self.assertEqual(stream.get_data_type(), STREAM_TYPE_FLOAT)
+
+        # for this one, we are required to make an HTTP request to get the
+        # latest value
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.assertEqual(stream.get_current_value().get_data(), 123.1)
+
+    def test_get_current_value_empty(self):
+        stream = self._get_stream("test", with_cached_data=True)
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM_NO_CURRENT_VALUE)
         self.assertEqual(stream.get_current_value(), None)
+
+    def test_write_datapoint_bad_arg(self):
+        test_stream = self._get_stream("test")
+        self.assertRaises(TypeError, test_stream.write_datapoint, 123)
+
+    def test_write_datapoint_simple_nocache(self):
+        self.prepare_response("POST", "/ws/DataPoint/test", CREATE_DATAPOINT_RESPONSE, status=201)
+        test_stream = self._get_stream("test")
+        test_stream.write_datapoint(DataPoint(
+            data=123.4,
+        ))
+
+        # verify that the body sent to the device cloud is sufficiently minimal
+        last_request = httpretty.last_request()
+        self.assertEqual(
+            last_request.body,
+            '<DataPoint><streamId>test</streamId><data>123.4</data></DataPoint>')
+
+    def test_write_datapoint_simple_with_cache(self):
+        self.prepare_response("POST", "/ws/DataPoint/test", CREATE_DATAPOINT_RESPONSE, status=201)
+        test_stream = self._get_stream("test", with_cached_data=True)
+        test_stream.write_datapoint(DataPoint(
+            data=123.4,
+        ))
+
+        # verify that the body sent to the device cloud is sufficiently minimal
+        last_request = httpretty.last_request()
+        self.assertEqual(
+            last_request.body,
+            '<DataPoint><streamId>test</streamId><data>123.4</data><streamType>FLOAT</streamType></DataPoint>')
+
+
+class TestDataPoint(HttpTestBase):
+
+    def _get_stream(self, stream_id="test", with_cached_data=False):
+        if with_cached_data:
+            self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
+            self.dc.streams.get_streams()
+            return self.dc.streams.get_stream(stream_id)
+        else:
+            return self.dc.streams.get_stream(stream_id)
+
+    def test_accessors(self):
+        # With a captured data point, ensure we can read back everything as expected
+        stream = self._get_stream("test", with_cached_data=True)
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+
+        dp = stream.get_current_value()
+        self.assertEqual(dp.get_id(), "07d77854-0557-11e4-ab44-fa163e7ebc6b")
+        self.assertEqual(dp.get_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981000))
+        self.assertEqual(dp.get_server_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981000))
+        self.assertEqual(dp.get_data(), 123.1)
+        self.assertEqual(dp.get_description(), "Test")
+        self.assertEqual(dp.get_quality(), 20)
+        self.assertEqual(dp.get_location(), (1.0, 2.0, 3.0))
+        self.assertEqual(dp.get_units(), "light years")
+        self.assertEqual(dp.get_stream_id(), "test")
+        self.assertEqual(dp.get_data_type(), "FLOAT")
+
+    def test_bad_location_string(self):
+        dp = DataPoint(123)
+        self.assertRaises(ValueError, dp.set_location, "0,1")
+        self.assertRaises(ValueError, dp.set_location, "0,1,2,3")
+        self.assertRaises(ValueError, dp.set_location, "bad-input")
+
+    def test_bad_location_type(self):
+        dp = DataPoint(123)
+        self.assertRaises(TypeError, dp.set_location, datetime.datetime.now())
+
+    def test_set_location_valid(self):
+        dp = DataPoint(123)
+        dp.set_location((4, 5, 6))
+        self.assertEqual(dp.get_location(), (4.0, 5.0, 6.0))
+
+    def test_set_quality_float(self):
+        # cover truncation case for code coverage
+        dp = DataPoint(123)
+        dp.set_quality(99.5)
+        self.assertEqual(dp.get_quality(), 99)
+
+    def test_type_checking(self):
+        dp = DataPoint(123)
+        self.assertRaises(TypeError, dp.set_description, 5)
+        self.assertRaises(TypeError, dp.set_stream_id, [1, 2, 3])
+
+    def test_set_bad_timestamp(self):
+        dp = DataPoint(123)
+        self.assertRaises(ValueError, dp.set_timestamp, "123456")  # not ISO8601
+        self.assertRaises(TypeError, dp.set_timestamp, 12345)
 
 if __name__ == "__main__":
     unittest.main()
