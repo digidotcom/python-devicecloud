@@ -1,6 +1,19 @@
 python-devicecloud
 ******************
 
+Documention Map
+===============
+
+.. toctree::
+   :maxdepth: 1
+
+   core
+   devicecore
+   streams
+   filedata
+   sci
+   examples
+
 Introduction
 ============
 
@@ -46,22 +59,6 @@ quick example of what the API looks like::
     for stream in dc.streams.get_streams():
         if stream.get_data_type().lower() in ('float', 'double'):
             print "%s -> %s" % (stream.get_name(), stream.get_current_value())
-
-
-Documention Map
-===============
-
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   core
-   devicecore
-   streams
-   filedata
-   sci
-
 
 Indices and tables
 ==================

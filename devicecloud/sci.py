@@ -73,11 +73,12 @@ class ServerCommandInterfaceAPI(APIBase):
                  cache=None, allow_offline=None, wait_for_reconnect=None):
         """Send SCI request to 1 or more targets
 
-        This method has several required arguments and several optional arguments:
+        :param str operation: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+            file_system, data_service, and reboot}
+        :param target: The device(s) to be targeted with this request
+        :type target: :class:`~.TargetABC` or list of :class:`~.TargetABC` instances
 
-        * ``operation``: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
-            file_system, data_service, and reboot
-        * ``target``: may either be a single ``TargetABC`` or a list of ``TargetABC``s.
+        TODO: document other params
 
         """
         if not isinstance(payload, basestring):

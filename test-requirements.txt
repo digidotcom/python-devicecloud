@@ -4,3 +4,4 @@ httpretty
 pyandoc
 sphinx
 coverage
+sphinx_rtd_theme

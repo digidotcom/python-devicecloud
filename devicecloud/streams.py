@@ -5,106 +5,7 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
-r"""Module providing classes for interacting with device cloud data streams
-
-Data Streams on the device cloud provide a mechanism for storing time-series
-values over a long period of time.  Each individual value in the time series
-is known as a Data Point.
-
-There are a few basic operations supported by the device cloud on streams which
-are supported by the device cloud and this library.  Here we give examples of
-each.
-
-Listing Streams
-^^^^^^^^^^^^^^^
-
-Although it is not recommended for production applications, it is often useful
-when building tools to be able to fetch a list of all streams.  This can be
-done by using :meth:`~StreamsAPI.get_streams`::
-
-    dc = DeviceCloud('user', 'pass')
-    for stream in dc.streams.get_streams():
-        print "%s: %s" % (stream.get_stream_id(),
-                          stream.get_description())
-
-
-Creating a Stream
-^^^^^^^^^^^^^^^^^
-
-Streams can be created in two ways, both of which are supported by this library.
-
-1. Create a stream explicitly using :py:meth:`~.StreamAPI.create_stream`
-2. Write a data point to a stream that does not yet exist but include information key'
-   to the stream using :py:meth:`~.StreamAPI.stream_write`.
-
-Here's examples of these two methods for creating a new stream::
-
-    dc = DeviceCloud('user', 'pass')
-
-    # explicitly create a new data stream
-    humidity_stream = dc.streams.create_stream(
-        stream_id="mystreams/hudidity",
-        data_type="float",
-        description="Humidity")
-    humidity_stream.write(Datapoint(81.2))
-
-    # create data stream implicitly
-    temperature_stream = streams.get_stream("/%s/temperature" % some_id)
-    temperature_stream.write(Datapoint(
-            stream_id="mystreams/temperature" % some_id,
-            data=74.1,
-            description="Outside Air Temperature in F",
-            data_type=STREAM_TYPE_FLOAT,
-            unit="Degrees Fahrenheit"
-    ))
-
-Getting Information About A Stream
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Whether we know a stream by id and have gotten a reference using
-:meth:`~StreamsAPI.get_stream` or have discovered it using
-:meth:`~StreamsAPI.get_streams`, the :class:`~DataStream` should
-be able to provide access to all metadata about the stream that
-you may need.  Here we show several of them::
-
-    strm = dc.streams.get_stream("test")
-    print strm.get_stream_id()
-    print strm.get_data_type()
-    print strm.get_units()
-    print strm.get_description()
-    print strm.get_data_ttl()
-    print strm.get_rollup_ttl()
-    print strm.get_current_value()  # return DataPoint object
-
-.. note::
-
-   :meth:`~.DataStream.get_current_value()` does not use cached values by
-   default and will make a web service call to get the most recent current
-   value unless ``use_cached`` is set to True when called.
-
-Deleting a Stream
-^^^^^^^^^^^^^^^^^
-
-Deleting a data stream is possible by calling :meth:`~DataStream.delete`::
-
-    strm = dc.streams.get_stream("doomed")
-    strm.delete()
-
-Updating Stream Metadata
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-This feature is currently not supported.  Some stream information may
-be updated by writing a :class:`~DataPoint` and including updated
-stream info elements.
-
-DataPoint objects
-^^^^^^^^^^^^^^^^^
-
-The :class:`DataPoint` class encapsulates all information required for
-both writing data points as well as retrieving information about data
-points stored on the device cloud.
-
-"""
+r"""Module providing classes for interacting with device cloud data streams"""
 
 from StringIO import StringIO
 import logging
@@ -157,7 +58,7 @@ class NoSuchStreamException(StreamException):
     """Failure to find a stream based on a given id"""
 
 
-class StreamAPI(APIBase):
+class StreamsAPI(APIBase):
     """Provide interface for interacting with device cloud streams API
 
     For further information, see :mod:`devicecloud.streams`.
@@ -185,14 +86,14 @@ class StreamAPI(APIBase):
         This method will attempt to create a new data stream on the device cloud.
         This method will only succeed if the stream does not already exist.
 
-        :param stream_id: (str) The path/id of the stream being created on the device cloud.
-        :param data_type: (str) The type of this stream.  This must be in the set
+        :param str stream_id: The path/id of the stream being created on the device cloud.
+        :param str data_type: The type of this stream.  This must be in the set
             `{ INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }`.  These values are
             available in constants like :attr:`~STREAM_TYPE_INTEGER`.
-        :param description: (str) An optional description of this stream. See :meth:`~DataStream.get_description`.
-        :param data_ttl: (int) The TTL for data points in this stream. See :meth:`~DataStream.get_data_ttl`.
-        :param rollup_ttl: (int) The TTL for performing rollups on data. See :meth:~DataStream.get_rollup_ttl`.
-        :param units: (str) Units for data in this stream.  See :meth:`~DataStream.get_units`
+        :param str description: An optional description of this stream. See :meth:`~DataStream.get_description`.
+        :param int data_ttl: The TTL for data points in this stream. See :meth:`~DataStream.get_data_ttl`.
+        :param int rollup_ttl: The TTL for performing rollups on data. See :meth:~DataStream.get_rollup_ttl`.
+        :param str units: Units for data in this stream.  See :meth:`~DataStream.get_units`
 
         """
 
@@ -225,7 +126,7 @@ class StreamAPI(APIBase):
     def get_streams(self):
         """Return the iterator over all streams present on the device cloud
 
-        :returns:  iterator over all :class:`.DataStream` instances on the device cloud
+        :return:  iterator over all :class:`.DataStream` instances on the device cloud
 
         """
         # TODO: deal with paging.  We now return a generator, so the interface should look the same
@@ -240,9 +141,10 @@ class StreamAPI(APIBase):
         return None if the stream is not already created.
 
         :param stream_id: The path of the stream on the device cloud
-        :raises: :class:`TypeError` if the stream_id provided is the wrong type
-        :raises: :class:`ValueError` if the stream_id is not properly formed
-        :returns: (:class:`.DataStream`) datastream instance with the provided stream_id
+        :raises TypeError: if the stream_id provided is the wrong type
+        :raises ValueError: if the stream_id is not properly formed
+        :return: datastream instance with the provided stream_id
+        :rtype: DataStream
 
         """
         return DataStream(self._conn, stream_id)
@@ -254,9 +156,10 @@ class StreamAPI(APIBase):
         stream is not already created.
 
         :param stream_id: The path of the stream on the device cloud
-        :raises: :class:`TypeError` if the stream_id provided is the wrong type
-        :raises: :class:`ValueError` if the stream_id is not properly formed
-        :returns: (:class:`.DataStream`) :class:`.DataStream` instance with the provided stream_id
+        :raises TypeError: if the stream_id provided is the wrong type
+        :raises ValueError: if the stream_id is not properly formed
+        :return: :class:`.DataStream` instance with the provided stream_id
+        :rtype: :class:`~DataStream`
 
         """
         stream = self.get_stream(stream_id)
@@ -281,10 +184,10 @@ class DataPoint(object):
     def from_json(cls, stream, json_data):
         """Create a new DataPoint object from device cloud JSON data
 
-        :param stream: The :class:`~DataStream` out of which this data is coming
-        :param json_data: Deserialized JSON data from the device cloud about this device
-        :raises: ValueError if the data is malformed
-        :returns: (:class:`~DataPoint`) newly created :class:`~DataPoint`
+        :param DataStream stream: The :class:`~DataStream` out of which this data is coming
+        :param dict json_data: Deserialized JSON data from the device cloud about this device
+        :raises ValueError: if the data is malformed
+        :return: (:class:`~DataPoint`) newly created :class:`~DataPoint`
 
         """
         return cls(
@@ -558,7 +461,8 @@ class DataStream(object):
     def get_stream_id(self):
         """Get the id/path of this stream
 
-        :returns: (string) id/path of this stream
+        :return: id/path of this stream
+        :rtype: str
 
         """
         return self._stream_id
@@ -568,21 +472,22 @@ class DataStream(object):
 
         The data type is the type of data stored in this data stream. Valid types include:
 
-        * "INTEGER": data can be represented with a network (= big-endian) 32-bit two's-complement integer.  Data
-             with this type maps to a python int.
-        * "LONG": data can be represented with a network (= big-endian) 64-bit two's complement integer.  Data
-             with this type maps to a python int.
-        * "FLOAT": data can be represented with a network (= big-endian) 32-bit IEEE754 floating point.  Data
-             with this type maps to a python float.
-        * "DOUBLE": data can be represented with a network (= big-endian) 64-bit IEEE754 floating point.  Data
-             with this type maps to a python float.
-        * "STRING": UTF-8.  Data with this type map to a python string
-        * "BINARY": Data with this type map to a python string.
-        * "UNKNOWN": Data with this type map to a python string.
+        * INTEGER - data can be represented with a network (= big-endian) 32-bit two's-complement integer.  Data
+          with this type maps to a python int.
+        * LONG - data can be represented with a network (= big-endian) 64-bit two's complement integer.  Data
+          with this type maps to a python int.
+        * FLOAT - data can be represented with a network (= big-endian) 32-bit IEEE754 floating point.  Data
+          with this type maps to a python float.
+        * DOUBLE - data can be represented with a network (= big-endian) 64-bit IEEE754 floating point.  Data
+          with this type maps to a python float.
+        * STRING - UTF-8.  Data with this type map to a python string
+        * BINARY - Data with this type map to a python string.
+        * UNKNOWN - Data with this type map to a python string.
 
-        :param use_cached: If False, the function will always request the latest from the device cloud.
+        :param bool use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :returns: (str) The data type of this stream as a string
+        :return: The data type of this stream as a string
+        :rtype: str
 
         """
         dtype = self._get_stream_metadata(use_cached).get("dataType")
@@ -595,9 +500,10 @@ class DataStream(object):
 
         Units are a user-defined field stored as a string
 
-        :param use_cached: If False, the function will always request the latest from the device cloud.
+        :param bool use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :returns: (str) The unit of this stream as a string
+        :return: The unit of this stream as a string
+        :rtype: str or None
 
         """
         return self._get_stream_metadata(use_cached).get("units")
@@ -605,11 +511,12 @@ class DataStream(object):
     def get_description(self, use_cached=True):
         """Get the description associated with this data stream
 
-        :param use_cached: If False, the function will always request the latest from the device cloud.
+        :param bool use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
-        :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: (string) The description associated with this stream
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+        :raises devicecloud.streams.NoSuchStreamException: if this stream has not yet been created
+        :return: The description associated with this stream
+        :rtype: str or None
 
         """
         return self._get_stream_metadata(use_cached).get("description")
@@ -620,11 +527,12 @@ class DataStream(object):
         The dataTtl is the time to live (TTL) in seconds for data points stored in the data stream.
         A data point expires after the configured amount of time and is automatically deleted.
 
-        :param use_cached: If False, the function will always request the latest from the device cloud.
+        :param bool use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
-        :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: (int or None) The dataTtl associated with this stream in seconds
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+        :raises devicecloud.streams.NoSuchStreamException: if this stream has not yet been created
+        :return: The dataTtl associated with this stream in seconds
+        :rtype: int or None
 
         """
 
@@ -638,11 +546,13 @@ class DataStream(object):
         stored in the stream. A roll-up expires after the configured amount of time and is
         automatically deleted.
 
-        :param use_cached: If False, the function will always request the latest from the device cloud.
+        :param bool use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
-        :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: (int or None) The rollupTtl associated with this stream in seconds
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+        :raises devicecloud.streams.NoSuchStreamException: if this stream has not yet been created
+        :return: The rollupTtl associated with this stream in seconds
+        :rtype: int or None
+
         """
         rollup_ttl_text = self._get_stream_metadata(use_cached).get("rollupTtl")
         return int(rollup_ttl_text)
@@ -652,12 +562,12 @@ class DataStream(object):
 
         The current value is the last recorded data point for this stream.
 
-        :param use_cached: If False, the function will always request the latest from the device cloud.
+        :param bool use_cached: If False, the function will always request the latest from the device cloud.
             If True, the device will not make a request if it already has cached data.
-        :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
-        :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
-        :returns: (:class:`~DataPoint` or None) The most recent value written to this
-            stream (or None if nothing has been written)
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+        :raises devicecloud.streams.NoSuchStreamException: if this stream has not yet been created
+        :return: The most recent value written to this stream (or None if nothing has been written)
+        :rtype: :class:`~DataPoint` or None
 
         """
         current_value = self._get_stream_metadata(use_cached).get("currentValue")
@@ -669,8 +579,8 @@ class DataStream(object):
     def delete(self):
         """Delete this stream from the device cloud along with its history
 
-        :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
-        :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+        :raises devicecloud.streams.NoSuchStreamException: if this stream has not yet been created
 
         """
         # TODO: Implement delete functionality
@@ -686,7 +596,7 @@ class DataStream(object):
 
         Values already set on the datapoint will not be overridden (except for path)
 
-        :param datapoint: The :class:`.DataPoint` that should be written to the device cloud
+        :param DataPoint datapoint: The :class:`.DataPoint` that should be written to the device cloud
 
         """
         if not isinstance(datapoint, DataPoint):

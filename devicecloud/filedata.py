@@ -5,6 +5,8 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
+"""Provide access to the device cloud filedata API"""
+
 from xml.etree import ElementTree
 import base64
 import hashlib
@@ -25,6 +27,8 @@ PUT_FILE_TEMPLATE = """
 
 
 class FileDataAPI(APIBase):
+    """Encapsulate data and logic required to interact with the device cloud file data store"""
+
     def get_files(self, file_glob, device, from_date, contents):
         condition = ["fdName like '%s'" % file_glob, ]
         if device is not None:
@@ -50,6 +54,8 @@ class FileDataAPI(APIBase):
 
 
 class FileData(object):
+    """Encapsulate state and logic surrounding a "filedata" element"""
+
     @classmethod
     def from_filedata(cls, el):
         """Create a FileData object from FileData etree data"""
