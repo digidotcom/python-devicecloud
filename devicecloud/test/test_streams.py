@@ -135,7 +135,7 @@ class TestStreamsAPI(HttpTestBase):
         self.prepare_json_response("POST", "/ws/DataStream", CREATE_DATA_STREAM)
         self.prepare_json_response("GET", "/ws/DataStream/teststream", GET_STREAM_RESULT)
         streams = self.dc.get_streams_api()
-        stream = streams.create_data_stream("teststream",
+        stream = streams.create_stream("teststream",
                                             "string",
                                             description="My Test",
                                             data_ttl=1234,
@@ -150,107 +150,55 @@ class TestStreamsAPI(HttpTestBase):
         self.prepare_json_response("POST", "/ws/DataStream",
                                    CREATE_DATA_STREAM_BAD_TYPE, status=400)
         self.assertRaises(DeviceCloudHttpException,
-                          self.dc.streams.create_data_stream, "teststream", "string")
+                          self.dc.streams.create_stream, "teststream", "string")
 
     def test_get_streams_empty(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
         streams = self.dc.streams.get_streams()
-        self.assertEqual(streams, [])
+        self.assertEqual(list(streams), [])
 
     def test_get_streams(self):
         self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streams = self.dc.streams.get_streams()
+        streams = list(self.dc.streams.get_streams())
         self.assertEqual(len(streams), 2)
         self.assertIsInstance(streams[0], DataStream)
         self.assertIsInstance(streams[1], DataStream)
 
-    def test_get_stream_no_cache(self):
+    def test_get_stream(self):
         # Get a stream by ID when there is no cache
         stream = self.dc.streams.get_stream("/test/stream")
         self.assert_(isinstance(stream, DataStream))
         self.assertEqual(stream.get_stream_id(), "/test/stream")
 
-    def test_get_stream_cache_miss(self):
-        # Fill (empty) cache
-        self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
-        streams = self.dc.streams.get_streams()
-        self.assertEqual(streams, [])
-
-        # Now get a stream by ID
-        stream = self.dc.streams.get_stream("/test/stream")
-        self.assert_(isinstance(stream, DataStream))
-        self.assertEqual(stream.get_stream_id(), "/test/stream")
-
-    def test_get_stream_cache_hit(self):
-        # Fill cache by doing a get_steams() call
-        self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streams = self.dc.streams.get_streams()
-        self.assertEqual(len(streams), 2)
-        self.assertIsInstance(streams[0], DataStream)
-        self.assertIsInstance(streams[1], DataStream)
-
-        # Now, let's do a get_stream for stream 0
-        test_stream = self.dc.streams.get_stream("test")
-        self.assertEqual(test_stream.get_stream_id(), "test")
-        self.assertEqual(test_stream.get_data_ttl(), 172800)  # no HTTP request to retrieve
-
-    def test_get_stream_if_exists_nocache_does_not_exist(self):
-        # In this test, we try to get a stream that does not exist from a state in
-        # which no cache exists.  The stream does not exist, so we give a 404
+    def test_get_stream_if_exists_does_not_exist(self):
+        # Try to get a stream that does not exist
         self.prepare_response("GET", "/ws/DataStream/test", "", status=404)
         self.assertEqual(self.dc.streams.get_stream_if_exists("test"), None)
 
-    def test_get_stream_if_exists_cache_miss_does_not_exist(self):
-        # In this test, we try to get a stream that does not exist from a state in
-        # which a cache does exist.  In this case, we still expect a request against
-        # the device cloud to be made, but we will return a 404
-        self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS_EMPTY)
-        self.prepare_response("GET", "/ws/DataStream/test", "", status=404)
-        self.dc.streams.get_streams()
-        self.assertEqual(self.dc.streams.get_stream_if_exists("test"), None)
-
-    def test_get_stream_if_exists_cache_hit(self):
-        # In this case, we request to get a stream if it exists.  We have a
-        # cache containing the stream, so we just provide that stream
-        self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-        streams = self.dc.streams.get_streams()
+    def test_get_stream_if_exists_exists(self):
+        # Try to get a stream that does exist
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM, status=200)
         stream = self.dc.streams.get_stream_if_exists("test")
         self.assert_(stream is not None)
         self.assertEqual(stream.get_stream_id(), "test")
         self.assertEqual(stream.get_rollup_ttl(), 432000)
 
-    def test_get_stream_if_exists_nocache_exists(self):
-        # In this case, there is no cache but we have requested a stream that
-        # does in fact exist
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        stream = self.dc.streams.get_stream_if_exists("test")
-        self.assert_(stream is not None)
-        self.assertEqual(stream.get_stream_id(), "test")
-        self.assertEqual(stream.get_data_type(), "FLOAT")
-        self.assertEqual(stream.get_description(), "some description")
-        current_value = stream.get_current_value()
-        self.assertEqual(current_value.get_data(), 123.1)
-
 
 class TestDataStream(HttpTestBase):
 
-    def _get_stream(self, stream_id="test", with_cached_data=False):
-        if with_cached_data:
-            self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
-            self.dc.streams.get_streams()
-            return self.dc.streams.get_stream(stream_id)
-        else:
-            return self.dc.streams.get_stream(stream_id)
+    def _get_stream(self, response):
+        self.prepare_response("GET", "/ws/DataStream/test", response)
+        return self.dc.streams.get_stream("test")
 
     def test_bad_cached_data(self):
         # mostly for branch coverage
         self.assertRaises(TypeError, DataStream, self.dc._conn, "test", 3)
 
     def test_repr(self):
-        self.assertEqual(repr(self._get_stream()), "DataStream('test')")
+        self.assertEqual(repr(self._get_stream(GET_TEST_DATA_STREAM)), "DataStream('test')")
 
     def test_accessors(self):
-        stream = self._get_stream("test", with_cached_data=True)
+        stream = self._get_stream(GET_TEST_DATA_STREAM)
 
         # all of these should be cached
         self.assertEqual(stream.get_stream_id(), "test")
@@ -262,22 +210,20 @@ class TestDataStream(HttpTestBase):
 
         # for this one, we are required to make an HTTP request to get the
         # latest value
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
         self.assertEqual(stream.get_current_value().get_data(), 123.1)
 
     def test_get_current_value_empty(self):
-        stream = self._get_stream("test", with_cached_data=True)
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM_NO_CURRENT_VALUE)
+        stream = self._get_stream(GET_TEST_DATA_STREAM_NO_CURRENT_VALUE)
         self.assertEqual(stream.get_current_value(), None)
 
-    def test_write_datapoint_bad_arg(self):
-        test_stream = self._get_stream("test")
-        self.assertRaises(TypeError, test_stream.write_datapoint, 123)
+    def test_write_bad_arg(self):
+        test_stream = self._get_stream(GET_TEST_DATA_STREAM)
+        self.assertRaises(TypeError, test_stream.write, 123)
 
-    def test_write_datapoint_simple_nocache(self):
+    def test_write_simple(self):
         self.prepare_response("POST", "/ws/DataPoint/test", CREATE_DATAPOINT_RESPONSE, status=201)
-        test_stream = self._get_stream("test")
-        test_stream.write_datapoint(DataPoint(
+        test_stream = self._get_stream(GET_TEST_DATA_STREAM)
+        test_stream.write(DataPoint(
             data=123.4,
         ))
 
@@ -287,18 +233,31 @@ class TestDataStream(HttpTestBase):
             last_request.body,
             '<DataPoint><streamId>test</streamId><data>123.4</data></DataPoint>')
 
-    def test_write_datapoint_simple_with_cache(self):
+    def test_write_full(self):
         self.prepare_response("POST", "/ws/DataPoint/test", CREATE_DATAPOINT_RESPONSE, status=201)
-        test_stream = self._get_stream("test", with_cached_data=True)
-        test_stream.write_datapoint(DataPoint(
+        test_stream = self._get_stream(GET_TEST_DATA_STREAM)
+        test_stream.write(DataPoint(
             data=123.4,
+            description="Best Datapoint Ever?",
+            timestamp=datetime.datetime(2014, 7, 7, 14, 10, 34),
+            quality=99,
+            location=(99, 88, 77),
+            units="scolvilles",
         ))
 
         # verify that the body sent to the device cloud is sufficiently minimal
         last_request = httpretty.last_request()
         self.assertEqual(
             last_request.body,
-            '<DataPoint><streamId>test</streamId><data>123.4</data><streamType>FLOAT</streamType></DataPoint>')
+            '<DataPoint>'
+            '<streamId>test</streamId>'
+            '<data>123.4</data>'
+            '<description>Best Datapoint Ever?</description>'
+            '<timestamp>2014-07-07T14:10:34</timestamp>'  # TODO: does this need to include tz?
+            '<quality>99</quality>'
+            '<location>99,88,77</location>'
+            '<streamUnits>scolvilles</streamUnits>'
+            '</DataPoint>')
 
 
 class TestDataPoint(HttpTestBase):

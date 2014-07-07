@@ -25,7 +25,7 @@ SUCCESSFUL_STATUS_CODES = [
     201
 ]
 
-logger = logging.getLogger("dc")
+logger = logging.getLogger("devicecloud")
 
 
 class DeviceCloudException(Exception):

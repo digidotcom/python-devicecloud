@@ -10,12 +10,12 @@ from devicecloud import DeviceCloud
 dc = DeviceCloud('USER', "PASSWORD")  # TODO: replace
 
 streams = dc.get_streams_api()
-streams.create_data_stream(
+streams.create_stream(
     stream_id="test",
     data_type='float',
     description='some description',
 )
-streams.create_data_stream(
+streams.create_stream(
     stream_id="another/test",
     data_type="INTEGER",
     description="Some Integral Thing"

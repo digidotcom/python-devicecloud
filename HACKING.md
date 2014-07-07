@@ -42,7 +42,7 @@ activated):
     $ cd docs
     $ make html
 
-The docs that are build will be located at
+The docs that are built will be located at
 docs/_build/html/index.html.  Eventually, something will be rigged up
 so that these get released to the web on something like
 readthedocs.org.

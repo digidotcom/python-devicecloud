@@ -5,8 +5,7 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
-"""Module providing classes for interacting with device cloud data streams
-
+r"""Module providing classes for interacting with device cloud data streams
 
 Data Streams on the device cloud provide a mechanism for storing time-series
 values over a long period of time.  Each individual value in the time series
@@ -16,34 +15,43 @@ There are a few basic operations supported by the device cloud on streams which
 are supported by the device cloud and this library.  Here we give examples of
 each.
 
+Listing Streams
+^^^^^^^^^^^^^^^
+
+Although it is not recommended for production applications, it is often useful
+when building tools to be able to fetch a list of all streams.  This can be
+done by using :meth:`~StreamsAPI.get_streams`::
+
+    dc = DeviceCloud('user', 'pass')
+    for stream in dc.streams.get_streams():
+        print "%s: %s" % (stream.get_stream_id(),
+                          stream.get_description())
+
+
 Creating a Stream
 ^^^^^^^^^^^^^^^^^
 
 Streams can be created in two ways, both of which are supported by this library.
 
-1. Create a stream explicitly using :py:meth:`~.StreamAPI.create_data_stream`
+1. Create a stream explicitly using :py:meth:`~.StreamAPI.create_stream`
 2. Write a data point to a stream that does not yet exist but include information key'
    to the stream using :py:meth:`~.StreamAPI.stream_write`.
 
 Here's examples of these two methods for creating a new stream::
 
-    from devicecloud import DeviceCloud
-    from devicecloud.streams import Datapoint, STREAM_TYPE_FLOAT
-
     dc = DeviceCloud('user', 'pass')
-    streams = dc.get_streams_api()
 
     # explicitly create a new data stream
-    humidity_stream = streams.create_data_stream(
-        stream_id="/%s/hudidity" % some_id,
+    humidity_stream = dc.streams.create_stream(
+        stream_id="mystreams/hudidity",
         data_type="float",
         description="Humidity")
-    humidity_stream.write(81.2)
+    humidity_stream.write(Datapoint(81.2))
 
     # create data stream implicitly
     temperature_stream = streams.get_stream("/%s/temperature" % some_id)
     temperature_stream.write(Datapoint(
-            stream_id="/%s/temperature" % some_id,
+            stream_id="mystreams/temperature" % some_id,
             data=74.1,
             description="Outside Air Temperature in F",
             data_type=STREAM_TYPE_FLOAT,
@@ -53,17 +61,57 @@ Here's examples of these two methods for creating a new stream::
 Getting Information About A Stream
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Whether we know a stream by id and have gotten a reference using
+:meth:`~StreamsAPI.get_stream` or have discovered it using
+:meth:`~StreamsAPI.get_streams`, the :class:`~DataStream` should
+be able to provide access to all metadata about the stream that
+you may need.  Here we show several of them::
 
+    strm = dc.streams.get_stream("test")
+    print strm.get_stream_id()
+    print strm.get_data_type()
+    print strm.get_units()
+    print strm.get_description()
+    print strm.get_data_ttl()
+    print strm.get_rollup_ttl()
+    print strm.get_current_value()  # return DataPoint object
+
+.. note::
+
+   :meth:`~.DataStream.get_current_value()` does not use cached values by
+   default and will make a web service call to get the most recent current
+   value unless ``use_cached`` is set to True when called.
+
+Deleting a Stream
+^^^^^^^^^^^^^^^^^
+
+Deleting a data stream is possible by calling :meth:`~DataStream.delete`::
+
+    strm = dc.streams.get_stream("doomed")
+    strm.delete()
+
+Updating Stream Metadata
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+This feature is currently not supported.  Some stream information may
+be updated by writing a :class:`~DataPoint` and including updated
+stream info elements.
+
+DataPoint objects
+^^^^^^^^^^^^^^^^^
+
+The :class:`DataPoint` class encapsulates all information required for
+both writing data points as well as retrieving information about data
+points stored on the device cloud.
 
 """
 
 from StringIO import StringIO
-import datetime
 import logging
 
 from devicecloud.apibase import APIBase
 from devicecloud import DeviceCloudException, DeviceCloudHttpException
-from devicecloud.util import iso8601_to_dt
+from devicecloud.util import conditional_write, to_none_or_dt, validate_type
 from types import NoneType
 
 
@@ -74,15 +122,6 @@ DATA_POINT_TEMPLATE = """\
 </DataPoint>
 """
 
-DATA_STREAM_TEMPLATE = """\
-<DataStream>
-   <streamId>{id}</streamId>
-   <dataType>{data_type}</dataType>
-   <description>{description}</description>
-   <dataTtl>{data_ttl}</dataTtl>
-   <rollupTtl>{rollup_ttl}</rollupTtl>
-</DataStream>
-"""
 
 STREAM_TYPE_INTEGER = "INTEGER"
 STREAM_TYPE_LONG = "LONG"
@@ -107,27 +146,7 @@ DSTREAM_TYPE_MAP = {
 
 ONE_DAY = 86400  # in seconds
 
-logger = logging.getLogger("dc.streams")
-
-
-#--- Helper Functions
-def _validate_type(input, *types):
-    if not isinstance(input, types):
-        raise TypeError("Input expected to one of following types: %s" % (types, ))
-    return input
-
-
-def _to_none_or_dt(input):
-    """Convert string/None to None or a datetime object"""
-    # if this is already None or a datetime, just use that
-    if isinstance(input, (NoneType, datetime.datetime)):
-        return input
-
-    if isinstance(input, basestring):
-        # try to convert from ISO8601
-        return iso8601_to_dt(input)
-    else:
-        raise TypeError("Not a string, NoneType, or datetime object")
+logger = logging.getLogger("devicecloud.streams")
 
 
 class StreamException(DeviceCloudException):
@@ -147,50 +166,70 @@ class StreamAPI(APIBase):
 
     def __init__(self, *args, **kwargs):
         APIBase.__init__(self, *args, **kwargs)
-        self._streams_cache = {}  # mapping of streamId -> DataStream objects
-        self._streams_cache_valid = False
 
-    def _add_stream_to_cache(self, stream):
-        self._streams_cache[stream.get_stream_id()] = stream
-
-    def _get_streams(self, use_cached=True):
+    def _get_streams(self):
         """Clear and update internal cache of stream objects"""
-        if not use_cached or not self._streams_cache_valid:
-            self._streams_cache = {}
-            response = self._conn.get_json("/ws/DataStream")
-            for stream_data in response["items"]:
-                stream_id = stream_data["streamId"]
-                stream = DataStream(self._conn, stream_id, stream_data)
-                self._streams_cache[stream_id] = stream
-            self._streams_cache_valid = True
-        return self._streams_cache
+        # TODO: handle paging, perhaps change this to be a generator
+        streams = {}
+        response = self._conn.get_json("/ws/DataStream")
+        for stream_data in response["items"]:
+            stream_id = stream_data["streamId"]
+            stream = DataStream(self._conn, stream_id, stream_data)
+            streams[stream_id] = stream
+        return streams
 
-    def create_data_stream(self, stream_id, data_type, description=None, data_ttl=(ONE_DAY * 2),
-                           rollup_ttl=(ONE_DAY * 5)):
-        """Create and return a DataStream object"""
-        description = description or ""
+    def create_stream(self, stream_id, data_type, description=None, data_ttl=None,
+                      rollup_ttl=None, units=None):
+        """Create a new data stream on the device cloud
 
-        data = DATA_STREAM_TEMPLATE.format(id=stream_id,
-                                           description=description,
-                                           data_type=data_type,
-                                           data_ttl=data_ttl,
-                                           rollup_ttl=rollup_ttl)
+        This method will attempt to create a new data stream on the device cloud.
+        This method will only succeed if the stream does not already exist.
 
-        self._conn.post("/ws/DataStream", data)
-        logger.info("Data stream (%s) created successfully", stream_id)
-        stream = DataStream(self._conn, stream_id)
-        self._add_stream_to_cache(stream)
-        return stream
-
-    def get_streams(self, use_cached=True):
-        """Return the list of all streams present on the device cloud
-
-        :param use_cached: If False, the function will always request the latest from the device cloud.
-            If True, the device will not make a request if it already has cached data.
-        :returns:  list of :class:`.DataStream` instances
+        :param stream_id: (str) The path/id of the stream being created on the device cloud.
+        :param data_type: (str) The type of this stream.  This must be in the set
+            `{ INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }`.  These values are
+            available in constants like :attr:`~STREAM_TYPE_INTEGER`.
+        :param description: (str) An optional description of this stream. See :meth:`~DataStream.get_description`.
+        :param data_ttl: (int) The TTL for data points in this stream. See :meth:`~DataStream.get_data_ttl`.
+        :param rollup_ttl: (int) The TTL for performing rollups on data. See :meth:~DataStream.get_rollup_ttl`.
+        :param units: (str) Units for data in this stream.  See :meth:`~DataStream.get_units`
 
         """
-        return self._get_streams(use_cached).values()
+
+        stream_id = validate_type(stream_id, basestring)
+        data_type = validate_type(data_type, NoneType, basestring)
+        if isinstance(data_type, basestring):
+            data_type = str(data_type).upper()
+        if not data_type in set([None, ] + DSTREAM_TYPE_MAP.keys()):
+            raise ValueError("data_type %r is not valid" % data_type)
+        description = validate_type(stream_id, NoneType, basestring)
+        data_ttl = validate_type(data_ttl, NoneType, int, long)
+        rollup_ttl = validate_type(rollup_ttl, NoneType, int, long)
+        units = validate_type(units, NoneType, basestring)
+
+        sio = StringIO()
+        sio.write("<DataStream>")
+        conditional_write(sio, "<streamId>{}</streamId>", stream_id)
+        conditional_write(sio, "<dataType>{}</dataType>", data_type)
+        conditional_write(sio, "<description>{}</description>", description)
+        conditional_write(sio, "<dataTtl>{}</dataTtl>", data_ttl)
+        conditional_write(sio, "<rollupTtl>{}</rollupTtl>", rollup_ttl)
+        conditional_write(sio, "<units>{}</units>", units)
+        sio.write("</DataStream>")
+
+        self._conn.post("/ws/DataStream", sio.getvalue())
+        logger.info("Data stream (%s) created successfully", stream_id)
+        stream = DataStream(self._conn, stream_id)
+        return stream
+
+    def get_streams(self):
+        """Return the iterator over all streams present on the device cloud
+
+        :returns:  iterator over all :class:`.DataStream` instances on the device cloud
+
+        """
+        # TODO: deal with paging.  We now return a generator, so the interface should look the same
+        return iter(self._get_streams().values())
 
     def get_stream(self, stream_id):
         """Return a reference to a stream with the given ``stream_id``
@@ -206,11 +245,6 @@ class StreamAPI(APIBase):
         :returns: (:class:`.DataStream`) datastream instance with the provided stream_id
 
         """
-        if self._streams_cache_valid:
-            s = self._streams_cache.get(stream_id)
-            if s is not None:
-                return s
-
         return DataStream(self._conn, stream_id)
 
     def get_stream_if_exists(self, stream_id):
@@ -295,9 +329,9 @@ class DataPoint(object):
         self.set_units(units)
 
         # these should only ever be read by the public API
-        self._dp_id = _validate_type(dp_id, NoneType, basestring)
-        self._customer_id = _validate_type(customer_id, NoneType, basestring)
-        self._server_timestamp = _to_none_or_dt(server_timestamp)
+        self._dp_id = validate_type(dp_id, NoneType, basestring)
+        self._customer_id = validate_type(customer_id, NoneType, basestring)
+        self._server_timestamp = to_none_or_dt(server_timestamp)
 
     def get_id(self):
         """Get the ID of this data point if available
@@ -333,7 +367,7 @@ class DataPoint(object):
 
     def set_stream_id(self, stream_id):
         """Set the stream id associated with this data point"""
-        self._stream_id = _validate_type(stream_id, NoneType, basestring)
+        self._stream_id = validate_type(stream_id, NoneType, basestring)
 
     def get_description(self):
         """Get the description associated with this data point if available"""
@@ -341,7 +375,7 @@ class DataPoint(object):
 
     def set_description(self, description):
         """Set the description for this data point"""
-        self._description = _validate_type(description, NoneType, basestring)
+        self._description = validate_type(description, NoneType, basestring)
 
     def get_timestamp(self):
         """Get the timestamp of this datapoint as a :class:`datetime.datetime` object
@@ -359,7 +393,7 @@ class DataPoint(object):
         string with either ISO8601 or unix timestamp form.
 
         """
-        self._timestamp = _to_none_or_dt(timestamp)
+        self._timestamp = to_none_or_dt(timestamp)
 
     def get_server_timestamp(self):
         """Get the date and time at which the server received this data point"""
@@ -387,7 +421,7 @@ class DataPoint(object):
         elif isinstance(quality, float):
             quality = int(quality)
 
-        self._quality = _validate_type(quality, NoneType, int, long)
+        self._quality = validate_type(quality, NoneType, int, long)
 
     def get_location(self):
         """Get the location for this data point
@@ -450,7 +484,7 @@ class DataPoint(object):
         { INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }.
 
         """
-        _validate_type(data_type, NoneType, basestring)
+        validate_type(data_type, NoneType, basestring)
         if isinstance(data_type, basestring):
             data_type = str(data_type).upper()
         if not data_type in set([None] + DSTREAM_TYPE_MAP.keys()):
@@ -470,7 +504,7 @@ class DataPoint(object):
         stream might be created with the write of a data point.
 
         """
-        self._units = _validate_type(unit, NoneType, basestring)
+        self._units = validate_type(unit, NoneType, basestring)
 
     def to_xml(self):
         """Convert this datapoint into a form suitable for pushing to device cloud
@@ -483,25 +517,22 @@ class DataPoint(object):
         out.write("<DataPoint>")
         out.write("<streamId>%s</streamId>" % (self._stream_id[1:] if self._stream_id.startswith('/') else self._stream_id))
         out.write("<data>%s</data>" % self.get_data())
-        if self.get_description() is not None:
-            out.write("<description>%s</description>" % self.get_description())
+        conditional_write(out, "<description>{}</description>", self.get_description())
         if self.get_timestamp() is not None:
-            # TODO: convert to ISO8601
-            out.write("<timestamp>%s</timestamp>" % self.get_timestamp())
-        if self.get_quality() is not None:
-            out.write("<quality>%s</quality>" % self.get_quality())
+            out.write("<timestamp>{}</timestamp>".format(self.get_timestamp().isoformat()))
+        conditional_write(out, "<quality>{}</quality>", self.get_quality())
         if self.get_location() is not None:
             out.write("<location>%s</location>" % ",".join(map(str, self.get_location())))
-        if self.get_data_type():
-            out.write("<streamType>%s</streamType>" % self.get_data_type())
-        if self._units:
-            out.write("<streamUnits>%s</streamUnits>" % self._units)
+        conditional_write(out, "<streamType>{}</streamType>", self.get_data_type())
+        conditional_write(out, "<streamUnits>{}</streamUnits>", self.get_units())
         out.write("</DataPoint>")
         return out.getvalue()
 
 
 class DataStream(object):
     """Encapsulation of a DataStream's methods and attributes"""
+
+    # TODO: Add ability to modify stream metadata (e.g. set_data_ttl, etc.)
 
     def __init__(self, conn, stream_id, cached_data=None):
         if not isinstance(cached_data, (NoneType, dict)):
@@ -635,7 +666,17 @@ class DataStream(object):
         else:
             return None
 
-    def write_datapoint(self, datapoint):
+    def delete(self):
+        """Delete this stream from the device cloud along with its history
+
+        :raises: :class:`.DeviceCloudHttpException` in the case of an unexpected http error
+        :raises: :class:`.NoSuchStreamException` if this stream has not yet been created
+
+        """
+        # TODO: Implement delete functionality
+        pass
+
+    def write(self, datapoint):
         """Write some raw data to a stream using the DataPoint API
 
         This method will mutate the datapoint provided to populate it with information
@@ -659,5 +700,4 @@ class DataStream(object):
 
     def read(self):
         """Read one or more DataPoints from a stream"""
-
         # TODO: Implement me

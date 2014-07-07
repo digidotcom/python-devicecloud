@@ -244,7 +244,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'python-devicecloud', u'python-devicecloud Documentation',
-   u'Paul Osborne, Tom Manley, Stephen Stack', 'python-devicecloud', 'One line description of project.',
+   u'Paul Osborne, Tom Manley, Stephen Stack', 'python-devicecloud',
+   'Device Cloud Web Services Client for Python',
    'Miscellaneous'),
 ]
 
