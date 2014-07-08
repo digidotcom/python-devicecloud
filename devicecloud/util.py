@@ -6,7 +6,7 @@
 # Etherios, Inc. is a Division of Digi International.
 
 import datetime
-from types import NoneType
+import six
 
 
 def conditional_write(strm, fmt, value, *args, **kwargs):
@@ -23,10 +23,10 @@ def iso8601_to_dt(iso8601):
 def to_none_or_dt(input):
     """Convert string/None to None or a datetime object"""
     # if this is already None or a datetime, just use that
-    if isinstance(input, (NoneType, datetime.datetime)):
+    if isinstance(input, (type(None), datetime.datetime)):
         return input
 
-    if isinstance(input, basestring):
+    if isinstance(input, six.string_types):
         # try to convert from ISO8601
         return iso8601_to_dt(input)
     else:

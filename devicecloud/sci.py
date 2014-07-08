@@ -7,7 +7,7 @@
 
 """Server Command Interface functionality"""
 from devicecloud.apibase import APIBase
-from types import NoneType
+import six
 
 
 SCI_TEMPLATE = """\
@@ -81,7 +81,7 @@ class ServerCommandInterfaceAPI(APIBase):
         TODO: document other params
 
         """
-        if not isinstance(payload, basestring):
+        if not isinstance(payload, six.string_types):
             raise TypeError("payload is required to be string")
 
         # validate targets and bulid targets xml section
@@ -95,7 +95,7 @@ class ServerCommandInterfaceAPI(APIBase):
         targets_xml = "".join(t.to_xml() for t in targets)
 
         # reply argument
-        if not isinstance(reply, (NoneType, basestring)):
+        if not isinstance(reply, (type(None), six.string_types)):
             raise TypeError("reply must be either None or a string")
         if reply is not None:
             reply_xml = ' reply="{}"'.format(reply)
@@ -103,7 +103,7 @@ class ServerCommandInterfaceAPI(APIBase):
             reply_xml = ''
 
         # synchronous argument
-        if not isinstance(synchronous, (NoneType, bool)):
+        if not isinstance(synchronous, (type(None), bool)):
             raise TypeError("synchronous expected to be either None or a boolean")
         if synchronous is not None:
             synchronous_xml = ' synchronous="{}"'.format('true' if synchronous else 'false')
@@ -112,7 +112,7 @@ class ServerCommandInterfaceAPI(APIBase):
 
         # sync_timeout argument
         # TODO: What units is syncTimeout in?  seconds?
-        if not isinstance(sync_timeout, (NoneType, int, long)):
+        if not sync_timeout is None or isinstance(sync_timeout, six.integer_types):
             raise TypeError("sync_timeout expected to either be None or a number")
         if sync_timeout is not None:
             sync_timeout_xml = ' syncTimeout="{}"'.format(sync_timeout)
@@ -120,7 +120,7 @@ class ServerCommandInterfaceAPI(APIBase):
             sync_timeout_xml = ''
 
         # cache argument
-        if not isinstance(cache, (NoneType, bool)):
+        if not isinstance(cache, (type(None), bool)):
             raise TypeError("cache expected to either be None or a boolean")
         if cache is not None:
             cache_xml = ' cache="{}"'.format('true' if cache else 'false')
@@ -128,7 +128,7 @@ class ServerCommandInterfaceAPI(APIBase):
             cache_xml = ''
 
         # allow_offline argument
-        if not isinstance(allow_offline, (NoneType, bool)):
+        if not isinstance(allow_offline, (type(None), bool)):
             raise TypeError("allow_offline is expected to be either None or a boolean")
         if allow_offline is not None:
             allow_offline_xml = ' allowOffline="{}"'.format('true' if allow_offline else 'false')
@@ -136,7 +136,7 @@ class ServerCommandInterfaceAPI(APIBase):
             allow_offline_xml = ''
 
         # wait_for_reconnect argument
-        if not isinstance(wait_for_reconnect, (NoneType, bool)):
+        if not isinstance(wait_for_reconnect, (type(None), bool)):
             raise TypeError("wait_for_reconnect expected to be either None or a boolean")
         if wait_for_reconnect is not None:
             wait_for_reconnect_xml = ' waitForReconnect="{}"'.format('true' if wait_for_reconnect else 'false')
