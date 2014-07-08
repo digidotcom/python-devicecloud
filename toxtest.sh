@@ -32,6 +32,7 @@ do
 done
 
 # Now, run the tests after sourcing venv for tox install/use
+pythonbrew symlink
 pythonbrew venv -p 2.7.7 create python-devicecloud-tox
 pythonbrew venv use python-devicecloud-tox
 pip install -r test-requirements.txt
