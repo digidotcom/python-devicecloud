@@ -1,11 +1,15 @@
-from devicecloud.api.sci import ServerCommandInterfaceAPI
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2014 Etherios, Inc. All rights reserved.
+# Etherios, Inc. is a Division of Digi International.
+
+import json
 
 __version__ = "0.1"
 
-from devicecloud.api.devicecore import DeviceCoreAPI
 from requests.auth import HTTPBasicAuth
-from api.filedata import FileDataAPI
-from api.streams import StreamAPI
 import logging
 import requests
 import time
@@ -21,10 +25,7 @@ SUCCESSFUL_STATUS_CODES = [
     201
 ]
 
-PING_URL = "/ws/DeviceCore?size=1"
-ONE_DAY = 86400  # in seconds
-
-logger = logging.getLogger("dc")
+logger = logging.getLogger("devicecloud")
 
 
 class DeviceCloudException(Exception):
@@ -33,21 +34,23 @@ class DeviceCloudException(Exception):
 
 class DeviceCloudHttpException(DeviceCloudException):
     """Exception raised when we failed a request to the DC over HTTP"""
+
     def __init__(self, response, *args, **kwargs):
         DeviceCloudException.__init__(self, *args, **kwargs)
         self.response = response
 
 
 class _DeviceCloudConnection(object):
+    """Encapsulate information about a connection to the device cloud
+
+    This class is used internally and does not represent a part of the public API
+    to the device cloud.
+
+    """
+
     def __init__(self, auth, base_url):
         self._auth = auth
         self._base_url = base_url
-
-    def connect(self):
-        """Establish/Verify a connection with the Device Cloud"""
-
-        # Ping the device cloud, raises exception if it fails
-        self.ping()
 
     def _make_url(self, path):
         if not path.startswith("/"):
@@ -67,12 +70,24 @@ class _DeviceCloudConnection(object):
         raise DeviceCloudHttpException(response, err)
 
     def ping(self):
-        """Ping the Device Cloud using the authorization provided"""
-        self.get(PING_URL)  # TODO: Is this sufficient, valid?
+        """Ping the Device Cloud using the authorization provided
+
+        :return: The response of getting a single device from DeviceCore on success
+        :raises: :class:`.DeviceCloudHttpException` if there is a problem
+
+        """
+        return self.get("/ws/DeviceCore?size=1")
 
     def get(self, path, retries=0, **kwargs):
         url = self._make_url(path)
         return self._make_request(retries, "GET", url, **kwargs)
+
+    def get_json(self, path, retries=0, **kwargs):
+        url = self._make_url(path)
+        headers = kwargs.setdefault('headers', {})
+        headers.update({'Accept': 'application/json'})
+        response = self._make_request(retries, "GET", url, **kwargs)
+        return json.loads(response.text)
 
     def post(self, path, data, retries=0, **kwargs):
         url = self._make_url(path)
@@ -88,91 +103,128 @@ class _DeviceCloudConnection(object):
 
 
 class DeviceCloud(object):
-    """Provides access to information/operations on a device cloud account"""
+    """Provide access to core device cloud features
+
+    This class is the primary interface to the device cloud through which access to individual
+    device cloud services is provided.  Creating a ``DeviceCloud`` object is as easy as doing
+    the following::
+
+        from devicecloud import DeviceCloud
+
+        dc = DeviceCloud('user', 'pass')
+        if dc.has_valid_credentials():
+            print dc.devicecore.list_devices()
+
+    From there, access to all of the device clouds features are possible.  In some cases, methods
+    for quickly performing selected actions may be provided directly via the ``DeviceCloud`` object
+    while advanced usage requires using functionality exposed through other interfaces.
+
+    """
 
     def __init__(self, username, password, base_url="https://login.etherios.com"):
         self._conn = _DeviceCloudConnection(HTTPBasicAuth(username, password), base_url)
-        self._conn.connect()
+        self._streams_api = None  # streams property api ref
+        self._filedata_api = None  # filedata property api ref
+        self._devicecore_api = None  # devicecore property api ref
+        self._sci_api = None  # sci property api ref
 
-        # API Components
-        self._file_data = FileDataAPI(self._conn)
-        self._streams = StreamAPI(self._conn)
-        self._sci = ServerCommandInterfaceAPI(self._conn)
-        self._device_core = DeviceCoreAPI(self._conn, self._sci)
+    def has_valid_credentials(self):
+        """Verify that the device cloud url, username, and password are valid
 
-    #---------------------------------------------------------------------------
-    # API - Streams
-    #---------------------------------------------------------------------------
-    def create_data_stream(self, name, data_type, description=None,
-                                                  data_ttl=(ONE_DAY * 2),
-                                                  rollup_ttl=(ONE_DAY * 5)):
-        """Create and return a DataStream object from the Device Cloud
+        This method will attempt to "ping" the device cloud in order to ensure that all
+        of the provided information is correct.
 
-        TODO: Describe the usage of `data_ttl` and `rollup_ttl`
-        """
-        return self._streams.create_data_stream(name, data_type, description,
-                                                data_ttl, rollup_ttl)
-
-    def get_available_streams(self, cached=False):
-        """Return a list of all available streams"""
-        return self._streams.get_streams(cached)
-
-    def get_stream(self, stream_id, cached=False):
-        return self._streams.get_stream(stream_id, cached)
-
-    def stream_write(self, stream_id, data):
-        """Write a DataPoint to a previously opened DataStream"""
-        self._streams.stream_write(stream_id, data)
-
-    def stream_read(self, stream_id):
-        """Return data from some stream"""
-        return self._streams.stream_read(stream_id)
-
-    #---------------------------------------------------------------------------
-    # API - FileData
-    #---------------------------------------------------------------------------
-    def get_filedata_file(self, file_glob, device=None, from_date=None, contents=False):
-        """Gets files that match the *file_glob* pattern using the FileData API
-
-        If *device* is not ``None`` then it will only look for files from *device*.
-        If *from_date* is not ``None`` then it will only for files modified since
-        *from_date*. If *include_contents* is ``True`` then the file contents
-        will be retrieved.
-        """
-        return self._file_data.get_files(file_glob, device, from_date, contents)
-
-    def put_filedata_file(self, file_name, file_data):
-        self._file_data.put_file(file_name, file_data)
-
-    #---------------------------------------------------------------------------
-    # API - DeviceCore
-    #---------------------------------------------------------------------------
-    def list_devices(self):
-        """Get information about all devices associated with this device cloud account
-
-        This method will return a list of :class:`.Device` instances.  Additional operations
-        can be performed on these instances.
+        :return: True if the credentials are valid and false if not
+        :rtype: bool
 
         """
-        return self._device_core.list_devices()
+        try:
+            self._conn.ping()
+        except DeviceCloudException:
+            return False
+        else:
+            return True
 
-    #---------------------------------------------------------------------------
-    # API - Devices (SCI)
-    #---------------------------------------------------------------------------
-    def sci_put_file(self, addr, file_name, file_data):
-        """Put a file onto the filesystem of a connected device"""
-        raise NotImplementedError()
+    @property
+    def streams(self):
+        """Property providing access to the :class:`.StreamsAPI`"""
+        if self._streams_api is None:
+            self._streams_api = self.get_streams_api()
+        return self._streams_api
 
-    def sci_get_file(self, addr, glob):
-        """Get a file from the filesystem of a connected device"""
-        raise NotImplementedError()
+    @property
+    def filedata(self):
+        """Property providing access to the :class:`.FileDataAPI`"""
+        if self._filedata_api is None:
+            self._filedata_api = self.get_filedata_api()
+        return self._filedata_api
 
-    #---------------------------------------------------------------------------
-    # API - Monitors
-    #---------------------------------------------------------------------------
-    # TODO: Implement me
+    @property
+    def devicecore(self):
+        """Property providing access to the :class:`.DeviceCoreAPI`"""
+        if self._devicecore_api is None:
+            self._devicecore_api = self.get_devicecore_api()
+        return self._devicecore_api
 
-    #---------------------------------------------------------------------------
-    # API - Alarms
-    #---------------------------------------------------------------------------
-    # TODO: Implement me
+    @property
+    def sci(self):
+        """Property providing access to the :class:`.ServerCommandInterfaceAPI`"""
+        if self._sci_api is None:
+            self._sci_api = self.get_sci_api()
+        return self._sci_api
+
+    def get_streams_api(self):
+        """Returns a :class:`.StreamsAPI` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.streams` but will create
+        a new object (with a new cache) each time called.
+
+        :return: Stream API object bound to this device cloud account
+        :rtype: :class:`.StreamsAPI`
+
+        """
+        from devicecloud.streams import StreamsAPI
+
+        return StreamsAPI(self._conn)
+
+    def get_filedata_api(self):
+        """Returns a :class:`.FileDataAPI` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.filedata` but will create
+        a new object (with a new cache) each time called.
+
+        :return: FileData API object bound to this device cloud account
+        :rtype: :class:`.FileDataAPI`
+
+        """
+        from devicecloud.filedata import FileDataAPI  # prevent circular imports
+
+        return FileDataAPI(self._conn)
+
+    def get_devicecore_api(self):
+        """Returns a :class:`.DeviceCoreAPI` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.devicecore` but will create
+        a new object (with a new cache) each time called.
+
+        :return: devicecore API object bound to this device cloud account
+        :rtype: :class:`.DeviceCoreAPI`
+
+        """
+        from devicecloud.devicecore import DeviceCoreAPI
+
+        return DeviceCoreAPI(self._conn, self.get_sci_api())
+
+    def get_sci_api(self):
+        """Returns a :class:`.ServerCommandInterfaceAPI` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.sci` but will create
+        a new object (with a new cache) each time called.
+
+        :return: SCI API object bound to this device cloud account
+        :rtype: :class:`.ServerCommandInterfaceAPI`
+
+        """
+        from devicecloud.sci import ServerCommandInterfaceAPI
+
+        return ServerCommandInterfaceAPI(self._conn)

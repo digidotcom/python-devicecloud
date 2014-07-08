@@ -1,8 +1,16 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2014 Etherios, Inc. All rights reserved.
+# Etherios, Inc. is a Division of Digi International.
+
 import unittest
-from devicecloud import DeviceCloud
-from devicecloud.api.sci import DeviceTarget
+
+from devicecloud.sci import DeviceTarget
 from devicecloud.test.test_utilities import HttpTestBase
 import httpretty
+
 
 EXAMPLE_SCI_DEVICE_NOT_CONNECTED = """\
 <sci_reply version="1.0"><reboot><device id="00000000-00000000-00409DFF-FF58175B"><error id="2001"><desc>Device Not Connected</desc></error></device></reboot></sci_reply>
@@ -15,7 +23,7 @@ class TestSCI(HttpTestBase):
 
     def test_sci_successful_error(self):
         self._prepare_sci_response(EXAMPLE_SCI_DEVICE_NOT_CONNECTED)
-        self.dc._sci.send_sci(
+        self.dc.get_sci_api().send_sci(
             operation="send_message",
             target=DeviceTarget("00000000-00000000-00409DFF-FF58175B"),
             payload="<reset/>")

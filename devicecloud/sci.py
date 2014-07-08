@@ -1,5 +1,12 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2014 Etherios, Inc. All rights reserved.
+# Etherios, Inc. is a Division of Digi International.
+
 """Server Command Interface functionality"""
-from devicecloud.api.apibase import APIBase
+from devicecloud.apibase import APIBase
 from types import NoneType
 
 
@@ -66,11 +73,12 @@ class ServerCommandInterfaceAPI(APIBase):
                  cache=None, allow_offline=None, wait_for_reconnect=None):
         """Send SCI request to 1 or more targets
 
-        This method has several required arguments and several optional arguments:
+        :param str operation: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+            file_system, data_service, and reboot}
+        :param target: The device(s) to be targeted with this request
+        :type target: :class:`~.TargetABC` or list of :class:`~.TargetABC` instances
 
-        * ``operation``: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
-            file_system, data_service, and reboot
-        * ``target``: may either be a single ``TargetABC`` or a list of ``TargetABC``s.
+        TODO: document other params
 
         """
         if not isinstance(payload, basestring):

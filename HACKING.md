@@ -23,8 +23,29 @@ test-requirements.txt).  From the project root:
 
     $ nosetests .
 
+To run the unit tests with coverage results (view cover/index.html),
+do the following:
+
+    $ nosetests --with-coverage --cover-html --cover-package=devicecloud .
+
 New contributions to the library will only be accepted if they include
 unit test coverage (with some exceptions).
+
+
+Build the Documentation
+-----------------------
+
+Documentation (outside of this file and the README) is done via
+Sphinx.  To build the docs, just do the following (with virtualenv
+activated):
+
+    $ cd docs
+    $ make html
+
+The docs that are built will be located at
+docs/_build/html/index.html.  Eventually, something will be rigged up
+so that these get released to the web on something like
+readthedocs.org.
 
 
 Open Source License Header
