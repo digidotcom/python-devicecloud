@@ -114,19 +114,19 @@ GET_TEST_DATA_STREAM_NO_CURRENT_VALUE = """\
 
 
 GET_STREAM_RESULT = {
-    u'items': [
-        {u'cstId': u'7603',
-         u'dataTtl': u'1234',
-         u'dataType': u'STRING',
-         u'description': u'My Test',
-         u'forwardTo': u'',
-         u'rollupTtl': u'5678',
-         u'streamId': u'teststream',
-         u'units': u''}
+    'items': [
+        {'cstId': '7603',
+         'dataTtl': '1234',
+         'dataType': 'STRING',
+         'description': 'My Test',
+         'forwardTo': '',
+         'rollupTtl': '5678',
+         'streamId': 'teststream',
+         'units': ''}
     ],
-    u'pageCursor': u'b8773c45-1-5a7afea7',
-    u'requestedSize': u'1000',
-    u'resultSize': u'1'
+    'pageCursor': 'b8773c45-1-5a7afea7',
+    'requestedSize': '1000',
+    'resultSize': '1'
 }
 
 
