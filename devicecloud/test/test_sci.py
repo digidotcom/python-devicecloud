@@ -10,6 +10,7 @@ import unittest
 from devicecloud.sci import DeviceTarget
 from devicecloud.test.test_utilities import HttpTestBase
 import httpretty
+import six
 
 
 EXAMPLE_SCI_DEVICE_NOT_CONNECTED = """\
@@ -28,7 +29,14 @@ class TestSCI(HttpTestBase):
             target=DeviceTarget("00000000-00000000-00409DFF-FF58175B"),
             payload="<reset/>")
         self.assertEqual(httpretty.last_request().body,
-                         '<sci_request version="1.0"><send_message><targets><device id="00000000-00000000-00409DFF-FF58175B"/></targets><reset/></send_message></sci_request>')
+                         six.b('<sci_request version="1.0">'
+                               '<send_message>'
+                               '<targets>'
+                               '<device id="00000000-00000000-00409DFF-FF58175B"/>'
+                               '</targets>'
+                               '<reset/>'
+                               '</send_message>'
+                               '</sci_request>'))
 
 
 

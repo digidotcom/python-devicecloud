@@ -18,6 +18,8 @@ Ubuntu, you should be able to do:
 Running the Unit Tests
 ----------------------
 
+### Running Tests with Nose
+
 Running the tests is easy with nose (including in
 test-requirements.txt).  From the project root:
 
@@ -30,6 +32,18 @@ do the following:
 
 New contributions to the library will only be accepted if they include
 unit test coverage (with some exceptions).
+
+### Testing All Versions with Tox
+
+We also support running the tests against all supported versions of
+python using a combination of [tox]() and [pythonbrew]().  To run all
+of the tests against all supported versions of python, just do the
+following:
+
+    $ ./toxtest.sh
+
+This might take awhile the first time as it will build from source a
+version of the interpreter for each version supported.
 
 
 Build the Documentation

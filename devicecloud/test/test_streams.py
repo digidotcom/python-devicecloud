@@ -15,6 +15,7 @@ from devicecloud import DeviceCloudHttpException
 
 # Example HTTP Responses
 import httpretty
+import six
 
 CREATE_DATA_STREAM = {
     "location": "teststream"
@@ -113,19 +114,19 @@ GET_TEST_DATA_STREAM_NO_CURRENT_VALUE = """\
 
 
 GET_STREAM_RESULT = {
-    u'items': [
-        {u'cstId': u'7603',
-         u'dataTtl': u'1234',
-         u'dataType': u'STRING',
-         u'description': u'My Test',
-         u'forwardTo': u'',
-         u'rollupTtl': u'5678',
-         u'streamId': u'teststream',
-         u'units': u''}
+    'items': [
+        {'cstId': '7603',
+         'dataTtl': '1234',
+         'dataType': 'STRING',
+         'description': 'My Test',
+         'forwardTo': '',
+         'rollupTtl': '5678',
+         'streamId': 'teststream',
+         'units': ''}
     ],
-    u'pageCursor': u'b8773c45-1-5a7afea7',
-    u'requestedSize': u'1000',
-    u'resultSize': u'1'
+    'pageCursor': 'b8773c45-1-5a7afea7',
+    'requestedSize': '1000',
+    'resultSize': '1'
 }
 
 
@@ -228,10 +229,12 @@ class TestDataStream(HttpTestBase):
         ))
 
         # verify that the body sent to the device cloud is sufficiently minimal
-        last_request = httpretty.last_request()
         self.assertEqual(
-            last_request.body,
-            '<DataPoint><streamId>test</streamId><data>123.4</data></DataPoint>')
+            httpretty.last_request().body,
+            six.b('<DataPoint>'
+                  '<streamId>test</streamId>'
+                  '<data>123.4</data>'
+                  '</DataPoint>'))
 
     def test_write_full(self):
         self.prepare_response("POST", "/ws/DataPoint/test", CREATE_DATAPOINT_RESPONSE, status=201)
@@ -246,18 +249,17 @@ class TestDataStream(HttpTestBase):
         ))
 
         # verify that the body sent to the device cloud is sufficiently minimal
-        last_request = httpretty.last_request()
         self.assertEqual(
-            last_request.body,
-            '<DataPoint>'
-            '<streamId>test</streamId>'
-            '<data>123.4</data>'
-            '<description>Best Datapoint Ever?</description>'
-            '<timestamp>2014-07-07T14:10:34</timestamp>'  # TODO: does this need to include tz?
-            '<quality>99</quality>'
-            '<location>99,88,77</location>'
-            '<streamUnits>scolvilles</streamUnits>'
-            '</DataPoint>')
+            httpretty.last_request().body,
+            six.b('<DataPoint>'
+                  '<streamId>test</streamId>'
+                  '<data>123.4</data>'
+                  '<description>Best Datapoint Ever?</description>'
+                  '<timestamp>2014-07-07T14:10:34</timestamp>'  # TODO: does this need to include tz?
+                  '<quality>99</quality>'
+                  '<location>99,88,77</location>'
+                  '<streamUnits>scolvilles</streamUnits>'
+                  '</DataPoint>'))
 
 
 class TestDataPoint(HttpTestBase):

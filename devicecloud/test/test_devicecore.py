@@ -82,7 +82,7 @@ EXAMPLE_GET_DEVICES = {
 
 class TestDeviceCore(HttpTestBase):
     def _get_device(self, mac):
-        devices = self.dc.get_devicecore_api().list_devices()
+        devices = self.dc.devicecore.list_devices()
         self.assertEqual(len(devices), 2)
 
         # get a ref to device with mac "00:40:9D:58:17:5B"
@@ -95,10 +95,14 @@ class TestDeviceCore(HttpTestBase):
         return device
 
     def test_dc_get_devices(self):
-        self.prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
-        devices = self.dc.get_devicecore_api().list_devices()
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        devices = self.dc.devicecore.list_devices()
         self.assertEqual(len(devices), 2)
+
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         dev1 = self._get_device("00:40:9D:58:17:5B")
+
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         dev2 = self._get_device("00:1d:09:2b:7d:8c")
 
         self.assertEqual(dev1.get_mac(), "00:40:9D:58:17:5B")
@@ -137,9 +141,9 @@ class TestDeviceCore(HttpTestBase):
         get_devices_update = copy.deepcopy(EXAMPLE_GET_DEVICES)
         get_devices_update["items"][0]["dpDeviceType"] = "Turboencabulator"
         del get_devices_update["items"][1]  # remove the other item... close enough
-        self.prepare_json_response("GET", "/ws/DeviceCore/.json", EXAMPLE_GET_DEVICES)
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         device = self._get_device("00:40:9D:58:17:5B")
-        self.prepare_json_response("GET", "/ws/DeviceCore/702077/.json", get_devices_update)
+        self.prepare_json_response("GET", "/ws/DeviceCore/702077", get_devices_update)
         self.assertEqual(device.get_device_type(), "ConnectPort X5 R")
         self.assertEqual(device.get_device_type(False), "Turboencabulator")
         self.assertEqual(device.get_device_type(), "Turboencabulator")  # make sure cache updated

@@ -7,13 +7,13 @@
 
 r"""Module providing classes for interacting with device cloud data streams"""
 
-from StringIO import StringIO
 import logging
+import six
 
 from devicecloud.apibase import APIBase
 from devicecloud import DeviceCloudException, DeviceCloudHttpException
 from devicecloud.util import conditional_write, to_none_or_dt, validate_type
-from types import NoneType
+from six import StringIO
 
 
 DATA_POINT_TEMPLATE = """\
@@ -97,16 +97,16 @@ class StreamsAPI(APIBase):
 
         """
 
-        stream_id = validate_type(stream_id, basestring)
-        data_type = validate_type(data_type, NoneType, basestring)
-        if isinstance(data_type, basestring):
+        stream_id = validate_type(stream_id, six.string_types)
+        data_type = validate_type(data_type, type(None), six.string_types)
+        if isinstance(data_type, six.string_types):
             data_type = str(data_type).upper()
-        if not data_type in set([None, ] + DSTREAM_TYPE_MAP.keys()):
+        if not data_type in (set([None, ]) | set(list(DSTREAM_TYPE_MAP.keys()))):
             raise ValueError("data_type %r is not valid" % data_type)
-        description = validate_type(stream_id, NoneType, basestring)
-        data_ttl = validate_type(data_ttl, NoneType, int, long)
-        rollup_ttl = validate_type(rollup_ttl, NoneType, int, long)
-        units = validate_type(units, NoneType, basestring)
+        description = validate_type(stream_id, type(None), six.string_types)
+        data_ttl = validate_type(data_ttl, type(None), *six.integer_types)
+        rollup_ttl = validate_type(rollup_ttl, type(None), *six.integer_types)
+        units = validate_type(units, type(None), six.string_types)
 
         sio = StringIO()
         sio.write("<DataStream>")
@@ -232,8 +232,8 @@ class DataPoint(object):
         self.set_units(units)
 
         # these should only ever be read by the public API
-        self._dp_id = validate_type(dp_id, NoneType, basestring)
-        self._customer_id = validate_type(customer_id, NoneType, basestring)
+        self._dp_id = validate_type(dp_id, type(None), six.string_types)
+        self._customer_id = validate_type(customer_id, type(None), six.string_types)
         self._server_timestamp = to_none_or_dt(server_timestamp)
 
     def get_id(self):
@@ -270,7 +270,7 @@ class DataPoint(object):
 
     def set_stream_id(self, stream_id):
         """Set the stream id associated with this data point"""
-        self._stream_id = validate_type(stream_id, NoneType, basestring)
+        self._stream_id = validate_type(stream_id, type(None), six.string_types)
 
     def get_description(self):
         """Get the description associated with this data point if available"""
@@ -278,7 +278,7 @@ class DataPoint(object):
 
     def set_description(self, description):
         """Set the description for this data point"""
-        self._description = validate_type(description, NoneType, basestring)
+        self._description = validate_type(description, type(None), six.string_types)
 
     def get_timestamp(self):
         """Get the timestamp of this datapoint as a :class:`datetime.datetime` object
@@ -319,12 +319,12 @@ class DataPoint(object):
         be converted to an integer.
 
         """
-        if isinstance(quality, basestring):
+        if isinstance(quality, six.string_types):
             quality = int(quality)
         elif isinstance(quality, float):
             quality = int(quality)
 
-        self._quality = validate_type(quality, NoneType, int, long)
+        self._quality = validate_type(quality, type(None), *six.integer_types)
 
     def get_location(self):
         """Get the location for this data point
@@ -346,8 +346,8 @@ class DataPoint(object):
         if location is None:
             self._location = location
 
-        elif isinstance(location, basestring):  # from device cloud, convert from csv
-            parts = map(float, str(location).split(","))
+        elif isinstance(location, six.string_types):  # from device cloud, convert from csv
+            parts = str(location).split(",")
             if len(parts) == 3:
                 self._location = tuple(map(float, parts))
                 return
@@ -357,7 +357,7 @@ class DataPoint(object):
         # TODO: could maybe try to allow any iterable but this covers the most common cases
         elif (isinstance(location, (tuple, list))
                 and len(location) == 3
-                and all([isinstance(x, (float, int, long)) for x in location])):
+                and all([isinstance(x, (float, six.integer_types)) for x in location])):
             self._location = tuple(map(float, location))  # coerce ints to float
         else:
             raise TypeError("Location must be None or 3-tuple of floats")
@@ -387,10 +387,10 @@ class DataPoint(object):
         { INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }.
 
         """
-        validate_type(data_type, NoneType, basestring)
-        if isinstance(data_type, basestring):
+        validate_type(data_type, type(None), six.string_types)
+        if isinstance(data_type, six.string_types):
             data_type = str(data_type).upper()
-        if not data_type in set([None] + DSTREAM_TYPE_MAP.keys()):
+        if not data_type in (set([None, ]) | set(DSTREAM_TYPE_MAP.keys())):
             raise ValueError("Provided data type not in available set of types")
         self._data_type = data_type
 
@@ -407,7 +407,7 @@ class DataPoint(object):
         stream might be created with the write of a data point.
 
         """
-        self._units = validate_type(unit, NoneType, basestring)
+        self._units = validate_type(unit, type(None), six.string_types)
 
     def to_xml(self):
         """Convert this datapoint into a form suitable for pushing to device cloud
@@ -438,7 +438,7 @@ class DataStream(object):
     # TODO: Add ability to modify stream metadata (e.g. set_data_ttl, etc.)
 
     def __init__(self, conn, stream_id, cached_data=None):
-        if not isinstance(cached_data, (NoneType, dict)):
+        if not isinstance(cached_data, (type(None), dict)):
             raise TypeError("cached_data should be dict or None")
         self._conn = conn
         self._stream_id = stream_id
@@ -452,7 +452,7 @@ class DataStream(object):
         if self._cached_data is None or not use_cached:
             try:
                 self._cached_data = self._conn.get_json("/ws/DataStream/%s" % self._stream_id)["items"][0]
-            except DeviceCloudHttpException, http_exception:
+            except DeviceCloudHttpException as http_exception:
                 if http_exception.response.status_code == 404:
                     raise NoSuchStreamException("Stream with id %r has not been created", self._stream_id)
                 raise http_exception
