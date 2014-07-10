@@ -36,9 +36,10 @@ unit test coverage (with some exceptions).
 ### Testing All Versions with Tox
 
 We also support running the tests against all supported versions of
-python using a combination of [tox]() and [pythonbrew]().  To run all
-of the tests against all supported versions of python, just do the
-following:
+python using a combination of
+[tox](http://tox.readthedocs.org/en/latest/) and
+[pythonbrew](https://github.com/utahta/pythonbrew).  To run all of the
+tests against all supported versions of python, just do the following:
 
     $ ./toxtest.sh
 
