@@ -44,7 +44,7 @@ couple quick examples to give you a taste of what the API looks like.
     #
     # This is done using the device cloud DeviceCore functionality
     print "== Connected Devices =="
-    for device in dc.list_devices():
+    for device in dc.devicecore.list_devices():
         if device.is_connected():
             print device.get_mac()
 
@@ -52,7 +52,7 @@ couple quick examples to give you a taste of what the API looks like.
     # with a floating point type
     #
     # This is done using the device cloud stream functionality
-    for stream in dc.get_streams():
+    for stream in dc.streams.get_streams():
         if stream.get_data_type().lower() in ('float', 'double'):
             print "%s -> %s" % (stream.get_name(), stream.get_current_value())
 
