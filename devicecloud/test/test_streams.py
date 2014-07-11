@@ -8,7 +8,7 @@
 import unittest
 import datetime
 
-from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint
+from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
 
@@ -169,7 +169,7 @@ class TestStreamsAPI(HttpTestBase):
         # Get a stream by ID when there is no cache
         stream = self.dc.streams.get_stream("/test/stream")
         self.assert_(isinstance(stream, DataStream))
-        self.assertEqual(stream.get_stream_id(), "/test/stream")
+        self.assertEqual(stream.get_stream_id(), "test/stream")
 
     def test_get_stream_if_exists_does_not_exist(self):
         # Try to get a stream that does not exist
@@ -260,6 +260,25 @@ class TestDataStream(HttpTestBase):
                   '<location>99,88,77</location>'
                   '<streamUnits>scolvilles</streamUnits>'
                   '</DataPoint>'))
+
+    def test_delete_no_such_stream(self):
+        self.prepare_response("DELETE", "/ws/DataStream/test", """\
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<result>
+  <error>DELETE DataStream error. Error reading Stream does not exist entity id='test'</error>
+</result>""", status=404)
+        test_stream = self.dc.streams.get_stream("test")
+        self.assertRaises(NoSuchStreamException, test_stream.delete)
+
+    def test_delete_other_http_exception(self):
+        self.prepare_response("DELETE", "/ws/DataStream/test", "", status=500)
+        test_stream = self.dc.streams.get_stream("test")
+        self.assertRaises(DeviceCloudHttpException, test_stream.delete)
+
+    def test_delete_success(self):
+        self.prepare_response("DELETE", "/ws/DataStream/test", "", status=200)
+        test_stream = self.dc.streams.get_stream("test").delete()
+        self.assertEqual(httpretty.last_request().command, 'DELETE')
 
 
 class TestDataPoint(HttpTestBase):

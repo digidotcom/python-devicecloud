@@ -21,8 +21,10 @@ __all__ = (
 )
 
 SUCCESSFUL_STATUS_CODES = [
-    200,
-    201
+    200,  # OK
+    201,  # Created
+    202,  # Accepted
+    204,  # No Content (success for DELETE operation)
 ]
 
 logger = logging.getLogger("devicecloud")

@@ -97,16 +97,16 @@ class StreamsAPI(APIBase):
 
         """
 
-        stream_id = validate_type(stream_id, six.string_types)
-        data_type = validate_type(data_type, type(None), six.string_types)
-        if isinstance(data_type, six.string_types):
+        stream_id = validate_type(stream_id, *six.string_types)
+        data_type = validate_type(data_type, type(None), *six.string_types)
+        if isinstance(data_type, *six.string_types):
             data_type = str(data_type).upper()
         if not data_type in (set([None, ]) | set(list(DSTREAM_TYPE_MAP.keys()))):
             raise ValueError("data_type %r is not valid" % data_type)
-        description = validate_type(stream_id, type(None), six.string_types)
+        description = validate_type(stream_id, type(None), *six.string_types)
         data_ttl = validate_type(data_ttl, type(None), *six.integer_types)
         rollup_ttl = validate_type(rollup_ttl, type(None), *six.integer_types)
-        units = validate_type(units, type(None), six.string_types)
+        units = validate_type(units, type(None), *six.string_types)
 
         sio = StringIO()
         sio.write("<DataStream>")
@@ -232,8 +232,8 @@ class DataPoint(object):
         self.set_units(units)
 
         # these should only ever be read by the public API
-        self._dp_id = validate_type(dp_id, type(None), six.string_types)
-        self._customer_id = validate_type(customer_id, type(None), six.string_types)
+        self._dp_id = validate_type(dp_id, type(None), *six.string_types)
+        self._customer_id = validate_type(customer_id, type(None), *six.string_types)
         self._server_timestamp = to_none_or_dt(server_timestamp)
 
     def get_id(self):
@@ -270,7 +270,10 @@ class DataPoint(object):
 
     def set_stream_id(self, stream_id):
         """Set the stream id associated with this data point"""
-        self._stream_id = validate_type(stream_id, type(None), six.string_types)
+        stream_id = validate_type(stream_id, type(None), *six.string_types)
+        if stream_id is not None:
+            stream_id = stream_id.lstrip('/')
+        self._stream_id = stream_id
 
     def get_description(self):
         """Get the description associated with this data point if available"""
@@ -278,7 +281,7 @@ class DataPoint(object):
 
     def set_description(self, description):
         """Set the description for this data point"""
-        self._description = validate_type(description, type(None), six.string_types)
+        self._description = validate_type(description, type(None), *six.string_types)
 
     def get_timestamp(self):
         """Get the timestamp of this datapoint as a :class:`datetime.datetime` object
@@ -319,7 +322,7 @@ class DataPoint(object):
         be converted to an integer.
 
         """
-        if isinstance(quality, six.string_types):
+        if isinstance(quality, *six.string_types):
             quality = int(quality)
         elif isinstance(quality, float):
             quality = int(quality)
@@ -346,7 +349,7 @@ class DataPoint(object):
         if location is None:
             self._location = location
 
-        elif isinstance(location, six.string_types):  # from device cloud, convert from csv
+        elif isinstance(location, *six.string_types):  # from device cloud, convert from csv
             parts = str(location).split(",")
             if len(parts) == 3:
                 self._location = tuple(map(float, parts))
@@ -387,10 +390,10 @@ class DataPoint(object):
         { INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }.
 
         """
-        validate_type(data_type, type(None), six.string_types)
-        if isinstance(data_type, six.string_types):
+        validate_type(data_type, type(None), *six.string_types)
+        if isinstance(data_type, *six.string_types):
             data_type = str(data_type).upper()
-        if not data_type in (set([None, ]) | set(DSTREAM_TYPE_MAP.keys())):
+        if not data_type in ({None} | set(DSTREAM_TYPE_MAP.keys())):
             raise ValueError("Provided data type not in available set of types")
         self._data_type = data_type
 
@@ -407,7 +410,7 @@ class DataPoint(object):
         stream might be created with the write of a data point.
 
         """
-        self._units = validate_type(unit, type(None), six.string_types)
+        self._units = validate_type(unit, type(None), *six.string_types)
 
     def to_xml(self):
         """Convert this datapoint into a form suitable for pushing to device cloud
@@ -418,8 +421,8 @@ class DataPoint(object):
         """
         out = StringIO()
         out.write("<DataPoint>")
-        out.write("<streamId>%s</streamId>" % (self._stream_id[1:] if self._stream_id.startswith('/') else self._stream_id))
-        out.write("<data>%s</data>" % self.get_data())
+        out.write("<streamId>{}</streamId>".format(self.get_stream_id()))
+        out.write("<data>{}</data>".format(self.get_data()))
         conditional_write(out, "<description>{}</description>", self.get_description())
         if self.get_timestamp() is not None:
             out.write("<timestamp>{}</timestamp>".format(self.get_timestamp().isoformat()))
@@ -440,8 +443,11 @@ class DataStream(object):
     def __init__(self, conn, stream_id, cached_data=None):
         if not isinstance(cached_data, (type(None), dict)):
             raise TypeError("cached_data should be dict or None")
+
+        stream_id = validate_type(stream_id, *six.string_types).lstrip('/')
+
         self._conn = conn
-        self._stream_id = stream_id
+        self._stream_id = stream_id  # Invariant: string with any leading '/' stripped
         self._cached_data = cached_data
 
     def __repr__(self):
@@ -579,12 +585,20 @@ class DataStream(object):
     def delete(self):
         """Delete this stream from the device cloud along with its history
 
+        This call will return None on success and raise an exception in the event of an error
+        performing the deletion.
+
         :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
-        :raises devicecloud.streams.NoSuchStreamException: if this stream has not yet been created
+        :raises devicecloud.streams.NoSuchStreamException: if this stream has already been deleted
 
         """
-        # TODO: Implement delete functionality
-        pass
+        try:
+            self._conn.delete("/ws/DataStream/{}".format(self.get_stream_id()))
+        except DeviceCloudHttpException as http_excpeption:
+            if http_excpeption.response.status_code == 404:
+                raise NoSuchStreamException()  # this branch is present, but the DC appears to just return 200 again
+            else:
+                raise http_excpeption
 
     def write(self, datapoint):
         """Write some raw data to a stream using the DataPoint API
@@ -606,7 +620,7 @@ class DataStream(object):
         if self._cached_data is not None and datapoint.get_data_type() is None:
             datapoint._data_type = self.get_data_type()
 
-        self._conn.post("/ws/DataPoint/%s" % self.get_stream_id(), datapoint.to_xml())
+        self._conn.post("/ws/DataPoint/{}".format(self.get_stream_id()), datapoint.to_xml())
 
     def read(self):
         """Read one or more DataPoints from a stream"""
