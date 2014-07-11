@@ -277,6 +277,8 @@ class TestDataStream(HttpTestBase):
 
     def test_delete_success(self):
         self.prepare_response("DELETE", "/ws/DataStream/test", "", status=200)
+        test_stream = self.dc.streams.get_stream("test").delete()
+        self.assertEqual(httpretty.last_request().command, 'DELETE')
 
 
 class TestDataPoint(HttpTestBase):
