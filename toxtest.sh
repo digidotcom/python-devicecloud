@@ -23,7 +23,8 @@ eval "$(pyenv init -)"
 # install each python version that we want to test with
 for pyversion in ${pyversions[*]};
 do
-    pyenv install -s ${pyversions}
+    echo "Ensuring Python ${pyversion} is installed"
+    pyenv install -s ${pyversion}
 done
 pyenv rehash
 
