@@ -272,8 +272,7 @@ class DataPoint(object):
         """Set the stream id associated with this data point"""
         stream_id = validate_type(stream_id, type(None), *six.string_types)
         if stream_id is not None:
-            while stream_id.startswith('/'):
-                stream_id = stream_id[1:]
+            stream_id = stream_id.lstrip('/')
         self._stream_id = stream_id
 
     def get_description(self):
@@ -445,9 +444,7 @@ class DataStream(object):
         if not isinstance(cached_data, (type(None), dict)):
             raise TypeError("cached_data should be dict or None")
 
-        stream_id = validate_type(stream_id, *six.string_types)
-        while stream_id.startswith("/"):
-            stream_id = stream_id[1:]
+        stream_id = validate_type(stream_id, *six.string_types).lstrip('/')
 
         self._conn = conn
         self._stream_id = stream_id  # Invariant: string with any leading '/' stripped
