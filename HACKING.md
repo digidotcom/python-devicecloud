@@ -38,8 +38,8 @@ unit test coverage (with some exceptions).
 We also support running the tests against all supported versions of
 python using a combination of
 [tox](http://tox.readthedocs.org/en/latest/) and
-[pythonbrew](https://github.com/utahta/pythonbrew).  To run all of the
-tests against all supported versions of python, just do the following:
+[pyenv](https://github.com/yyuu/pyenv).  To run all of the tests
+against all supported versions of python, just do the following:
 
     $ ./toxtest.sh
 
