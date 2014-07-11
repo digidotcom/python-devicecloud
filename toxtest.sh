@@ -31,7 +31,7 @@ pyenv rehash
 pyenv global "${pyversions}"
 
 # Now, run the tests after sourcing venv for tox install/use
-if [ ! -d ".toxvenv" ]
+if [ ! -d ".toxenv" ]
 then
     virtualenv-2.7 .toxenv
 fi
