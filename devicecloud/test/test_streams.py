@@ -169,7 +169,7 @@ class TestStreamsAPI(HttpTestBase):
         # Get a stream by ID when there is no cache
         stream = self.dc.streams.get_stream("/test/stream")
         self.assert_(isinstance(stream, DataStream))
-        self.assertEqual(stream.get_stream_id(), "/test/stream")
+        self.assertEqual(stream.get_stream_id(), "test/stream")
 
     def test_get_stream_if_exists_does_not_exist(self):
         # Try to get a stream that does not exist
