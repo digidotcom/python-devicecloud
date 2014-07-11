@@ -9,7 +9,8 @@
 pyversions=(2.7.7
             3.2.5
             3.3.5
-            3.4.1) # 2.6.9 (not supported)
+            3.4.1
+            pypy-2.3.1)
 
 # first make sure that pyenv is installed
 if [ ! -s "$HOME/.pyenv/bin/pyenv" ]; then
@@ -17,26 +18,21 @@ if [ ! -s "$HOME/.pyenv/bin/pyenv" ]; then
 fi
 
 # add pyenv to our path and initialize (if this has not already been done)
-export PATH="$HOME/.pyenv/shims:$HOME/.pyenv/bin:$PATH"
+export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 
 # install each python version that we want to test with
 for pyversion in ${pyversions[*]};
 do
-    echo "Ensuring Python ${pyversion} is installed"
     pyenv install -s ${pyversion}
 done
 pyenv rehash
 
 # This is required
-pyenv global "${pyversions}"
+pyenv global ${pyversions[*]}
 
 # Now, run the tests after sourcing venv for tox install/use
-if [ ! -d ".toxenv" ]
-then
-    virtualenv-2.7 .toxenv
-fi
+virtualenv -q .toxenv
 source .toxenv/bin/activate
-
 pip install -q -r test-requirements.txt
 tox
