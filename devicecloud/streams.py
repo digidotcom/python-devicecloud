@@ -735,8 +735,10 @@ class DataStream(object):
         :param timezone: timezone for calculating roll-ups. This determines roll-up interval
             boundaries and only applies to roll-ups of a day or larger (for example, day,
             week, or month). Note that it does not apply to the startTime and endTime parameters.
-            See the Timestamps and Supported time zones sections for more information.
-            http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#TimeZones
+            See the `Timestamps <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#timestamp>`_
+            and `Supported Time Zones <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#TimeZones>`_
+            sections for more information.
+
         :type timezone: str or None
         :param int page_size: The number of results that we should attempt to retrieve from the
             device cloud in each page.  Generally, this can be left at its default value unless
