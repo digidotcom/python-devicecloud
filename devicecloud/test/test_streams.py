@@ -420,12 +420,6 @@ class TestDataStream(HttpTestBase):
 
 class TestDataStreamRead(HttpTestBase):
 
-    def setUp(self):
-        HttpTestBase.setUp(self)
-
-    def tearDown(self):
-        HttpTestBase.setUp(self)
-
     def _get_query_params(self, index):
         return httpretty.last_request().querystring  # already parsed to be dict
 

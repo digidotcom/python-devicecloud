@@ -14,7 +14,6 @@ import httpretty
 class HttpTestBase(unittest.TestCase):
     def setUp(self):
         httpretty.enable()
-        httpretty.reset()
         # setup the Device cloud ping response
         self.prepare_response("GET", "/ws/DeviceCore?size=1", "", status=200)
         self.dc = DeviceCloud('user', 'pass')
