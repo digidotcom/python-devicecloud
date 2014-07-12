@@ -714,23 +714,15 @@ class DataStream(object):
             If False, results will be returned oldest to newest.
         :param rollup_interval: the roll-up interval that should be used if one is desired at all.  Rollups
             will not be performed if None is specified for the interval.  Valid roll-up interval values
-            include the following.
-            * None: do not perform any roll-up calculations.  Raw results.
-            * "half":  half hour intervals
-            * "hourly": hourly intervals
-            * "day": daily intervals
-            * "week": weekly intervals
-            * "month": monthly intervals
+            are None, "half", "hourly", "day", "week", and "month".  See `DataPoints documentation
+            <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints>`_
+            for additional details on these values.
         :type rollup_interval: str or None
         :param rollup_method: The aggregation applied to values in the points within the specified
-            rollup_interval.  Available methods are the following:
-            * None: do not perform any roll-up calculations.  Raw results.
-            * "sum": sum of all values in each roll-up interval
-            * "average": average of all values in each roll-up interval
-            * "min": minimum value in each roll-up interval
-            * "max": maximum value in each roll-up interval
-            * "count": count of all data points in each roll-up interval
-            * "standarddev": standard deviation of all values in each roll-up interval
+            rollup_interval.  Available methods are None, "sum", "average", "min", "max", "count", and
+            "standarddev".  See `DataPoint documentation
+            <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints>`_
+            for additional details on these values.
         :type rollup_method: str or None
         :param timezone: timezone for calculating roll-ups. This determines roll-up interval
             boundaries and only applies to roll-ups of a day or larger (for example, day,
