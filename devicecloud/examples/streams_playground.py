@@ -40,8 +40,12 @@ def create_stream_and_delete(dc):
 
     for i in range(5):
         test_stream.write(DataPoint(
-            data=i * pi
+            data=i * pi,
+            description="This is {} * pi".format(i)
         ))
+
+    for i, stream in enumerate(test_stream.read()):
+        print ("{}, {!r}".format(i + 1, stream))
 
     raw_input("We wrote some points to the cloud, go check it out!")
 

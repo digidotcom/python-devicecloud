@@ -7,8 +7,10 @@
 
 import unittest
 import datetime
+import six
 
-from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException
+from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException, ROLLUP_INTERVAL_HALF, \
+    ROLLUP_METHOD_COUNT
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
 
@@ -129,6 +131,135 @@ GET_STREAM_RESULT = {
     'resultSize': '1'
 }
 
+GET_DATA_POINTS_EMPTY = """\
+{
+"resultSize": "0",
+"requestedSize": "1000",
+"pageCursor": "4a788aab-1-5bf968a4",
+"items": []
+}
+"""
+
+GET_DATA_POINTS_ONE = """\
+{
+  "resultSize": "1",
+  "requestedSize": "1000",
+  "pageCursor": "75d56063-0968-11e4-9041-fa163e8f4b62",
+  "requestedStartTime": "-1",
+  "requestedEndTime": "-1",
+  "items": [
+    {
+      "id": "75b0e84b-0968-11e4-9041-fa163e8f4b62",
+      "cstId": "7603",
+      "streamId": "test",
+      "timestamp": "1405130498373",
+      "timestampISO": "2014-07-12T02:01:38.373Z",
+      "serverTimestamp": "1405130498373",
+      "serverTimestampISO": "2014-07-12T02:01:38.373Z",
+      "data": "0.0",
+      "description": "",
+      "quality": "0"
+    }
+  ]
+}
+"""
+
+# In the following data, there are 5 points and we make 3 requests for 2
+# points in each page
+GET_DATA_POINTS_FIVE_PAGED = [
+    """\
+{
+  "resultSize": "2",
+  "requestedSize": "2",
+  "pageCursor": "75d56063-0968-11e4-9041-fa163e8f4b62",
+  "requestedStartTime": "-1",
+  "requestedEndTime": "-1",
+  "items": [
+    {
+      "id": "75b0e84b-0968-11e4-9041-fa163e8f4b62",
+      "cstId": "7603",
+      "streamId": "test",
+      "timestamp": "1405130498373",
+      "timestampISO": "2014-07-12T02:01:38.373Z",
+      "serverTimestamp": "1405130498373",
+      "serverTimestampISO": "2014-07-12T02:01:38.373Z",
+      "data": "0.0",
+      "description": "",
+      "quality": "0"
+    },
+    {
+      "id": "75d56063-0968-11e4-9041-fa163e8f4b62",
+      "cstId": "7603",
+      "streamId": "test",
+      "timestamp": "1405130498612",
+      "timestampISO": "2014-07-12T02:01:38.612Z",
+      "serverTimestamp": "1405130498612",
+      "serverTimestampISO": "2014-07-12T02:01:38.612Z",
+      "data": "3.14159265359",
+      "description": "",
+      "quality": "0"
+    }
+  ]
+}""",
+    """\
+{
+  "resultSize": "2",
+  "requestedSize": "2",
+  "pageCursor": "761eecbb-0968-11e4-9041-fa163e8f4b62",
+  "requestedStartTime": "-1",
+  "requestedEndTime": "-1",
+  "items": [
+    {
+      "id": "75f8901f-0968-11e4-ab44-fa163e7ebc6b",
+      "cstId": "7603",
+      "streamId": "test",
+      "timestamp": "1405130498843",
+      "timestampISO": "2014-07-12T02:01:38.843Z",
+      "serverTimestamp": "1405130498843",
+      "serverTimestampISO": "2014-07-12T02:01:38.843Z",
+      "data": "6.28318530718",
+      "description": "",
+      "quality": "0"
+    },
+    {
+      "id": "761eecbb-0968-11e4-9041-fa163e8f4b62",
+      "cstId": "7603",
+      "streamId": "test",
+      "timestamp": "1405130499094",
+      "timestampISO": "2014-07-12T02:01:39.094Z",
+      "serverTimestamp": "1405130499094",
+      "serverTimestampISO": "2014-07-12T02:01:39.094Z",
+      "data": "9.42477796077",
+      "description": "",
+      "quality": "0"
+    }
+  ]
+}""",
+    """\
+{
+  "resultSize": "1",
+  "requestedSize": "2",
+  "pageCursor": "76459cf1-0968-11e4-98e9-fa163ecf1de4",
+  "requestedStartTime": "-1",
+  "requestedEndTime": "-1",
+  "items": [
+    {
+      "id": "76459cf1-0968-11e4-98e9-fa163ecf1de4",
+      "cstId": "7603",
+      "streamId": "test",
+      "timestamp": "1405130499347",
+      "timestampISO": "2014-07-12T02:01:39.347Z",
+      "serverTimestamp": "1405130499347",
+      "serverTimestampISO": "2014-07-12T02:01:39.347Z",
+      "data": "12.5663706144",
+      "description": "",
+      "quality": "0"
+    }
+  ]
+}
+"""
+]
+
 
 class TestStreamsAPI(HttpTestBase):
 
@@ -195,8 +326,14 @@ class TestDataStream(HttpTestBase):
         # mostly for branch coverage
         self.assertRaises(TypeError, DataStream, self.dc._conn, "test", 3)
 
-    def test_repr(self):
-        self.assertEqual(repr(self._get_stream(GET_TEST_DATA_STREAM)), "DataStream('test')")
+    def test_repr_nocache(self):
+        # This basically just tests to make sure that we don't raise an exception
+        repr(self.dc.streams.get_stream("test"))
+
+    def test_repr_cache(self):
+        stream = self._get_stream(GET_TEST_DATA_STREAM)
+        stream.get_data_type()
+        repr(stream)  # just make sure no exception
 
     def test_accessors(self):
         stream = self._get_stream(GET_TEST_DATA_STREAM)
@@ -281,6 +418,131 @@ class TestDataStream(HttpTestBase):
         self.assertEqual(httpretty.last_request().command, 'DELETE')
 
 
+class TestDataStreamRead(HttpTestBase):
+
+    def setUp(self):
+        HttpTestBase.setUp(self)
+
+    def tearDown(self):
+        HttpTestBase.setUp(self)
+
+    def _get_query_params(self, index):
+        return httpretty.last_request().querystring  # already parsed to be dict
+
+    def test_read_empty(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_EMPTY)
+        test_stream = self.dc.streams.get_stream("test")
+        results = list(test_stream.read())
+        self.assertEqual(results, [])
+
+    def test_read_no_stream(self):
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_EMPTY, status=404)
+        test_stream = self.dc.streams.get_stream("test")
+        iterator = test_stream.read()
+        self.assertRaises(NoSuchStreamException, six.next, iterator)
+
+    def test_simple_read_one_page(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read())
+        self.assertEqual(len(points), 1)
+        point = points[0]
+        self.assertEqual(point.get_id(), "75b0e84b-0968-11e4-9041-fa163e8f4b62")
+
+    def test_simple_read_several_pages(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+
+        # This test is a bit awkward as the pattern matching in httpretty is strange
+        # and it I couldn't get it to work in a nicer fashion
+        test_stream = self.dc.streams.get_stream("test")
+        generator = test_stream.read(page_size=2)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_FIVE_PAGED[0])
+
+        point1 = six.next(generator)
+        self.assertEqual(point1.get_id(), "75b0e84b-0968-11e4-9041-fa163e8f4b62")
+        point2 = six.next(generator)
+        self.assertEqual(point2.get_id(), "75d56063-0968-11e4-9041-fa163e8f4b62")
+
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_FIVE_PAGED[1])
+
+        point3 = six.next(generator)
+        self.assertEqual(point3.get_id(), "75f8901f-0968-11e4-ab44-fa163e7ebc6b")
+        point4 = six.next(generator)
+        self.assertEqual(point4.get_id(), "761eecbb-0968-11e4-9041-fa163e8f4b62")
+
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_FIVE_PAGED[2])
+
+        point5 = six.next(generator)
+        self.assertEqual(point5.get_id(), "76459cf1-0968-11e4-98e9-fa163ecf1de4")
+        self.assertRaises(StopIteration, six.next, generator)
+
+    def test_start_time(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(start_time=datetime.datetime(2009, 9, 9, 12, 00, 4)))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["startTime"][0], "2009-09-09T12:00:04")
+
+    def test_end_time(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(end_time=datetime.datetime(2020, 4, 5, 6, 7, 8)))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["endTime"][0], "2020-04-05T06:07:08")
+
+    def test_sort_asc(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(newest_first=False))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["order"][0], "ascending")
+
+    def test_sort_desc(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(newest_first=True))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["order"][0], "descending")
+
+    def test_rollup_interval_half(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(rollup_interval=ROLLUP_INTERVAL_HALF))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["rollupInterval"][0], "half")
+
+    def test_rollup_interval_invalid(self):
+        test_stream = self.dc.streams.get_stream("test")
+        self.assertRaises(ValueError, six.next, test_stream.read(rollup_interval='invalid'))
+
+    def test_rollup_method_count(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(rollup_method=ROLLUP_METHOD_COUNT))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["rollupMethod"][0], "count")
+
+    def test_rollup_method_invalid(self):
+        test_stream = self.dc.streams.get_stream("test")
+        self.assertRaises(ValueError, six.next, test_stream.read(rollup_method='invalid'))
+
+    def test_timezone(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(timezone="America/Denver"))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["timezone"][0], "America/Denver")
+
+    def test_page_size(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read(page_size=9876))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["size"][0], "9876")
+
+
 class TestDataPoint(HttpTestBase):
 
     def _get_stream(self, stream_id="test", with_cached_data=False):
@@ -338,6 +600,14 @@ class TestDataPoint(HttpTestBase):
         dp = DataPoint(123)
         self.assertRaises(ValueError, dp.set_timestamp, "123456")  # not ISO8601
         self.assertRaises(TypeError, dp.set_timestamp, 12345)
+
+    def test_repr(self):
+        # This just tests that we can get the repr without raising an exception... better than nothing
+        stream = self._get_stream("test", with_cached_data=True)
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        dp = stream.get_current_value()
+        repr(dp)
+
 
 if __name__ == "__main__":
     unittest.main()

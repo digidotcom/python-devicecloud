@@ -252,6 +252,32 @@ class DataPoint(object):
         self._customer_id = validate_type(customer_id, type(None), *six.string_types)
         self._server_timestamp = to_none_or_dt(server_timestamp)
 
+    def __repr__(self):
+        fmt = ("DataPoint(data={data!r}, "
+               "stream_id={stream_id!r}, "
+               "description={description!r}, "
+               "timestamp={timestamp!r}, "
+               "quality={quality!r}, "
+               "location={location!r}, "
+               "data_type={data_type!r}, "
+               "units={units!r}, "
+               "dp_id={dp_id!r}, "
+               "customer_id={customer_id!r}, "
+               "server_timestamp={server_timestamp!r})")
+        return fmt.format(
+            data=self.get_data(),
+            stream_id=self.get_stream_id(),
+            description=self.get_description(),
+            timestamp=self.get_timestamp(),
+            quality=self.get_quality(),
+            location=self.get_location(),
+            data_type=self.get_data_type(),
+            units=self.get_units(),
+            dp_id=self.get_id(),
+            customer_id=self._customer_id,
+            server_timestamp=self.get_server_timestamp()
+        )
+
     def get_id(self):
         """Get the ID of this data point if available
 
@@ -467,7 +493,29 @@ class DataStream(object):
         self._cached_data = cached_data
 
     def __repr__(self):
-        return "DataStream(%r)" % (self._stream_id, )
+        # Provide a repr.  We want to avoid making an HTTP request here as that
+        # might not be desirable
+        if self._cached_data is None:
+            return "DataStream(stream_id={stream_id!r})".format(
+                stream_id=self.get_stream_id(),
+            )
+        else:
+            # The purists will say that you should be able to eval this.  Realistically,
+            # the idea behind a __repr__ is that it is unambiguous and above all useful
+            # when debugging.  That is what we shoot for here.
+            return ("DataStream(stream_id={stream_id!r}, "
+                    "data_type={data_type!r}, "
+                    "units={units!r}, "
+                    "description={description!r}, "
+                    "data_ttl={data_ttl!r}, "
+                    "rollup_ttl={rollup_ttl!r})".format(
+                stream_id=self.get_stream_id(),
+                data_type=self.get_data_type(),
+                units=self.get_units(),
+                description=self.get_description(),
+                data_ttl=self.get_data_ttl(),
+                rollup_ttl=self.get_rollup_ttl(),
+            ))
 
     def _get_stream_metadata(self, use_cached):
         """Retrieve metadata about this stream from the device cloud"""
@@ -727,7 +775,7 @@ class DataStream(object):
         query_parameters = {
             'timeline': 'client' if use_client_timeline else 'server',
             'order': 'descending' if newest_first else 'ascending',
-            'pageSize': page_size
+            'size': page_size
         }
         if start_time is not None:
             query_parameters["startTime"] = start_time.isoformat()
@@ -740,20 +788,21 @@ class DataStream(object):
         if timezone is not None:
             query_parameters["timezone"] = timezone
 
-        while True:
-            # Basically, keep requesting pages until we get one where the list of
-            # items is empty.  This will always result in an extra query, but I don't
-            # really see any alternative
-            result = self._conn.get_json("/ws/DataStream/{}?{}".format(
-                self.get_stream_id(),
-                urllib.urlencode(query_parameters)))
+        result_size = page_size
+        while result_size == page_size:
+            # request the next page of data or first if pageCursor is not set as query param
+            try:
+                result = self._conn.get_json("/ws/DataPoint/{stream_id}?{query_params}".format(
+                    stream_id=self.get_stream_id(),
+                    query_params=urllib.parse.urlencode(query_parameters)
+                ))
+            except DeviceCloudHttpException as http_exception:
+                if http_exception.response.status_code == 404:
+                    raise NoSuchStreamException()
+                raise http_exception
 
-            # update the page cursor for the next time around
-            query_parameters["pageCursor"] = result["pageCursor"]
-
-            if len(result.get("items", [])) == 0:
-                return  # this will raise StopIteration
-
-            for item_info in result:
+            result_size = int(result["resultSize"])  # how many are actually included here?
+            query_parameters["pageCursor"] = result["pageCursor"]  # get ready to grab next page
+            for item_info in result.get("items", []):
                 data_point = DataPoint.from_json(self, item_info)
                 yield data_point
