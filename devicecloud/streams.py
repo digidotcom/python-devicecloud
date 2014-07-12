@@ -8,6 +8,7 @@
 r"""Module providing classes for interacting with device cloud data streams"""
 
 import logging
+import datetime
 import six
 
 from devicecloud.apibase import APIBase
@@ -16,13 +17,14 @@ from devicecloud.util import conditional_write, to_none_or_dt, validate_type
 from six import StringIO
 
 
+urllib = six.moves.urllib
+
 DATA_POINT_TEMPLATE = """\
 <DataPoint>
    <data>{data}</data>
    <streamId>{stream}</streamId>
 </DataPoint>
 """
-
 
 STREAM_TYPE_INTEGER = "INTEGER"
 STREAM_TYPE_LONG = "LONG"
@@ -31,6 +33,20 @@ STREAM_TYPE_DOUBLE = "DOUBLE"
 STREAM_TYPE_STRING = "STRING"
 STREAM_TYPE_BINARY = "BINARY"
 STREAM_TYPE_UNKNOWN = "UNKNOWN"
+
+ROLLUP_INTERVAL_HALF = "half"
+ROLLUP_INTERVAL_HOUR = "hour"
+ROLLUP_INTERVAL_DAY = "day"
+ROLLUP_INTERVAL_WEEK = "week"
+ROLLUP_INTERVAL_MONTH = "month"
+
+ROLLUP_METHOD_SUM = "sum"
+ROLLUP_METHOD_AVERAGE = "average"
+ROLLUP_METHOD_MIN = "min"
+ROLLUP_METHOD_MAX = "max"
+ROLLUP_METHOD_COUNT = "count"
+ROLLUP_METHOD_STDDEV = "standarddev"
+
 
 # Mapping in the following form:
 # <dc-type> -> (<dc-to-python-fn>, <python-to-dc-fn>)
@@ -235,6 +251,32 @@ class DataPoint(object):
         self._dp_id = validate_type(dp_id, type(None), *six.string_types)
         self._customer_id = validate_type(customer_id, type(None), *six.string_types)
         self._server_timestamp = to_none_or_dt(server_timestamp)
+
+    def __repr__(self):
+        fmt = ("DataPoint(data={data!r}, "
+               "stream_id={stream_id!r}, "
+               "description={description!r}, "
+               "timestamp={timestamp!r}, "
+               "quality={quality!r}, "
+               "location={location!r}, "
+               "data_type={data_type!r}, "
+               "units={units!r}, "
+               "dp_id={dp_id!r}, "
+               "customer_id={customer_id!r}, "
+               "server_timestamp={server_timestamp!r})")
+        return fmt.format(
+            data=self.get_data(),
+            stream_id=self.get_stream_id(),
+            description=self.get_description(),
+            timestamp=self.get_timestamp(),
+            quality=self.get_quality(),
+            location=self.get_location(),
+            data_type=self.get_data_type(),
+            units=self.get_units(),
+            dp_id=self.get_id(),
+            customer_id=self._customer_id,
+            server_timestamp=self.get_server_timestamp()
+        )
 
     def get_id(self):
         """Get the ID of this data point if available
@@ -451,7 +493,29 @@ class DataStream(object):
         self._cached_data = cached_data
 
     def __repr__(self):
-        return "DataStream(%r)" % (self._stream_id, )
+        # Provide a repr.  We want to avoid making an HTTP request here as that
+        # might not be desirable
+        if self._cached_data is None:
+            return "DataStream(stream_id={stream_id!r})".format(
+                stream_id=self.get_stream_id(),
+            )
+        else:
+            # The purists will say that you should be able to eval this.  Realistically,
+            # the idea behind a __repr__ is that it is unambiguous and above all useful
+            # when debugging.  That is what we shoot for here.
+            return ("DataStream(stream_id={stream_id!r}, "
+                    "data_type={data_type!r}, "
+                    "units={units!r}, "
+                    "description={description!r}, "
+                    "data_ttl={data_ttl!r}, "
+                    "rollup_ttl={rollup_ttl!r})".format(
+                stream_id=self.get_stream_id(),
+                data_type=self.get_data_type(),
+                units=self.get_units(),
+                description=self.get_description(),
+                data_ttl=self.get_data_ttl(),
+                rollup_ttl=self.get_rollup_ttl(),
+            ))
 
     def _get_stream_metadata(self, use_cached):
         """Retrieve metadata about this stream from the device cloud"""
@@ -622,6 +686,117 @@ class DataStream(object):
 
         self._conn.post("/ws/DataPoint/{}".format(self.get_stream_id()), datapoint.to_xml())
 
-    def read(self):
-        """Read one or more DataPoints from a stream"""
-        # TODO: Implement me
+    def read(self, start_time=None, end_time=None, use_client_timeline=True, newest_first=True,
+             rollup_interval=None, rollup_method=None, timezone=None, page_size=1000):
+        """Read one or more DataPoints from a stream
+
+        This method will attempt to read items from this stream.  An iterator over the streams
+        is returned over which one can iterate.
+
+        .. warning::
+           The data points from the device cloud is a paged data set.  When iterating over the
+           result set there could be delays when we hit the end of a page.  If this is undesirable,
+           the caller should collect all results into a data structure first before iterating over
+           the result set.
+
+        :param start_time: The start time for the window of data points to read.  None means
+            that we should start with the old data available.
+        :type start_time: :class:`datetime.datetime` or None
+        :param end_time: The end time for the window of data points to read.  None means
+            that we should include all points received until this point in time.
+        :type end_time: :class:`datetime.datetime` or None
+        :param bool use_client_timeline: If True, the times used will be those provided by
+              clients writing data points into the cloud (which also default to server time
+              if the a timestamp was not included by the client).  This is usually what you
+              want.  If False, the server timestamp will be used which records when the data
+              point was received.
+        :param bool newest_first: If True, results will be ordered from newest to oldest (descending order).
+            If False, results will be returned oldest to newest.
+        :param rollup_interval: the roll-up interval that should be used if one is desired at all.  Rollups
+            will not be performed if None is specified for the interval.  Valid roll-up interval values
+            are None, "half", "hourly", "day", "week", and "month".  See `DataPoints documentation
+            <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints>`_
+            for additional details on these values.
+        :type rollup_interval: str or None
+        :param rollup_method: The aggregation applied to values in the points within the specified
+            rollup_interval.  Available methods are None, "sum", "average", "min", "max", "count", and
+            "standarddev".  See `DataPoint documentation
+            <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints>`_
+            for additional details on these values.
+        :type rollup_method: str or None
+        :param timezone: timezone for calculating roll-ups. This determines roll-up interval
+            boundaries and only applies to roll-ups of a day or larger (for example, day,
+            week, or month). Note that it does not apply to the startTime and endTime parameters.
+            See the `Timestamps <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#timestamp>`_
+            and `Supported Time Zones <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#TimeZones>`_
+            sections for more information.
+
+        :type timezone: str or None
+        :param int page_size: The number of results that we should attempt to retrieve from the
+            device cloud in each page.  Generally, this can be left at its default value unless
+            you have a good reason to change the parameter for performance reasons.
+
+        """
+        # Validate function inputs
+        start_time = validate_type(start_time, datetime.datetime, type(None))
+        end_time = validate_type(end_time, datetime.datetime, type(None))
+        use_client_timeline = validate_type(use_client_timeline, bool)
+        newest_first = validate_type(newest_first, bool)
+        rollup_interval = validate_type(rollup_interval, type(None), *six.string_types)
+        if not rollup_interval in {None,
+                                   ROLLUP_INTERVAL_HALF,
+                                   ROLLUP_INTERVAL_HOUR,
+                                   ROLLUP_INTERVAL_DAY,
+                                   ROLLUP_INTERVAL_WEEK,
+                                   ROLLUP_INTERVAL_MONTH, }:
+            raise ValueError("Invalid rollup_interval %r provided" % (rollup_interval, ))
+        rollup_method = validate_type(rollup_method, type(None), *six.string_types)
+        if not rollup_method in {None,
+                                 ROLLUP_METHOD_SUM,
+                                 ROLLUP_METHOD_AVERAGE,
+                                 ROLLUP_METHOD_MIN,
+                                 ROLLUP_METHOD_MAX,
+                                 ROLLUP_METHOD_COUNT,
+                                 ROLLUP_METHOD_STDDEV}:
+            raise ValueError("Invalid rollup_method %r provided" % (rollup_method, ))
+        timezone = validate_type(timezone, type(None), *six.string_types)
+        page_size = validate_type(page_size, *six.integer_types)
+
+        # Remember that there could be multiple pages of data and we want to provide
+        # in iterator over the result set.  To start the process out, we need to make
+        # an initial request without a page cursor.  We should get one in response to
+        # our first request which we will use to page through the result set
+        query_parameters = {
+            'timeline': 'client' if use_client_timeline else 'server',
+            'order': 'descending' if newest_first else 'ascending',
+            'size': page_size
+        }
+        if start_time is not None:
+            query_parameters["startTime"] = start_time.isoformat()
+        if end_time is not None:
+            query_parameters["endTime"] = end_time.isoformat()
+        if rollup_interval is not None:
+            query_parameters["rollupInterval"] = rollup_interval
+        if rollup_method is not None:
+            query_parameters["rollupMethod"] = rollup_method
+        if timezone is not None:
+            query_parameters["timezone"] = timezone
+
+        result_size = page_size
+        while result_size == page_size:
+            # request the next page of data or first if pageCursor is not set as query param
+            try:
+                result = self._conn.get_json("/ws/DataPoint/{stream_id}?{query_params}".format(
+                    stream_id=self.get_stream_id(),
+                    query_params=urllib.parse.urlencode(query_parameters)
+                ))
+            except DeviceCloudHttpException as http_exception:
+                if http_exception.response.status_code == 404:
+                    raise NoSuchStreamException()
+                raise http_exception
+
+            result_size = int(result["resultSize"])  # how many are actually included here?
+            query_parameters["pageCursor"] = result["pageCursor"]  # get ready to grab next page
+            for item_info in result.get("items", []):
+                data_point = DataPoint.from_json(self, item_info)
+                yield data_point

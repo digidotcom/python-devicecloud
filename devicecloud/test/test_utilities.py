@@ -22,7 +22,7 @@ class HttpTestBase(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    def prepare_response(self, method, path, data, status=200):
+    def prepare_response(self, method, path, data, status=200, match_querystring=False):
         # TODO:
         #   Should probably assert on more request headers and
         #   respond with correct content type, etc.
@@ -30,6 +30,7 @@ class HttpTestBase(unittest.TestCase):
         httpretty.register_uri(method,
                                "https://login.etherios.com{}".format(path),
                                data,
+                               match_querystring=match_querystring,
                                status=status)
 
     def prepare_json_response(self, method, path, data, status=200):
