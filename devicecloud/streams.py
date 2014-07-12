@@ -9,7 +9,6 @@ r"""Module providing classes for interacting with device cloud data streams"""
 
 import logging
 import datetime
-from urllib import urlencode
 import six
 
 from devicecloud.apibase import APIBase
@@ -18,13 +17,14 @@ from devicecloud.util import conditional_write, to_none_or_dt, validate_type
 from six import StringIO
 
 
+urllib = six.moves.urllib
+
 DATA_POINT_TEMPLATE = """\
 <DataPoint>
    <data>{data}</data>
    <streamId>{stream}</streamId>
 </DataPoint>
 """
-
 
 STREAM_TYPE_INTEGER = "INTEGER"
 STREAM_TYPE_LONG = "LONG"
@@ -746,7 +746,7 @@ class DataStream(object):
             # really see any alternative
             result = self._conn.get_json("/ws/DataStream/{}?{}".format(
                 self.get_stream_id(),
-                urlencode(query_parameters)))
+                urllib.urlencode(query_parameters)))
 
             # update the page cursor for the next time around
             query_parameters["pageCursor"] = result["pageCursor"]
