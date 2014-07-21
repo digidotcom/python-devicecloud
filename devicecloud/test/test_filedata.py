@@ -36,29 +36,29 @@ GET_FILEDATA_SIMPLE = """\
 """
 
 # These were grabbed from the live cloud
-GET_HOME_RESULT = u'{\n    "resultTotalRows": "3",\n    "requestedStartRow": "0",\n    "resultSize": "3",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "00000000-00000000-0004F3FF-FF027D8C"}, "cstId": "304", "fdCreatedDate": "2011-10-13T21:21:58.110Z", "fdLastModifiedDate": "2011-10-13T21:21:58.110Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"},\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "00000000-00000000-080027FF-FFB1A2C2"}, "cstId": "304", "fdCreatedDate": "2012-01-16T02:22:16.510Z", "fdLastModifiedDate": "2012-01-16T02:22:16.510Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"},\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "test_dir"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.287Z", "fdLastModifiedDate": "2014-07-13T04:37:16.287Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"}\n   ]\n }\n'
-GET_DIR1_RESULT = u'{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
-GET_DIR2_RESULT = u'{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
-GET_DIR3_RESULT = u'{\n    "resultTotalRows": "1",\n    "requestedStartRow": "0",\n    "resultSize": "1",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/test_dir\\/", "fdName": "test_file.txt"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.283Z", "fdLastModifiedDate": "2014-07-21T06:14:13.550Z", "fdContentType": "text\\/plain", "fdSize": "149", "fdType": "file"}\n   ]\n }\n'
+GET_HOME_RESULT = '{\n    "resultTotalRows": "3",\n    "requestedStartRow": "0",\n    "resultSize": "3",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "00000000-00000000-0004F3FF-FF027D8C"}, "cstId": "304", "fdCreatedDate": "2011-10-13T21:21:58.110Z", "fdLastModifiedDate": "2011-10-13T21:21:58.110Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"},\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "00000000-00000000-080027FF-FFB1A2C2"}, "cstId": "304", "fdCreatedDate": "2012-01-16T02:22:16.510Z", "fdLastModifiedDate": "2012-01-16T02:22:16.510Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"},\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "test_dir"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.287Z", "fdLastModifiedDate": "2014-07-13T04:37:16.287Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"}\n   ]\n }\n'
+GET_DIR1_RESULT = '{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
+GET_DIR2_RESULT = '{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
+GET_DIR3_RESULT = '{\n    "resultTotalRows": "1",\n    "requestedStartRow": "0",\n    "resultSize": "1",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/test_dir\\/", "fdName": "test_file.txt"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.283Z", "fdLastModifiedDate": "2014-07-21T06:14:13.550Z", "fdContentType": "text\\/plain", "fdSize": "149", "fdType": "file"}\n   ]\n }\n'
 
 # This includes embedded data
-GET_WITH_EMBED = u'{\n    "resultTotalRows": "1",\n    ' \
-                 u'"requestedStartRow": "0",\n    ' \
-                 u'"resultSize": "1",\n    ' \
-                 u'"requestedSize": "1000",\n    ' \
-                 u'"remainingSize": "0",\n    ' \
-                 u'"items": ' \
-                 u'[\n{ ' \
-                 u'"id": { ' \
-                 u'"fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/test_dir\\/", ' \
-                 u'"fdName": "test_file.txt"}, ' \
-                 u'"cstId": "304", ' \
-                 u'"fdCreatedDate": "2014-07-13T04:37:16.283Z", ' \
-                 u'"fdLastModifiedDate": "2014-07-21T07:30:15.383Z", ' \
-                 u'"fdContentType": "text\\/plain", ' \
-                 u'"fdSize": "149", ' \
-                 u'"fdType": "file", ' \
-                 u'"fdData": "PEZpbGVEYXRhPjxmZENvbnRlbnRUeXBlPnRleHQvcGxhaW48L2ZkQ29udGVudFR5cGU+PGZkVHlwZT5maWxlPC9mZFR5cGU+PGZkRGF0YT5TR1ZzYkd4dkxDQjNiM0pzWkNFPQo8L2ZkRGF0YT48ZmRBcmNoaXZlPmZhbHNlPC9mZEFyY2hpdmU+PC9GaWxlRGF0YT4="}\n   ]\n }\n'
+GET_WITH_EMBED = '{\n    "resultTotalRows": "1",\n    ' \
+                 '"requestedStartRow": "0",\n    ' \
+                 '"resultSize": "1",\n    ' \
+                 '"requestedSize": "1000",\n    ' \
+                 '"remainingSize": "0",\n    ' \
+                 '"items": ' \
+                 '[\n{ ' \
+                 '"id": { ' \
+                 '"fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/test_dir\\/", ' \
+                 '"fdName": "test_file.txt"}, ' \
+                 '"cstId": "304", ' \
+                 '"fdCreatedDate": "2014-07-13T04:37:16.283Z", ' \
+                 '"fdLastModifiedDate": "2014-07-21T07:30:15.383Z", ' \
+                 '"fdContentType": "text\\/plain", ' \
+                 '"fdSize": "149", ' \
+                 '"fdType": "file", ' \
+                 '"fdData": "PEZpbGVEYXRhPjxmZENvbnRlbnRUeXBlPnRleHQvcGxhaW48L2ZkQ29udGVudFR5cGU+PGZkVHlwZT5maWxlPC9mZFR5cGU+PGZkRGF0YT5TR1ZzYkd4dkxDQjNiM0pzWkNFPQo8L2ZkRGF0YT48ZmRBcmNoaXZlPmZhbHNlPC9mZEFyY2hpdmU+PC9GaWxlRGF0YT4="}\n   ]\n }\n'
 
 
 class TestFileData(HttpTestBase):
