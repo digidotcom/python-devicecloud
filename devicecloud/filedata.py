@@ -41,20 +41,25 @@ fd_size = Attribute("fdSize")
 class FileDataAPI(APIBase):
     """Encapsulate data and logic required to interact with the device cloud file data store"""
 
-    def get_filedata(self, condition=None, page_size=1000):
+    def get_filedata(self, condition=None, embed=True, page_size=1000):
         """Return a generator over all results matching the provided condition"""
 
         condition = validate_type(condition, type(None), Expression, *six.string_types)
         page_size = validate_type(page_size, *six.integer_types)
+        embed = validate_type(embed, bool)
 
         # TODO: implementing paging over the result set
         if condition is None:
             condition = (fd_path == "~/")  # home directory
-        response = self._conn.get_json("/ws/FileData?condition={}".format(condition.compile()))
+        response = self._conn.get_json(
+            "/ws/FileData?embed={embed}&condition={condition}".format(
+                embed="true" if embed else "false",
+                condition=condition.compile())
+        )
 
         objects = []
         for fd_json in response.get("items", []):
-            objects.append(FileDataObject.from_json(fd_json))
+            objects.append(FileDataObject.from_json(self, fd_json))
         return objects
 
     def write_file(self, path, name, data, content_type=None, archive=False):
@@ -88,7 +93,7 @@ class FileDataAPI(APIBase):
             sio.getvalue(),
             params=params)
 
-    def walk(self, root="~/"):
+    def walk(self, root="~/", embed=True):
         """Emulation of os.walk behavior against the device cloud filedata store
 
         This method will yield tuples in the form ``(dirpath, FileDataDirectory's, FileData's)``
@@ -129,14 +134,15 @@ class FileDataObject(object):
     """Encapsulate state and logic surrounding a "filedata" element"""
 
     @classmethod
-    def from_json(cls, json_data):
+    def from_json(cls, fdapi, json_data):
         fd_type = json_data["fdType"]
         if fd_type == "directory":
-            return FileDataDirectory.from_json(json_data)
+            return FileDataDirectory.from_json(fdapi, json_data)
         else:
-            return FileDataFile.from_json(json_data)
+            return FileDataFile.from_json(fdapi, json_data)
 
-    def __init__(self, json_data):
+    def __init__(self, fdapi, json_data):
+        self._fdapi = fdapi
         self._json_data = json_data
 
     def get_type(self):
@@ -168,26 +174,40 @@ class FileDataObject(object):
 
 
 class FileDataDirectory(FileDataObject):
+    """Provide access to a directory and its metadata in the  filedata store"""
 
     @classmethod
-    def from_json(cls, json_data):
-        return cls(json_data)
+    def from_json(cls, fdapi, json_data):
+        return cls(fdapi, json_data)
 
-    def __init__(self, data):
-        FileDataObject.__init__(self, data)
+    def __init__(self, fdapi, data):
+        FileDataObject.__init__(self, fdapi, data)
 
     def __repr__(self):
         return "FileDataDirectory({!r})".format(self._json_data)
 
+    def walk(self, embed=True):
+        """Walk the directories and files rooted with this directory
+
+        This method will yield tuples in the form ``(dirpath, FileDataDirectory's, FileData's)``
+        recursively in pre-order (depth first from top down).
+
+]       :return: Generator yielding 3-tuples of dirpath, directories, and files
+        :rtype: 3-tuple in form (dirpath, list of :class:`FileDataDirectory`, list of :class:`FileDataFile`)
+
+        """
+        return self._fdapi.walk(root=self.get_path())
+
 
 class FileDataFile(FileDataObject):
+    """Provide access to a file and its metadata in the filedata store"""
 
     @classmethod
-    def from_json(cls, json_data):
-        return cls(json_data)
+    def from_json(cls, fdapi, json_data):
+        return cls(fdapi, json_data)
 
-    def __init__(self, json_data):
-        FileDataObject.__init__(self, json_data)
+    def __init__(self, fdapi, json_data):
+        FileDataObject.__init__(self, fdapi, json_data)
 
     def __repr__(self):
         return "FileDataFile({!r})".format(self._json_data)
