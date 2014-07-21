@@ -59,7 +59,7 @@ class FileDataAPI(APIBase):
     def write_file(self, path, name, data, content_type=None, archive=False):
         path = validate_type(path, *six.string_types)
         name = validate_type(name, *six.string_types)
-        data = validate_type(data, *six.string_types)
+        data = validate_type(data, six.binary_type)
         content_type = validate_type(content_type, type(None), *six.string_types)
         archive = validate_type(archive, bool)
 
@@ -145,7 +145,8 @@ class FileDataObject(object):
         if base64_data is None:
             return None
         else:
-            return base64.decodestring(base64_data)
+            # need to convert to bytes() with python 3
+            return base64.decodestring(six.b(base64_data))
 
     def get_type(self):
         return self._json_data["fdType"]

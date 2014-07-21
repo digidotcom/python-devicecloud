@@ -70,7 +70,7 @@ class TestFileData(HttpTestBase):
 
     def test_write_file_simple(self):
         self.prepare_response("PUT", "/ws/FileData/test/path/test.txt", "<???>", status=200)
-        data = "".join(map(chr, range(255)))
+        data = six.b("").join(map(chr, range(255)))
         self.dc.filedata.write_file(
             path="test/path",
             name="test.txt",
