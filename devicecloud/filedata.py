@@ -70,7 +70,7 @@ class FileDataAPI(APIBase):
             path += "/"
         name = name.lstrip("/")
 
-        sio = six.StringIO()
+        sio = six.moves.StringIO()
         sio.write("<FileData>")
         if content_type is not None:
             sio.write("<fdContentType>{}</fdContentType>".format(content_type))
@@ -164,7 +164,7 @@ class FileDataObject(object):
         return "{}{}".format(self.get_path(), self.get_name())
 
     def get_size(self):
-        return self._json_data["fdSize"]
+        return int(self._json_data["fdSize"])
 
 
 class FileDataDirectory(FileDataObject):
