@@ -7,16 +7,12 @@
 
 """Provide access to the device cloud filedata API"""
 
-from xml.etree import ElementTree
 import base64
-import hashlib
-import json
 
 from devicecloud.apibase import APIBase
 from devicecloud.conditions import Attribute, Expression
 from devicecloud.util import iso8601_to_dt, validate_type
 import six
-
 
 PUT_FILE_TEMPLATE = """
 <FileData>
@@ -41,19 +37,17 @@ fd_size = Attribute("fdSize")
 class FileDataAPI(APIBase):
     """Encapsulate data and logic required to interact with the device cloud file data store"""
 
-    def get_filedata(self, condition=None, embed=True, page_size=1000):
+    def get_filedata(self, condition=None, page_size=1000):
         """Return a generator over all results matching the provided condition"""
 
         condition = validate_type(condition, type(None), Expression, *six.string_types)
         page_size = validate_type(page_size, *six.integer_types)
-        embed = validate_type(embed, bool)
 
         # TODO: implementing paging over the result set
         if condition is None:
             condition = (fd_path == "~/")  # home directory
         response = self._conn.get_json(
-            "/ws/FileData?embed={embed}&condition={condition}".format(
-                embed="true" if embed else "false",
+            "/ws/FileData?embed=true&condition={condition}".format(
                 condition=condition.compile())
         )
 
@@ -93,7 +87,7 @@ class FileDataAPI(APIBase):
             sio.getvalue(),
             params=params)
 
-    def walk(self, root="~/", embed=True):
+    def walk(self, root="~/"):
         """Emulation of os.walk behavior against the device cloud filedata store
 
         This method will yield tuples in the form ``(dirpath, FileDataDirectory's, FileData's)``
@@ -145,6 +139,14 @@ class FileDataObject(object):
         self._fdapi = fdapi
         self._json_data = json_data
 
+    def get_data(self):
+        # NOTE: we assume that the "embed" option is used
+        base64_data = self._json_data.get("fdData")
+        if base64_data is None:
+            return None
+        else:
+            return base64.decodestring(base64_data)
+
     def get_type(self):
         return self._json_data["fdType"]
 
@@ -186,7 +188,7 @@ class FileDataDirectory(FileDataObject):
     def __repr__(self):
         return "FileDataDirectory({!r})".format(self._json_data)
 
-    def walk(self, embed=True):
+    def walk(self):
         """Walk the directories and files rooted with this directory
 
         This method will yield tuples in the form ``(dirpath, FileDataDirectory's, FileData's)``

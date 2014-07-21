@@ -5,9 +5,9 @@ import datetime
 
 from devicecloud.test.test_utilities import HttpTestBase
 
-
-# TODO: get production sample... this was just put together while on plane
 import six
+
+
 
 GET_FILEDATA_SIMPLE = """\
 {
@@ -19,7 +19,8 @@ GET_FILEDATA_SIMPLE = """\
             "fdContentType": "application/binary",
             "cstId": "1234",
             "fdCreatedDate": "2014-07-20T18:46:45.123Z",
-            "fdSize":  "1234"
+            "fdSize":  "1234",
+            "fdData": "QSBtYW4gYSBwbGFuIGEgY2FuYWwgcGFuYW1h"
         },
         {
             "fdType": "directory",
@@ -39,6 +40,25 @@ GET_HOME_RESULT = u'{\n    "resultTotalRows": "3",\n    "requestedStartRow": "0"
 GET_DIR1_RESULT = u'{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
 GET_DIR2_RESULT = u'{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
 GET_DIR3_RESULT = u'{\n    "resultTotalRows": "1",\n    "requestedStartRow": "0",\n    "resultSize": "1",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/test_dir\\/", "fdName": "test_file.txt"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.283Z", "fdLastModifiedDate": "2014-07-21T06:14:13.550Z", "fdContentType": "text\\/plain", "fdSize": "149", "fdType": "file"}\n   ]\n }\n'
+
+# This includes embedded data
+GET_WITH_EMBED = u'{\n    "resultTotalRows": "1",\n    ' \
+                 u'"requestedStartRow": "0",\n    ' \
+                 u'"resultSize": "1",\n    ' \
+                 u'"requestedSize": "1000",\n    ' \
+                 u'"remainingSize": "0",\n    ' \
+                 u'"items": ' \
+                 u'[\n{ ' \
+                 u'"id": { ' \
+                 u'"fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/test_dir\\/", ' \
+                 u'"fdName": "test_file.txt"}, ' \
+                 u'"cstId": "304", ' \
+                 u'"fdCreatedDate": "2014-07-13T04:37:16.283Z", ' \
+                 u'"fdLastModifiedDate": "2014-07-21T07:30:15.383Z", ' \
+                 u'"fdContentType": "text\\/plain", ' \
+                 u'"fdSize": "149", ' \
+                 u'"fdType": "file", ' \
+                 u'"fdData": "PEZpbGVEYXRhPjxmZENvbnRlbnRUeXBlPnRleHQvcGxhaW48L2ZkQ29udGVudFR5cGU+PGZkVHlwZT5maWxlPC9mZFR5cGU+PGZkRGF0YT5TR1ZzYkd4dkxDQjNiM0pzWkNFPQo8L2ZkRGF0YT48ZmRBcmNoaXZlPmZhbHNlPC9mZEFyY2hpdmU+PC9GaWxlRGF0YT4="}\n   ]\n }\n'
 
 
 class TestFileData(HttpTestBase):
@@ -120,7 +140,7 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/test.txt")
         self.assertEqual(obj.get_size(), 1234)
-        self.assertEqual(obj.get_data(), None)
+        self.assertEqual(obj.get_data(), "A man a plan a canal panama")
 
     def test_directory_metadata_access(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
@@ -138,7 +158,7 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/")
         self.assertEqual(obj.get_size(), 0)
-        self.assertEqual(obj.get_data(), "1234")
+        self.assertEqual(obj.get_data(), None)
 
 
 if __name__ == "__main__":
