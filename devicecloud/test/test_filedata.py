@@ -70,7 +70,7 @@ class TestFileData(HttpTestBase):
 
     def test_write_file_simple(self):
         self.prepare_response("PUT", "/ws/FileData/test/path/test.txt", "<???>", status=200)
-        data = six.b("").join(map(chr, range(255)))
+        data = six.b(''.join(map(chr, range(255))))
         self.dc.filedata.write_file(
             path="test/path",
             name="test.txt",
@@ -82,7 +82,8 @@ class TestFileData(HttpTestBase):
         root = ElementTree.fromstring(req.body)
         self.assertEqual(root.find("fdContentType").text, "application/binary")
         self.assertEqual(root.find("fdType").text, "file")
-        self.assertEqual(base64.decodestring(root.find("fdData").text), data)
+        fd_data = root.find("fdData").text
+        self.assertEqual(base64.decodestring(six.b(fd_data)), data)
         self.assertEqual(root.find("fdArchive").text, "true")
 
     def test_walk(self):
@@ -140,7 +141,7 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/test.txt")
         self.assertEqual(obj.get_size(), 1234)
-        self.assertEqual(obj.get_data(), "A man a plan a canal panama")
+        self.assertEqual(obj.get_data(), six.b("A man a plan a canal panama"))
 
     def test_directory_metadata_access(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)

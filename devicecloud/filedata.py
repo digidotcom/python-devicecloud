@@ -69,12 +69,17 @@ class FileDataAPI(APIBase):
             path += "/"
         name = name.lstrip("/")
 
+        if six.PY3:
+            base64_encoded_data = base64.encodebytes(data).decode('utf-8')
+        else:
+            base64_encoded_data = base64.encodestring(data)
+
         sio = six.moves.StringIO()
         sio.write("<FileData>")
         if content_type is not None:
             sio.write("<fdContentType>{}</fdContentType>".format(content_type))
         sio.write("<fdType>file</fdType>")
-        sio.write("<fdData>{}</fdData>".format(base64.encodestring(data)))
+        sio.write("<fdData>{}</fdData>".format(base64_encoded_data))
         sio.write("<fdArchive>{}</fdArchive>".format("true" if archive else "false"))
         sio.write("</FileData>")
 
