@@ -22,6 +22,9 @@ class HttpTestBase(unittest.TestCase):
         httpretty.disable()
         httpretty.reset()
 
+    def _get_last_request(self):
+        return httpretty.last_request()
+
     def prepare_response(self, method, path, data, status=200, match_querystring=False):
         # TODO:
         #   Should probably assert on more request headers and
