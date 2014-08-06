@@ -32,7 +32,7 @@ Method 1: Iterate through the file tree by getting the filedata
 objects associated with paths or other conditions::
 
     condtion = (fd_path == '~/')
-    for filedata in dc.filedata.get_filedata(fd_path == '~/'):
+    for filedata in dc.filedata.get_filedata(condition):
         print filedata
 
 The :meth:`.FileDataAPI.get_filedata` method will return a generator
@@ -99,7 +99,7 @@ There are three ways to create a new directory:
    all directories should be created recursively.
 3. By calling :meth:`.FileDataDirectory.add_subdirectory`
 
-Different methods may suit your needs depending on your usse cases.
+Different methods may suit your needs depending on your use cases.
 
 Writing a File
 ~~~~~~~~~~~~~~

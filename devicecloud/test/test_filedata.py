@@ -65,7 +65,7 @@ class TestFileData(HttpTestBase):
 
     def test_get_filedata_simple(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
-        objects = self.dc.filedata.get_filedata()
+        objects = list(self.dc.filedata.get_filedata())
         self.assertEqual(len(objects), 2)
 
     def test_write_file_simple(self):
@@ -127,7 +127,7 @@ class TestFileDataObject(HttpTestBase):
 
     def test_file_metadata_access(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
-        objects = self.dc.filedata.get_filedata()
+        objects = list(self.dc.filedata.get_filedata())
         self.assertEqual(len(objects), 2)
         obj = objects[0]
         self.assertEqual(obj.get_path(), "/db/blah/")
@@ -145,7 +145,7 @@ class TestFileDataObject(HttpTestBase):
 
     def test_directory_metadata_access(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
-        objects = self.dc.filedata.get_filedata()
+        objects = list(self.dc.filedata.get_filedata())
         self.assertEqual(len(objects), 2)
         obj = objects[1]
         self.assertEqual(obj.get_path(), "/db/blah/")

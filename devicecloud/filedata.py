@@ -44,6 +44,7 @@ class FileDataAPI(APIBase):
         page_size = validate_type(page_size, *six.integer_types)
 
         # TODO: implementing paging over the result set
+        # TODO: page_size is unused currently
         if condition is None:
             condition = (fd_path == "~/")  # home directory
         response = self._conn.get_json(
@@ -51,17 +52,15 @@ class FileDataAPI(APIBase):
                 condition=condition.compile())
         )
 
-        objects = []
         for fd_json in response.get("items", []):
-            objects.append(FileDataObject.from_json(self, fd_json))
-        return objects
+            yield FileDataObject.from_json(self, fd_json)
 
     def write_file(self, path, name, data, content_type=None, archive=False):
         path = validate_type(path, *six.string_types)
         name = validate_type(name, *six.string_types)
         data = validate_type(data, six.binary_type)
         content_type = validate_type(content_type, type(None), *six.string_types)
-        archive = validate_type(archive, bool)
+        archive_str = "true" if validate_type(archive, bool) else "false"
 
         if not path.startswith("/"):
             path = "/" + path
@@ -80,12 +79,12 @@ class FileDataAPI(APIBase):
             sio.write("<fdContentType>{}</fdContentType>".format(content_type))
         sio.write("<fdType>file</fdType>")
         sio.write("<fdData>{}</fdData>".format(base64_encoded_data))
-        sio.write("<fdArchive>{}</fdArchive>".format("true" if archive else "false"))
+        sio.write("<fdArchive>{}</fdArchive>".format(archive_str))
         sio.write("</FileData>")
 
         params = {
             "type": "file",
-            "archive": "true" if archive else "false"
+            "archive": archive_str
         }
         self._conn.put(
             "/ws/FileData{path}{name}".format(path=path,name=name),
@@ -182,7 +181,7 @@ class FileDataObject(object):
 
 
 class FileDataDirectory(FileDataObject):
-    """Provide access to a directory and its metadata in the  filedata store"""
+    """Provide access to a directory and its metadata in the filedata store"""
 
     @classmethod
     def from_json(cls, fdapi, json_data):
