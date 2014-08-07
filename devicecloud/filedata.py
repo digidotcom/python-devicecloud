@@ -14,15 +14,6 @@ from devicecloud.conditions import Attribute, Expression
 from devicecloud.util import iso8601_to_dt, validate_type
 import six
 
-PUT_FILE_TEMPLATE = """
-<FileData>
-    <fdContentType>text/xml</fdContentType>
-    <fdType>file</fdType>
-    <fdData>{file_data}</fdData>
-    <fdArchive>true</fdArchive>
-</FileData>
-"""
-
 
 fd_path = Attribute("fdPath")
 fd_name = Attribute("fdName")
@@ -38,24 +29,59 @@ class FileDataAPI(APIBase):
     """Encapsulate data and logic required to interact with the device cloud file data store"""
 
     def get_filedata(self, condition=None, page_size=1000):
-        """Return a generator over all results matching the provided condition"""
+        """Return a generator over all results matching the provided condition
+
+        :param condition: An :class:`.Expression` which defines the condition
+            which must be matched on the filedata that will be retrieved from
+            file data store. If a condition is unspecified, the following condition
+            will be used ``fd_path == '~/'``.  This condition will match all file
+            data in this accounts "home" directory (a sensible root).
+        :type condition: :class:`.Expression` or None
+        :param int page_size: The number of results to fetch in a single page.  Regardless
+            of the size specified, :meth:`.get_filedata` will continue to fetch pages
+            and yield results until all items have been fetched.
+        :return: Generator yielding :class:`.FileDataObject` instances matching the
+            provided conditions.
+
+        """
 
         condition = validate_type(condition, type(None), Expression, *six.string_types)
         page_size = validate_type(page_size, *six.integer_types)
+        offset = 0
+        remaining_size = 1  # just needs to be non-zero
 
-        # TODO: implementing paging over the result set
-        # TODO: page_size is unused currently
         if condition is None:
             condition = (fd_path == "~/")  # home directory
-        response = self._conn.get_json(
-            "/ws/FileData?embed=true&condition={condition}".format(
-                condition=condition.compile())
-        )
 
-        for fd_json in response.get("items", []):
-            yield FileDataObject.from_json(self, fd_json)
+        while remaining_size > 0:
+            response = self._conn.get_json(
+                "/ws/FileData?embed=true"
+                "&start={offset}"
+                "&size={page_size}"
+                "&condition={condition}".format(
+                    condition=condition.compile(),
+                    page_size=page_size,
+                    offset=offset))
+
+            offset += page_size
+            remaining_size = int(response.get("remainingSize", "0"))
+            for fd_json in response.get("items", []):
+                yield FileDataObject.from_json(self, fd_json)
 
     def write_file(self, path, name, data, content_type=None, archive=False):
+        """Write a file to the file data store at the given path
+
+        :param str path: The path (directory) into which the file should be written.
+        :param str name: The name of the file to be written.
+        :param data: The binary data that should be written into the file.
+        :type data: str (Python2) or bytes (Python3)
+        :param content_type: The content type for the data being written to the file.  May
+             be left unspecified.
+        :type content_type: str or None
+        :param bool archive: If true, history will be retained for various revisions of this
+            file.  If this is not required, leave as false.
+
+        """
         path = validate_type(path, *six.string_types)
         name = validate_type(name, *six.string_types)
         data = validate_type(data, six.binary_type)
@@ -144,6 +170,12 @@ class FileDataObject(object):
         self._json_data = json_data
 
     def get_data(self):
+        """Get the data associated with this filedata object
+
+        :returns: Data associated with this object or None if none exists
+        :rtype: str (Python2)/bytes (Python3) or None
+
+        """
         # NOTE: we assume that the "embed" option is used
         base64_data = self._json_data.get("fdData")
         if base64_data is None:
@@ -153,30 +185,39 @@ class FileDataObject(object):
             return base64.decodestring(six.b(base64_data))
 
     def get_type(self):
+        """Get the type (file/directory) of this object"""
         return self._json_data["fdType"]
 
     def get_last_modified_date(self):
+        """Get the last modified datetime of this object"""
         return iso8601_to_dt(self._json_data["fdLastModifiedDate"])
 
     def get_content_type(self):
+        """Get the content type of this object (or None)"""
         return self._json_data["fdContentType"]
 
     def get_customer_id(self):
+        """Get the customer ID associated with this object"""
         return self._json_data["cstId"]
 
     def get_created_date(self):
+        """Get the datetime this object was created"""
         return iso8601_to_dt(self._json_data["fdCreatedDate"])
 
     def get_name(self):
+        """Get the name of this object"""
         return self._json_data["id"]["fdName"]
 
     def get_path(self):
+        """Get the path of this object"""
         return self._json_data["id"]["fdPath"]
 
     def get_full_path(self):
+        """Get the full path (path and name) of this object"""
         return "{}{}".format(self.get_path(), self.get_name())
 
     def get_size(self):
+        """Get this size of this object (will be 0 for directories)"""
         return int(self._json_data["fdSize"])
 
 
@@ -199,7 +240,7 @@ class FileDataDirectory(FileDataObject):
         This method will yield tuples in the form ``(dirpath, FileDataDirectory's, FileData's)``
         recursively in pre-order (depth first from top down).
 
-]       :return: Generator yielding 3-tuples of dirpath, directories, and files
+        :return: Generator yielding 3-tuples of dirpath, directories, and files
         :rtype: 3-tuple in form (dirpath, list of :class:`FileDataDirectory`, list of :class:`FileDataFile`)
 
         """
@@ -208,7 +249,7 @@ class FileDataDirectory(FileDataObject):
     def write_file(self, *args, **kwargs):
         """Write a file into this directory
 
-        This method takes the same arguments as :meth:`~FileDataAPI.write_file`
+        This method takes the same arguments as :meth:`.FileDataAPI.write_file`
         with the exception of the ``path`` argument which is not needed here.
 
         """

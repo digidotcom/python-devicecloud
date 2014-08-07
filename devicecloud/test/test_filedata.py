@@ -35,6 +35,33 @@ GET_FILEDATA_SIMPLE = """\
 }
 """
 
+# Paging Test
+GET_FILEDATA_PAGE1 = """\
+{
+    "resultTotalRows": "2",
+    "requestedStartRow": "0",
+    "resultSize": "1",
+    "requestedSize": "1",
+    "remainingSize": "1",
+    "items": [
+{ "id": { "fdPath": "\/db\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\/test_dir\/", "fdName": "test_file.txt"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.283Z", "fdLastModifiedDate": "2014-08-07T03:57:09.393Z", "fdContentType": "text\/plain", "fdSize": "149", "fdType": "file", "fdData": "PEZpbGVEYXRhPjxmZENvbnRlbnRUeXBlPnRleHQvcGxhaW48L2ZkQ29udGVudFR5cGU+PGZkVHlwZT5maWxlPC9mZFR5cGU+PGZkRGF0YT5TR1ZzYkd4dkxDQjNiM0pzWkNFPQo8L2ZkRGF0YT48ZmRBcmNoaXZlPmZhbHNlPC9mZEFyY2hpdmU+PC9GaWxlRGF0YT4="}
+   ]
+ }
+"""
+
+GET_FILEDATA_PAGE2 = """\
+{
+    "resultTotalRows": "2",
+    "requestedStartRow": "1",
+    "resultSize": "1",
+    "requestedSize": "1",
+    "remainingSize": "0",
+    "items": [
+{ "id": { "fdPath": "\/db\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\/test_dir\/", "fdName": "test_file2.txt"}, "cstId": "304", "fdCreatedDate": "2014-08-07T03:56:22.013Z", "fdLastModifiedDate": "2014-08-07T03:57:10.057Z", "fdContentType": "text\/plain", "fdSize": "108", "fdType": "file", "fdData": "PEZpbGVEYXRhPjxmZFR5cGU+ZmlsZTwvZmRUeXBlPjxmZERhdGE+U0dWc2JHOHNJR0ZuWVdsdUlRPT0KPC9mZERhdGE+PGZkQXJjaGl2ZT5mYWxzZTwvZmRBcmNoaXZlPjwvRmlsZURhdGE+"}
+   ]
+ }
+"""
+
 # These were grabbed from the live cloud
 GET_HOME_RESULT = '{\n    "resultTotalRows": "3",\n    "requestedStartRow": "0",\n    "resultSize": "3",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "00000000-00000000-0004F3FF-FF027D8C"}, "cstId": "304", "fdCreatedDate": "2011-10-13T21:21:58.110Z", "fdLastModifiedDate": "2011-10-13T21:21:58.110Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"},\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "00000000-00000000-080027FF-FFB1A2C2"}, "cstId": "304", "fdCreatedDate": "2012-01-16T02:22:16.510Z", "fdLastModifiedDate": "2012-01-16T02:22:16.510Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"},\n{ "id": { "fdPath": "\\/db\\/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne\\/", "fdName": "test_dir"}, "cstId": "304", "fdCreatedDate": "2014-07-13T04:37:16.287Z", "fdLastModifiedDate": "2014-07-13T04:37:16.287Z", "fdContentType": "application\\/xml", "fdSize": "0", "fdType": "directory"}\n   ]\n }\n'
 GET_DIR1_RESULT = '{\n    "resultTotalRows": "0",\n    "requestedStartRow": "0",\n    "resultSize": "0",\n    "requestedSize": "1000",\n    "remainingSize": "0",\n    "items": [\n    ]\n }\n'
@@ -67,6 +94,16 @@ class TestFileData(HttpTestBase):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
         objects = list(self.dc.filedata.get_filedata())
         self.assertEqual(len(objects), 2)
+
+    def test_get_filedata_paged(self):
+        self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_PAGE1)
+        gen = self.dc.filedata.get_filedata(page_size=1)
+        obj1 = six.next(gen)
+        self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_PAGE2)
+        obj2 = six.next(gen)
+        self.assertRaises(StopIteration, six.next, gen)
+        self.assertEqual(obj1.get_name(), "test_file.txt")
+        self.assertEqual(obj2.get_name(), "test_file2.txt")
 
     def test_write_file_simple(self):
         self.prepare_response("PUT", "/ws/FileData/test/path/test.txt", "<???>", status=200)
