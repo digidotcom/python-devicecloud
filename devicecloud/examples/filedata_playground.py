@@ -9,6 +9,7 @@ from getpass import getpass
 from devicecloud import DeviceCloud
 from devicecloud.filedata import fd_path, fd_name, fd_size, fd_type
 from devicecloud.streams import DataPoint, NoSuchStreamException
+import six
 
 
 def get_authenticated_dc():
@@ -26,15 +27,16 @@ def get_authenticated_dc():
 if __name__ == '__main__':
     dc = get_authenticated_dc()
 
-    dc.filedata.write_file("/~/test_dir/", "test_file.txt", "Helllo, world!", "text/plain")
+    dc.filedata.write_file("/~/test_dir/", "test_file.txt", six.b("Helllo, world!"), "text/plain")
+    dc.filedata.write_file("/~/test_dir/", "test_file2.txt", six.b("Hello, again!"))
 
     query = None  # (fd_path == '/db/public/')
     for dirpath, directories, files in dc.filedata.walk():
         for fd_file in files:
             print fd_file
 
-    print dc.filedata.get_filedata(
-        (fd_type == "file") &
-        (fd_size < 250) &
-        (fd_name.like('%.txt'))
-    )
+    for fd in dc.filedata.get_filedata(
+            (fd_type == "file") &
+            (fd_size < 250) &
+            (fd_name.like('%.txt')), page_size=1):
+        print (fd)
