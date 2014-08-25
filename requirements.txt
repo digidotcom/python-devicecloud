@@ -1,2 +1,3 @@
-six
+six>=1.7.3
 requests>=2.2
+arrow>=0.4.4

@@ -9,22 +9,15 @@ r"""Module providing classes for interacting with device cloud data streams"""
 
 import logging
 import datetime
-import six
 
+import six
 from devicecloud.apibase import APIBase
 from devicecloud import DeviceCloudException, DeviceCloudHttpException
-from devicecloud.util import conditional_write, to_none_or_dt, validate_type
+from devicecloud.util import conditional_write, to_none_or_dt, validate_type, isoformat
 from six import StringIO
 
 
 urllib = six.moves.urllib
-
-DATA_POINT_TEMPLATE = """\
-<DataPoint>
-   <data>{data}</data>
-   <streamId>{stream}</streamId>
-</DataPoint>
-"""
 
 STREAM_TYPE_INTEGER = "INTEGER"
 STREAM_TYPE_LONG = "LONG"
@@ -467,7 +460,7 @@ class DataPoint(object):
         out.write("<data>{}</data>".format(self.get_data()))
         conditional_write(out, "<description>{}</description>", self.get_description())
         if self.get_timestamp() is not None:
-            out.write("<timestamp>{}</timestamp>".format(self.get_timestamp().isoformat()))
+            out.write("<timestamp>{}</timestamp>".format(isoformat(self.get_timestamp())))
         conditional_write(out, "<quality>{}</quality>", self.get_quality())
         if self.get_location() is not None:
             out.write("<location>%s</location>" % ",".join(map(str, self.get_location())))
@@ -664,6 +657,45 @@ class DataStream(object):
             else:
                 raise http_excpeption
 
+    def delete_datapoint(self, datapoint):
+        """Delete the provided datapoint from this stream
+
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+
+        """
+        datapoint = validate_type(datapoint, DataPoint)
+        self._conn.delete("/ws/DataPoint/{stream_id}/{datapoint_id}".format(
+            stream_id=self.get_stream_id(),
+            datapoint_id=datapoint.get_id(),
+        ))
+
+    def delete_datapoints_in_time_range(self, start_dt=None, end_dt=None):
+        """Delete datapoints from this stream between the provided start and end times
+
+        If neither a start or end time is specified, all data points in the stream
+        will be deleted.
+
+        :param start_dt: The datetime after which data points should be deleted or None
+            if all data points from the beginning of time should be deleted.
+        :param end_dt: The datetime before which data points should be deleted or None
+            if all data points until the current time should be deleted.
+        :raises devicecloud.DeviceCloudHttpException: in the case of an unexpected http error
+
+        """
+        start_dt = to_none_or_dt(validate_type(start_dt, datetime.datetime, type(None)))
+        end_dt = to_none_or_dt(validate_type(end_dt, datetime.datetime, type(None)))
+
+        params = {}
+        if start_dt is not None:
+            params['startTime'] = isoformat(start_dt)
+        if end_dt is not None:
+            params['endTime'] = isoformat(end_dt)
+
+        self._conn.delete("/ws/DataPoint/{stream_id}{querystring}".format(
+            stream_id=self.get_stream_id(),
+            querystring="?" + urllib.parse.urlencode(params) if params else "",
+        ))
+
     def write(self, datapoint):
         """Write some raw data to a stream using the DataPoint API
 
@@ -738,8 +770,8 @@ class DataStream(object):
 
         """
         # Validate function inputs
-        start_time = validate_type(start_time, datetime.datetime, type(None))
-        end_time = validate_type(end_time, datetime.datetime, type(None))
+        start_time = to_none_or_dt(validate_type(start_time, datetime.datetime, type(None)))
+        end_time = to_none_or_dt(validate_type(end_time, datetime.datetime, type(None)))
         use_client_timeline = validate_type(use_client_timeline, bool)
         newest_first = validate_type(newest_first, bool)
         rollup_interval = validate_type(rollup_interval, type(None), *six.string_types)
@@ -772,9 +804,9 @@ class DataStream(object):
             'size': page_size
         }
         if start_time is not None:
-            query_parameters["startTime"] = start_time.isoformat()
+            query_parameters["startTime"] = isoformat(start_time)
         if end_time is not None:
-            query_parameters["endTime"] = end_time.isoformat()
+            query_parameters["endTime"] = isoformat(end_time)
         if rollup_interval is not None:
             query_parameters["rollupInterval"] = rollup_interval
         if rollup_method is not None:
@@ -796,7 +828,7 @@ class DataStream(object):
                 raise http_exception
 
             result_size = int(result["resultSize"])  # how many are actually included here?
-            query_parameters["pageCursor"] = result["pageCursor"]  # get ready to grab next page
+            query_parameters["pageCursor"] = result.get("pageCursor")  # will not be present if result set is empty
             for item_info in result.get("items", []):
                 data_point = DataPoint.from_json(self, item_info)
                 yield data_point

@@ -7,12 +7,13 @@
 
 import unittest
 import datetime
-import six
 
+from dateutil.tz import tzutc
 from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException, ROLLUP_INTERVAL_HALF, \
     ROLLUP_METHOD_COUNT
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
+
 
 
 # Example HTTP Responses
@@ -113,7 +114,6 @@ GET_TEST_DATA_STREAM_NO_CURRENT_VALUE = """\
 ]
 }
 """
-
 
 GET_STREAM_RESULT = {
     'items': [
@@ -262,16 +262,15 @@ GET_DATA_POINTS_FIVE_PAGED = [
 
 
 class TestStreamsAPI(HttpTestBase):
-
     def test_create_data_stream(self):
         self.prepare_json_response("POST", "/ws/DataStream", CREATE_DATA_STREAM)
         self.prepare_json_response("GET", "/ws/DataStream/teststream", GET_STREAM_RESULT)
         streams = self.dc.get_streams_api()
         stream = streams.create_stream("teststream",
-                                            "string",
-                                            description="My Test",
-                                            data_ttl=1234,
-                                            rollup_ttl=5678)
+                                       "string",
+                                       description="My Test",
+                                       data_ttl=1234,
+                                       rollup_ttl=5678)
         self.assertEqual(stream.get_stream_id(), "teststream")
         self.assertEqual(stream.get_data_type(), "STRING")
         self.assertEqual(stream.get_description(), "My Test")
@@ -317,7 +316,6 @@ class TestStreamsAPI(HttpTestBase):
 
 
 class TestDataStream(HttpTestBase):
-
     def _get_stream(self, response):
         self.prepare_response("GET", "/ws/DataStream/test", response)
         return self.dc.streams.get_stream("test")
@@ -392,7 +390,7 @@ class TestDataStream(HttpTestBase):
                   '<streamId>test</streamId>'
                   '<data>123.4</data>'
                   '<description>Best Datapoint Ever?</description>'
-                  '<timestamp>2014-07-07T14:10:34</timestamp>'  # TODO: does this need to include tz?
+                  '<timestamp>2014-07-07T14:10:34Z</timestamp>'  # TODO: does this need to include tz?
                   '<quality>99</quality>'
                   '<location>99,88,77</location>'
                   '<streamUnits>scolvilles</streamUnits>'
@@ -419,7 +417,6 @@ class TestDataStream(HttpTestBase):
 
 
 class TestDataStreamRead(HttpTestBase):
-
     def _get_query_params(self, index):
         return httpretty.last_request().querystring  # already parsed to be dict
 
@@ -477,14 +474,14 @@ class TestDataStreamRead(HttpTestBase):
         self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
         test_stream = self.dc.streams.get_stream("test")
         points = list(test_stream.read(start_time=datetime.datetime(2009, 9, 9, 12, 00, 4)))
-        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["startTime"][0], "2009-09-09T12:00:04")
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["startTime"][0], "2009-09-09T12:00:04Z")
 
     def test_end_time(self):
         self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
         self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
         test_stream = self.dc.streams.get_stream("test")
-        points = list(test_stream.read(end_time=datetime.datetime(2020, 4, 5, 6, 7, 8)))
-        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["endTime"][0], "2020-04-05T06:07:08")
+        points = list(test_stream.read(end_time=datetime.datetime(2020, 4, 5, 6, 7, 8, tzinfo=tzutc())))
+        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["endTime"][0], "2020-04-05T06:07:08Z")
 
     def test_sort_asc(self):
         self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
@@ -536,9 +533,64 @@ class TestDataStreamRead(HttpTestBase):
         points = list(test_stream.read(page_size=9876))
         self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["size"][0], "9876")
 
+    def test_delete_datapoint(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read())
+        self.assertEqual(len(points), 1)
+        point = points[0]
+        self.assertEqual(point.get_id(), "75b0e84b-0968-11e4-9041-fa163e8f4b62")
+        self.prepare_response("DELETE", "/ws/DataPoint/test/75b0e84b-0968-11e4-9041-fa163e8f4b62",
+                              '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoint(point)
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path, "/ws/DataPoint/test/75b0e84b-0968-11e4-9041-fa163e8f4b62")
+
+    def test_delete_datapoints_in_range_start_and_end(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range(
+            start_dt=datetime.datetime(2010, 10, 10, 12, 52, tzinfo=tzutc()),
+            end_dt=datetime.datetime(2014, 4, 4, 3, 4, tzinfo=tzutc()))
+        self.assertEqual(self._get_last_request().method, "DELETE")
+
+        # the order could come out either way and they are both OK, do assertIn
+        self.assertIn(self._get_last_request().path,
+                      ("/ws/DataPoint/test?endTime=2014-04-04T03%3A04%3A00Z&startTime=2010-10-10T12%3A52%3A00Z",
+                       "/ws/DataPoint/test?startTime=2010-10-10T12%3A52%3A00Z&endTime=2014-04-04T03%3A04%3A00Z", ))
+
+    def test_delete_datapoints_in_range_start_only(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range(
+            start_dt=datetime.datetime(2010, 10, 10, 12, 52, tzinfo=tzutc()))
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path,
+                         "/ws/DataPoint/test?startTime=2010-10-10T12%3A52%3A00Z")
+
+    def test_delete_datapoints_in_range_end_only(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range(
+            end_dt=datetime.datetime(2014, 4, 4, 3, 4, tzinfo=tzutc()))
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path,
+                         "/ws/DataPoint/test?endTime=2014-04-04T03%3A04%3A00Z")
+
+    def test_delete_datapoints_in_range_no_start_or_end(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range()
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path, "/ws/DataPoint/test")
+
 
 class TestDataPoint(HttpTestBase):
-
     def _get_stream(self, stream_id="test", with_cached_data=False):
         if with_cached_data:
             self.prepare_response("GET", "/ws/DataStream", GET_DATA_STREAMS)
@@ -554,8 +606,8 @@ class TestDataPoint(HttpTestBase):
 
         dp = stream.get_current_value()
         self.assertEqual(dp.get_id(), "07d77854-0557-11e4-ab44-fa163e7ebc6b")
-        self.assertEqual(dp.get_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981000))
-        self.assertEqual(dp.get_server_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981000))
+        self.assertEqual(dp.get_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981, tzinfo=tzutc()))
+        self.assertEqual(dp.get_server_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981, tzinfo=tzutc()))
         self.assertEqual(dp.get_data(), 123.1)
         self.assertEqual(dp.get_description(), "Test")
         self.assertEqual(dp.get_quality(), 20)
@@ -592,7 +644,7 @@ class TestDataPoint(HttpTestBase):
 
     def test_set_bad_timestamp(self):
         dp = DataPoint(123)
-        self.assertRaises(ValueError, dp.set_timestamp, "123456")  # not ISO8601
+        self.assertRaises(ValueError, dp.set_timestamp, "abcdefg")  # not parseable by arrow
         self.assertRaises(TypeError, dp.set_timestamp, 12345)
 
     def test_repr(self):

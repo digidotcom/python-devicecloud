@@ -4,11 +4,12 @@
 #
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
-
-from devicecloud.test.test_utilities import HttpTestBase
 import copy
 import datetime
 import unittest
+
+from dateutil.tz import tzutc
+from devicecloud.test.test_utilities import HttpTestBase
 
 
 EXAMPLE_GET_DEVICES = {
@@ -112,7 +113,7 @@ class TestDeviceCore(HttpTestBase):
         self.assertEqual(dev1.get_ip(), "10.35.1.107")
         self.assertEqual(dev1.get_tags(), [])
         self.assertEqual(dev1.get_registration_dt(),
-                         datetime.datetime(2013, 2, 28, 19, 54))
+                         datetime.datetime(2013, 2, 28, 19, 54, tzinfo=tzutc()))
         self.assertEqual(dev1.get_meid(), '354374042391400')
         self.assertEqual(dev1.get_customer_id(), '1872')
         self.assertEqual(dev1.get_group_id(), '2331')
@@ -125,7 +126,7 @@ class TestDeviceCore(HttpTestBase):
         self.assertEqual(dev1.get_last_known_ip(), '10.35.1.107')
         self.assertEqual(dev1.get_global_ip(), '204.182.3.237')
         self.assertEqual(dev1.get_last_connected_dt(),
-                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633000))
+                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633, tzinfo=tzutc()))
         self.assertEqual(dev1.get_contact(), '')
         self.assertEqual(dev1.get_description(), '')
         self.assertEqual(dev1.get_location(), '')

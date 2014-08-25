@@ -1,5 +1,6 @@
 import unittest
 import datetime
+
 from devicecloud.conditions import Attribute
 
 
@@ -36,7 +37,7 @@ class TestConditions(unittest.TestCase):
     def test_datacmp(self):
         a = Attribute("a")
         self.assertEqual((a < datetime.datetime(2014, 7, 7)).compile(),
-                         "a<'2014-07-07T00%3A00%3A00'")
+                         "a<'2014-07-07T00%3A00%3A00Z'")
 
     def test_multi_combination(self):
         a = Attribute("a")

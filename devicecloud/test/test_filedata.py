@@ -3,10 +3,9 @@ import unittest
 from xml.etree import ElementTree
 import datetime
 
+from dateutil.tz import tzutc
 from devicecloud.test.test_utilities import HttpTestBase
-
 import six
-
 
 
 GET_FILEDATA_SIMPLE = """\
@@ -89,7 +88,6 @@ GET_WITH_EMBED = '{\n    "resultTotalRows": "1",\n    ' \
 
 
 class TestFileData(HttpTestBase):
-
     def test_get_filedata_simple(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
         objects = list(self.dc.filedata.get_filedata())
@@ -138,14 +136,16 @@ class TestFileData(HttpTestBase):
         # Dir 1
         self.prepare_response("GET", "/ws/FileData", GET_DIR1_RESULT)
         dirpath, dirnames, filenames = six.next(gen)
-        self.assertEqual(dirpath, "/db/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne/00000000-00000000-0004F3FF-FF027D8C")
+        self.assertEqual(dirpath,
+                         "/db/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne/00000000-00000000-0004F3FF-FF027D8C")
         self.assertEqual(dirnames, [])
         self.assertEqual(filenames, [])
 
         # Dir 2
         self.prepare_response("GET", "/ws/FileData", GET_DIR2_RESULT)
         dirpath, dirnames, filenames = six.next(gen)
-        self.assertEqual(dirpath, "/db/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne/00000000-00000000-080027FF-FFB1A2C2")
+        self.assertEqual(dirpath,
+                         "/db/CUS0000033_Spectrum_Design_Solutions__Paul_Osborne/00000000-00000000-080027FF-FFB1A2C2")
         self.assertEqual(dirnames, [])
         self.assertEqual(filenames, [])
 
@@ -161,7 +161,6 @@ class TestFileData(HttpTestBase):
 
 
 class TestFileDataObject(HttpTestBase):
-
     def test_file_metadata_access(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
         objects = list(self.dc.filedata.get_filedata())
@@ -172,9 +171,9 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_type(), "file")
         self.assertEqual(obj.get_content_type(), "application/binary")
         self.assertEqual(obj.get_last_modified_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
         self.assertEqual(obj.get_created_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/test.txt")
         self.assertEqual(obj.get_size(), 1234)
@@ -190,9 +189,9 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_type(), "directory")
         self.assertEqual(obj.get_content_type(), "application/xml")
         self.assertEqual(obj.get_last_modified_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
         self.assertEqual(obj.get_created_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/")
         self.assertEqual(obj.get_size(), 0)

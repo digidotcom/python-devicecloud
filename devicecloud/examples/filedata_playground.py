@@ -7,8 +7,7 @@
 from getpass import getpass
 
 from devicecloud import DeviceCloud
-from devicecloud.filedata import fd_path, fd_name, fd_size, fd_type
-from devicecloud.streams import DataPoint, NoSuchStreamException
+from devicecloud.filedata import fd_name, fd_size, fd_type
 import six
 
 
@@ -16,7 +15,7 @@ def get_authenticated_dc():
     while True:
         user = raw_input("username: ")
         password = getpass("password: ")
-        dc = DeviceCloud(user, password, base_url="https://test.idigi.com")
+        dc = DeviceCloud(user, password, base_url="https://test-idigi-com-2v5p9uat81qu.runscope.net")
         if dc.has_valid_credentials():
             print ("Credentials accepted!")
             return dc

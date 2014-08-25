@@ -13,6 +13,9 @@ section.
 
 """
 import datetime
+
+from devicecloud.util import isoformat, to_none_or_dt
+
 import six
 
 
@@ -25,7 +28,7 @@ def _quoted(value):
 
     """
     if isinstance(value, datetime.datetime):
-        value = value.isoformat()
+        value = isoformat(to_none_or_dt(value))
     else:
         value = str(value)
 

@@ -35,4 +35,4 @@ pyenv global ${pyversions[*]}
 virtualenv -q .toxenv
 source .toxenv/bin/activate
 pip install -q -r test-requirements.txt
-tox
+tox --recreate
