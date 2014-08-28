@@ -10,7 +10,7 @@ import pprint
 import time
 
 from devicecloud import DeviceCloud
-from devicecloud.streams import DataPoint, NoSuchStreamException
+from devicecloud.streams import DataPoint, NoSuchStreamException, STREAM_TYPE_INTEGER
 
 
 def get_authenticated_dc():
@@ -65,7 +65,7 @@ def attempt_to_delete_non_existant(dc):
         print ("!!! We were able to delete something which does not exist!!!")
 
 
-def write_points_and_delete_some():
+def write_points_and_delete_some(dc):
     test_stream = dc.streams.get_stream_if_exists("test")
 
     if test_stream is not None:
@@ -120,8 +120,47 @@ def write_points_and_delete_some():
     test_stream.delete()
 
 
+def bulk_write_datapoints_single_stream(dc):
+    datapoints = []
+    for i in range(300):
+        datapoints.append(DataPoint(
+            data_type=STREAM_TYPE_INTEGER,
+            units="meters",
+            data=i,
+        ))
+
+    stream = dc.streams.get_stream("my/test/bulkstream")
+    stream.bulk_write_datapoints(datapoints)
+    print("---" + stream.get_stream_id() + "---")
+    print(" ".join(str(dp.get_data()) for dp in stream.read(newest_first=False)))
+    print("")
+    stream.delete()
+
+
+def bulk_write_datapoints_multiple_streams(dc):
+    datapoints = []
+    for i in range(300):
+        datapoints.append(DataPoint(
+            stream_id="my/stream%d" % (i % 3),
+            data_type=STREAM_TYPE_INTEGER,
+            units="meters",
+            data=i,
+        ))
+    dc.streams.bulk_write_datapoints(datapoints)
+
+    for stream in dc.streams.get_streams():
+        if stream.get_stream_id().startswith('my/stream'):
+            print("---" + stream.get_stream_id() + "---")
+            print(" ".join(str(dp.get_data()) for dp in stream.read(newest_first=False)))
+            print("")
+        stream.delete()
+
+
 if __name__ == '__main__':
     dc = get_authenticated_dc()
     create_stream_and_delete(dc)
     attempt_to_delete_non_existant(dc)
-    write_points_and_delete_some()
+    write_points_and_delete_some(dc)
+    bulk_write_datapoints_single_stream(dc)
+    bulk_write_datapoints_multiple_streams(dc)
+
