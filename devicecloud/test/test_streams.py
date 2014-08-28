@@ -7,10 +7,11 @@
 
 import unittest
 import datetime
+import xml.etree.ElementTree as ET
 
 from dateutil.tz import tzutc
 from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException, ROLLUP_INTERVAL_HALF, \
-    ROLLUP_METHOD_COUNT
+    ROLLUP_METHOD_COUNT, STREAM_TYPE_INTEGER
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
 
@@ -314,6 +315,49 @@ class TestStreamsAPI(HttpTestBase):
         self.assertEqual(stream.get_stream_id(), "test")
         self.assertEqual(stream.get_rollup_ttl(), 432000)
 
+    def test_bulk_write_datapoints_not_a_list(self):
+        # should be passing a list but we are just giving it a datapoint
+        self.assertRaises(TypeError, self.dc.streams.bulk_write_datapoints, DataPoint(123))
+
+    def test_bulk_write_datapoints_not_a_list_of_datapoints(self):
+        self.assertRaises(TypeError, self.dc.streams.bulk_write_datapoints, [5, DataPoint(123)])
+
+    def test_bulk_write_datapoints_datapoint_has_no_stream_id(self):
+        self.assertRaises(ValueError, self.dc.streams.bulk_write_datapoints, [DataPoint(123)])
+
+    def test_bulk_write_multiple_pages(self):
+        # Actual response has a ton of locations for the new data points
+        requests = []
+        def handle_request(request, uri, headers):
+            requests.append(request)
+            return (200, headers, '<?xml version="1.0" encoding="ISO-8859-1"?><result></result>')
+
+        self.prepare_response("POST", "/ws/DataPoint", handle_request)
+        datapoints = []
+        for i in range(300):
+            datapoints.append(DataPoint(
+                stream_id="my/stream%d" % (i % 3),
+                data_type=STREAM_TYPE_INTEGER,
+                units="meters",
+                data=i,
+            ))
+        self.dc.streams.bulk_write_datapoints(datapoints)
+        self.assertEqual(len(requests), 2)
+
+
+        def parse_for_data(response):
+            root = ET.fromstring(response)
+            return [int(x.text) for x in root.iter('data')]
+
+        def parse_for_stream_id(response):
+            root = ET.fromstring(response)
+            return set(x.text for x in root.iter('streamId'))
+
+        self.assertEqual(parse_for_data(requests[0].body), list(range(250)))
+        self.assertEqual(parse_for_data(requests[1].body), list(range(250, 300)))
+        self.assertEqual(parse_for_stream_id(requests[0].body), {'my/stream0', 'my/stream1', 'my/stream2'})
+        self.assertEqual(parse_for_stream_id(requests[1].body), {'my/stream0', 'my/stream1', 'my/stream2'})
+
 
 class TestDataStream(HttpTestBase):
     def _get_stream(self, response):
@@ -414,6 +458,109 @@ class TestDataStream(HttpTestBase):
         self.prepare_response("DELETE", "/ws/DataStream/test", "", status=200)
         test_stream = self.dc.streams.get_stream("test").delete()
         self.assertEqual(httpretty.last_request().command, 'DELETE')
+
+    def test_bulk_write_datapoints_not_a_list(self):
+        # should be passing a list but we are just giving it a datapoint
+        stream = self._get_stream("test")
+        self.assertRaises(TypeError, stream.bulk_write_datapoints, DataPoint(123))
+
+    def test_bulk_write_datapoints_not_a_list_of_datapoints(self):
+        # should be passing a list of just datapoints, but we snuck in a 5!
+        stream = self._get_stream("test")
+        self.assertRaises(TypeError, stream.bulk_write_datapoints, [5, DataPoint(123)])
+
+    def test_bulk_write_multiple_pages(self):
+        # Actual response has a ton of locations for the new data points
+        stream = self._get_stream("test")
+
+        requests = []
+        def handle_request(request, uri, headers):
+            requests.append(request)
+            return (200, headers, '<?xml version="1.0" encoding="ISO-8859-1"?><result></result>')
+
+        self.prepare_response("POST", "/ws/DataPoint/test", handle_request)
+        datapoints = []
+        for i in range(300):
+            datapoints.append(DataPoint(
+                data_type=STREAM_TYPE_INTEGER,
+                units="meters",
+                data=i,
+            ))
+        stream.bulk_write_datapoints(datapoints)
+        self.assertEqual(len(requests), 2)
+
+        def parse_for_data(response):
+            root = ET.fromstring(response)
+            return [int(x.text) for x in root.iter('data')]
+
+        def parse_for_stream_id(response):
+            root = ET.fromstring(response)
+            return set(x.text for x in root.iter('streamId'))
+
+        self.assertEqual(parse_for_data(requests[0].body), list(range(250)))
+        self.assertEqual(parse_for_data(requests[1].body), list(range(250, 300)))
+        self.assertEqual(parse_for_stream_id(requests[0].body), {'test'})
+        self.assertEqual(parse_for_stream_id(requests[1].body), {'test'})
+
+
+
+class TestDataStreamDeleteDataPoints(HttpTestBase):
+
+    def test_delete_datapoint(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
+        test_stream = self.dc.streams.get_stream("test")
+        points = list(test_stream.read())
+        self.assertEqual(len(points), 1)
+        point = points[0]
+        self.assertEqual(point.get_id(), "75b0e84b-0968-11e4-9041-fa163e8f4b62")
+        self.prepare_response("DELETE", "/ws/DataPoint/test/75b0e84b-0968-11e4-9041-fa163e8f4b62",
+                              '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoint(point)
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path, "/ws/DataPoint/test/75b0e84b-0968-11e4-9041-fa163e8f4b62")
+
+    def test_delete_datapoints_in_range_start_and_end(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range(
+            start_dt=datetime.datetime(2010, 10, 10, 12, 52, tzinfo=tzutc()),
+            end_dt=datetime.datetime(2014, 4, 4, 3, 4, tzinfo=tzutc()))
+        self.assertEqual(self._get_last_request().method, "DELETE")
+
+        # the order could come out either way and they are both OK, do assertIn
+        self.assertIn(self._get_last_request().path,
+                      ("/ws/DataPoint/test?endTime=2014-04-04T03%3A04%3A00Z&startTime=2010-10-10T12%3A52%3A00Z",
+                       "/ws/DataPoint/test?startTime=2010-10-10T12%3A52%3A00Z&endTime=2014-04-04T03%3A04%3A00Z", ))
+
+    def test_delete_datapoints_in_range_start_only(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range(
+            start_dt=datetime.datetime(2010, 10, 10, 12, 52, tzinfo=tzutc()))
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path,
+                         "/ws/DataPoint/test?startTime=2010-10-10T12%3A52%3A00Z")
+
+    def test_delete_datapoints_in_range_end_only(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range(
+            end_dt=datetime.datetime(2014, 4, 4, 3, 4, tzinfo=tzutc()))
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path,
+                         "/ws/DataPoint/test?endTime=2014-04-04T03%3A04%3A00Z")
+
+    def test_delete_datapoints_in_range_no_start_or_end(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        test_stream = self.dc.streams.get_stream("test")
+        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
+        test_stream.delete_datapoints_in_time_range()
+        self.assertEqual(self._get_last_request().method, "DELETE")
+        self.assertEqual(self._get_last_request().path, "/ws/DataPoint/test")
 
 
 class TestDataStreamRead(HttpTestBase):
@@ -532,62 +679,6 @@ class TestDataStreamRead(HttpTestBase):
         test_stream = self.dc.streams.get_stream("test")
         points = list(test_stream.read(page_size=9876))
         self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["size"][0], "9876")
-
-    def test_delete_datapoint(self):
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
-        test_stream = self.dc.streams.get_stream("test")
-        points = list(test_stream.read())
-        self.assertEqual(len(points), 1)
-        point = points[0]
-        self.assertEqual(point.get_id(), "75b0e84b-0968-11e4-9041-fa163e8f4b62")
-        self.prepare_response("DELETE", "/ws/DataPoint/test/75b0e84b-0968-11e4-9041-fa163e8f4b62",
-                              '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
-        test_stream.delete_datapoint(point)
-        self.assertEqual(self._get_last_request().method, "DELETE")
-        self.assertEqual(self._get_last_request().path, "/ws/DataPoint/test/75b0e84b-0968-11e4-9041-fa163e8f4b62")
-
-    def test_delete_datapoints_in_range_start_and_end(self):
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        test_stream = self.dc.streams.get_stream("test")
-        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
-        test_stream.delete_datapoints_in_time_range(
-            start_dt=datetime.datetime(2010, 10, 10, 12, 52, tzinfo=tzutc()),
-            end_dt=datetime.datetime(2014, 4, 4, 3, 4, tzinfo=tzutc()))
-        self.assertEqual(self._get_last_request().method, "DELETE")
-
-        # the order could come out either way and they are both OK, do assertIn
-        self.assertIn(self._get_last_request().path,
-                      ("/ws/DataPoint/test?endTime=2014-04-04T03%3A04%3A00Z&startTime=2010-10-10T12%3A52%3A00Z",
-                       "/ws/DataPoint/test?startTime=2010-10-10T12%3A52%3A00Z&endTime=2014-04-04T03%3A04%3A00Z", ))
-
-    def test_delete_datapoints_in_range_start_only(self):
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        test_stream = self.dc.streams.get_stream("test")
-        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
-        test_stream.delete_datapoints_in_time_range(
-            start_dt=datetime.datetime(2010, 10, 10, 12, 52, tzinfo=tzutc()))
-        self.assertEqual(self._get_last_request().method, "DELETE")
-        self.assertEqual(self._get_last_request().path,
-                         "/ws/DataPoint/test?startTime=2010-10-10T12%3A52%3A00Z")
-
-    def test_delete_datapoints_in_range_end_only(self):
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        test_stream = self.dc.streams.get_stream("test")
-        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
-        test_stream.delete_datapoints_in_time_range(
-            end_dt=datetime.datetime(2014, 4, 4, 3, 4, tzinfo=tzutc()))
-        self.assertEqual(self._get_last_request().method, "DELETE")
-        self.assertEqual(self._get_last_request().path,
-                         "/ws/DataPoint/test?endTime=2014-04-04T03%3A04%3A00Z")
-
-    def test_delete_datapoints_in_range_no_start_or_end(self):
-        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
-        test_stream = self.dc.streams.get_stream("test")
-        self.prepare_response("DELETE", "/ws/DataPoint/test", '<?xml version="1.0" encoding="ISO-8859-1"?>\n<result/>')
-        test_stream.delete_datapoints_in_time_range()
-        self.assertEqual(self._get_last_request().method, "DELETE")
-        self.assertEqual(self._get_last_request().path, "/ws/DataPoint/test")
 
 
 class TestDataPoint(HttpTestBase):
