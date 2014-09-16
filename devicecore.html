@@ -1,0 +1,413 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DeviceCore API &mdash; python-devicecloud 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Streams API" href="streams.html"/>
+        <link rel="prev" title="Core API" href="core.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> python-devicecloud</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">DeviceCore API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#devicecore-overview">DeviceCore Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#module-devicecloud.streams">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#filedata-overview">FileData Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#sci-overview">SCI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>DeviceCore API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/devicecore.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="devicecore-api">
+<h1>DeviceCore API<a class="headerlink" href="#devicecore-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="devicecore-overview">
+<h2>DeviceCore Overview<a class="headerlink" href="#devicecore-overview" title="Permalink to this headline">¶</a></h2>
+<p>DeviceCore provides access to core device information such as which
+devices are in a given device cloud account, which of those are
+connected, etc.</p>
+</div>
+<div class="section" id="module-devicecloud.devicecore">
+<span id="devicecore-api-documentation"></span><h2>DeviceCore API Documentation<a class="headerlink" href="#module-devicecloud.devicecore" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="devicecloud.devicecore.DeviceCoreAPI">
+<em class="property">class </em><tt class="descclassname">devicecloud.devicecore.</tt><tt class="descname">DeviceCoreAPI</tt><big>(</big><em>conn</em>, <em>sci</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encapsulate DeviceCore interface</p>
+<dl class="method">
+<dt id="devicecloud.devicecore.DeviceCoreAPI.list_devices">
+<tt class="descname">list_devices</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.list_devices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a list of <a class="reference internal" href="#devicecloud.devicecore.Device" title="devicecloud.devicecore.Device"><tt class="xref py py-class docutils literal"><span class="pre">Device</span></tt></a> objects for this device cloud account</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.devicecore.Device">
+<em class="property">class </em><tt class="descclassname">devicecloud.devicecore.</tt><tt class="descname">Device</tt><big>(</big><em>conn</em>, <em>sci</em>, <em>device_json</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface to a device in the device cloud</p>
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_device_json">
+<tt class="descname">get_device_json</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_device_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the JSON metadata for this device as a python data structure</p>
+<p>If <tt class="docutils literal"><span class="pre">use_cached</span></tt> is not True, then a web services request will be made
+synchronously in order to get the latest device metatdata.  This will
+update the cached data for this device.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_tags">
+<tt class="descname">get_tags</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of tags for this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_connected">
+<tt class="descname">get_connected</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the device is currrently connect and False if not</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_connectware_id">
+<tt class="descname">get_connectware_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_connectware_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the connectware id of this device (primary key)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_device_id">
+<tt class="descname">get_device_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_device_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get this device&#8217;s device id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_ip">
+<tt class="descname">get_ip</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last known IP of this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_mac">
+<tt class="descname">get_mac</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_mac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the MAC address of this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_mac_last4">
+<tt class="descname">get_mac_last4</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_mac_last4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last 4 characters in the device mac address hex (e.g. 00:40:9D:58:17:5B -&gt; 175B)</p>
+<p>This is useful for use as a short reference to the device.  It is not guaranteed to
+be unique (obviously) but will often be if you don&#8217;t have too many devices.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_registration_dt">
+<tt class="descname">get_registration_dt</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_registration_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the datetime of when this device was added to the device cloud</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_meid">
+<tt class="descname">get_meid</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_meid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the meid as a string of this device if it has one or None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_customer_id">
+<tt class="descname">get_customer_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_customer_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the automatically generated customer id for this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_group_id">
+<tt class="descname">get_group_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_group_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the id of the group with which this device is associated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_group_path">
+<tt class="descname">get_group_path</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_group_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path of the group with which this device is associated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_vendor_id">
+<tt class="descname">get_vendor_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_vendor_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vendor id associated with this device if any</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_device_type">
+<tt class="descname">get_device_type</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_device_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the device type of this device if present</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_firmware_level">
+<tt class="descname">get_firmware_level</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_firmware_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the firmware level of this device if present</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_firmware_level_description">
+<tt class="descname">get_firmware_level_description</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_firmware_level_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the firmware level as a string (rather than a number)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_restricted_status">
+<tt class="descname">get_restricted_status</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_restricted_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the restricted status of this device</p>
+<p>The value here will be returned as an integer with 3 potential values:</p>
+<ol class="arabic simple">
+<li>0 - unrestricted</li>
+<li>2 - restricted</li>
+<li>3 - untrusted</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_last_known_ip">
+<tt class="descname">get_last_known_ip</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_last_known_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last known IP address of this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_global_ip">
+<tt class="descname">get_global_ip</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_global_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last known global IP from which a device connected (out of NAT)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_last_connected_dt">
+<tt class="descname">get_last_connected_dt</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_last_connected_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the datetime that the device last connected to the device cloud</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_contact">
+<tt class="descname">get_contact</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_contact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the contact (if any) associated with this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_description">
+<tt class="descname">get_description</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description associated with this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_location">
+<tt class="descname">get_location</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the location (string) associated with this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_latlon">
+<tt class="descname">get_latlon</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_latlon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a tuple with device latitude and longitude... these may be None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_user_metadata">
+<tt class="descname">get_user_metadata</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_user_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the user metadata for this device (string) if present</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_zb_pan_id">
+<tt class="descname">get_zb_pan_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_zb_pan_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Zigbee PAN ID from the device if present</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_zb_extended_address">
+<tt class="descname">get_zb_extended_address</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_zb_extended_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Zigbee extended address of this device if present</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_server_id">
+<tt class="descname">get_server_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_server_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID of the server this device is currently connected to</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_provision_id">
+<tt class="descname">get_provision_id</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_provision_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the provisioning ID of this device if used</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.get_current_connect_pw">
+<tt class="descname">get_current_connect_pw</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_current_connect_pw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current connection password for this device</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="streams.html" class="btn btn-neutral float-right" title="Streams API"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="core.html" class="btn btn-neutral" title="Core API"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,981 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Streams API &mdash; python-devicecloud 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.1 documentation" href="index.html"/>
+        <link rel="next" title="FileData API" href="filedata.html"/>
+        <link rel="prev" title="DeviceCore API" href="devicecore.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> python-devicecloud</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Streams API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#streams-overview">Streams Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicecloud.streams">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#filedata-overview">FileData Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#sci-overview">SCI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Streams API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/streams.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="streams-api">
+<h1>Streams API<a class="headerlink" href="#streams-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="streams-overview">
+<h2>Streams Overview<a class="headerlink" href="#streams-overview" title="Permalink to this headline">¶</a></h2>
+<p>Data Streams on the device cloud provide a mechanism for storing time-series
+values over a long period of time.  Each individual value in the time series
+is known as a Data Point.</p>
+<p>There are a few basic operations supported by the device cloud on streams which
+are supported by the device cloud and this library.  Here we give examples of
+each.</p>
+<div class="section" id="listing-streams">
+<h3>Listing Streams<a class="headerlink" href="#listing-streams" title="Permalink to this headline">¶</a></h3>
+<p>Although it is not recommended for production applications, it is often useful
+when building tools to be able to fetch a list of all streams.  This can be
+done by using <a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_streams" title="devicecloud.streams.StreamsAPI.get_streams"><tt class="xref py py-meth docutils literal"><span class="pre">StreamsAPI.get_streams()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;pass&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_streams</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">get_stream_id</span><span class="p">(),</span>
+                      <span class="n">stream</span><span class="o">.</span><span class="n">get_description</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-stream">
+<h3>Creating a Stream<a class="headerlink" href="#creating-a-stream" title="Permalink to this headline">¶</a></h3>
+<p>Streams can be created in two ways, both of which are supported by this library.</p>
+<ol class="arabic simple">
+<li>Create a stream explicitly using <a class="reference internal" href="#devicecloud.streams.StreamsAPI.create_stream" title="devicecloud.streams.StreamsAPI.create_stream"><tt class="xref py py-meth docutils literal"><span class="pre">StreamsAPI.create_stream()</span></tt></a></li>
+<li>Get a reference to a stream using <a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_stream" title="devicecloud.streams.StreamsAPI.get_stream"><tt class="xref py py-meth docutils literal"><span class="pre">StreamsAPI.get_stream()</span></tt></a>
+that does not yet exist and write a datapoint to it.</li>
+</ol>
+<p>Here&#8217;s examples of these two methods for creating a new stream:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;pass&#39;</span><span class="p">)</span>
+
+<span class="c"># explicitly create a new data stream</span>
+<span class="n">humidity_stream</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">create_stream</span><span class="p">(</span>
+    <span class="n">stream_id</span><span class="o">=</span><span class="s">&quot;mystreams/hudidity&quot;</span><span class="p">,</span>
+    <span class="n">data_type</span><span class="o">=</span><span class="s">&quot;float&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s">&quot;Humidity&quot;</span><span class="p">)</span>
+<span class="n">humidity_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Datapoint</span><span class="p">(</span><span class="mf">81.2</span><span class="p">))</span>
+
+<span class="c"># create data stream implicitly</span>
+<span class="n">temperature_stream</span> <span class="o">=</span> <span class="n">streams</span><span class="o">.</span><span class="n">get_stream</span><span class="p">(</span><span class="s">&quot;/</span><span class="si">%s</span><span class="s">/temperature&quot;</span> <span class="o">%</span> <span class="n">some_id</span><span class="p">)</span>
+<span class="n">temperature_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">Datapoint</span><span class="p">(</span>
+        <span class="n">stream_id</span><span class="o">=</span><span class="s">&quot;mystreams/temperature&quot;</span> <span class="o">%</span> <span class="n">some_id</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="mf">74.1</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">&quot;Outside Air Temperature in F&quot;</span><span class="p">,</span>
+        <span class="n">data_type</span><span class="o">=</span><span class="n">STREAM_TYPE_FLOAT</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="s">&quot;Degrees Fahrenheit&quot;</span>
+<span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-information-about-a-stream">
+<h3>Getting Information About A Stream<a class="headerlink" href="#getting-information-about-a-stream" title="Permalink to this headline">¶</a></h3>
+<p>Whether we know a stream by id and have gotten a reference using
+<a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_stream" title="devicecloud.streams.StreamsAPI.get_stream"><tt class="xref py py-meth docutils literal"><span class="pre">StreamsAPI.get_stream()</span></tt></a> or have discovered it using
+<a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_streams" title="devicecloud.streams.StreamsAPI.get_streams"><tt class="xref py py-meth docutils literal"><span class="pre">StreamsAPI.get_streams()</span></tt></a>, the <a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><tt class="xref py py-class docutils literal"><span class="pre">DataStream</span></tt></a> should
+be able to provide access to all metadata about the stream that
+you may need.  Here we show several of them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">strm</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_stream</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_stream_id</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_data_type</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_units</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_data_ttl</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_rollup_ttl</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">strm</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">()</span>  <span class="c"># return DataPoint object</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="#devicecloud.streams.DataStream.get_current_value" title="devicecloud.streams.DataStream.get_current_value"><tt class="xref py py-meth docutils literal"><span class="pre">DataStream.get_current_value()</span></tt></a> does not use cached values by
+default and will make a web service call to get the most recent current
+value unless <tt class="docutils literal"><span class="pre">use_cached</span></tt> is set to True when called.</p>
+</div>
+</div>
+<div class="section" id="deleting-a-stream">
+<h3>Deleting a Stream<a class="headerlink" href="#deleting-a-stream" title="Permalink to this headline">¶</a></h3>
+<p>Deleting a data stream is possible by calling <a class="reference internal" href="#devicecloud.streams.DataStream.delete" title="devicecloud.streams.DataStream.delete"><tt class="xref py py-meth docutils literal"><span class="pre">DataStream.delete()</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">strm</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_stream</span><span class="p">(</span><span class="s">&quot;doomed&quot;</span><span class="p">)</span>
+<span class="n">strm</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-stream-metadata">
+<h3>Updating Stream Metadata<a class="headerlink" href="#updating-stream-metadata" title="Permalink to this headline">¶</a></h3>
+<p>This feature is currently not supported.  Some stream information may
+be updated by writing a <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a> and including updated
+stream info elements.</p>
+</div>
+<div class="section" id="datapoint-objects">
+<h3>DataPoint objects<a class="headerlink" href="#datapoint-objects" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a> class encapsulates all information required for
+both writing data points as well as retrieving information about data
+points stored on the device cloud.</p>
+</div>
+</div>
+<div class="section" id="module-devicecloud.streams">
+<span id="api-documentation"></span><h2>API Documentation<a class="headerlink" href="#module-devicecloud.streams" title="Permalink to this headline">¶</a></h2>
+<p>Module providing classes for interacting with device cloud data streams</p>
+<dl class="exception">
+<dt id="devicecloud.streams.StreamException">
+<em class="property">exception </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">StreamException</tt><a class="headerlink" href="#devicecloud.streams.StreamException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for stream related exceptions</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="devicecloud.streams.NoSuchStreamException">
+<em class="property">exception </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">NoSuchStreamException</tt><a class="headerlink" href="#devicecloud.streams.NoSuchStreamException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Failure to find a stream based on a given id</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.streams.StreamsAPI">
+<em class="property">class </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">StreamsAPI</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.streams.StreamsAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide interface for interacting with device cloud streams API</p>
+<p>For further information, see <a class="reference internal" href="#module-devicecloud.streams" title="devicecloud.streams"><tt class="xref py py-mod docutils literal"><span class="pre">devicecloud.streams</span></tt></a>.</p>
+<dl class="method">
+<dt id="devicecloud.streams.StreamsAPI.create_stream">
+<tt class="descname">create_stream</tt><big>(</big><em>stream_id</em>, <em>data_type</em>, <em>description=None</em>, <em>data_ttl=None</em>, <em>rollup_ttl=None</em>, <em>units=None</em><big>)</big><a class="headerlink" href="#devicecloud.streams.StreamsAPI.create_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new data stream on the device cloud</p>
+<p>This method will attempt to create a new data stream on the device cloud.
+This method will only succeed if the stream does not already exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stream_id</strong> (<em>str</em>) &#8211; The path/id of the stream being created on the device cloud.</li>
+<li><strong>data_type</strong> (<em>str</em>) &#8211; The type of this stream.  This must be in the set
+<cite>{ INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }</cite>.  These values are
+available in constants like <tt class="xref py py-attr docutils literal"><span class="pre">STREAM_TYPE_INTEGER</span></tt>.</li>
+<li><strong>description</strong> (<em>str</em>) &#8211; An optional description of this stream. See <a class="reference internal" href="#devicecloud.streams.DataStream.get_description" title="devicecloud.streams.DataStream.get_description"><tt class="xref py py-meth docutils literal"><span class="pre">get_description()</span></tt></a>.</li>
+<li><strong>data_ttl</strong> (<em>int</em>) &#8211; The TTL for data points in this stream. See <a class="reference internal" href="#devicecloud.streams.DataStream.get_data_ttl" title="devicecloud.streams.DataStream.get_data_ttl"><tt class="xref py py-meth docutils literal"><span class="pre">get_data_ttl()</span></tt></a>.</li>
+<li><strong>rollup_ttl</strong> (<em>int</em>) &#8211; The TTL for performing rollups on data. See :meth:~DataStream.get_rollup_ttl`.</li>
+<li><strong>units</strong> (<em>str</em>) &#8211; Units for data in this stream.  See <a class="reference internal" href="#devicecloud.streams.DataStream.get_units" title="devicecloud.streams.DataStream.get_units"><tt class="xref py py-meth docutils literal"><span class="pre">get_units()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.StreamsAPI.get_streams">
+<tt class="descname">get_streams</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the iterator over all streams present on the device cloud</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">iterator over all <a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><tt class="xref py py-class docutils literal"><span class="pre">DataStream</span></tt></a> instances on the device cloud</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.StreamsAPI.get_stream">
+<tt class="descname">get_stream</tt><big>(</big><em>stream_id</em><big>)</big><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a reference to a stream with the given <tt class="docutils literal"><span class="pre">stream_id</span></tt></p>
+<p>Note that the requested stream may not exist yet.  If this is the
+case, later calls on the stream itself may fail.  To ensure that the
+stream exists, one can use <a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_stream_if_exists" title="devicecloud.streams.StreamsAPI.get_stream_if_exists"><tt class="xref py py-meth docutils literal"><span class="pre">get_stream_if_exists()</span></tt></a> which will
+return None if the stream is not already created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stream_id</strong> &#8211; The path of the stream on the device cloud</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if the stream_id provided is the wrong type</li>
+<li><strong>ValueError</strong> &#8211; if the stream_id is not properly formed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">datastream instance with the provided stream_id</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataStream</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.StreamsAPI.get_stream_if_exists">
+<tt class="descname">get_stream_if_exists</tt><big>(</big><em>stream_id</em><big>)</big><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_stream_if_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a reference to a stream with the given <tt class="docutils literal"><span class="pre">stream_id</span></tt> if it exists</p>
+<p>This works similar to <a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_stream" title="devicecloud.streams.StreamsAPI.get_stream"><tt class="xref py py-meth docutils literal"><span class="pre">get_stream()</span></tt></a> but will return None if the
+stream is not already created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stream_id</strong> &#8211; The path of the stream on the device cloud</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if the stream_id provided is the wrong type</li>
+<li><strong>ValueError</strong> &#8211; if the stream_id is not properly formed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><tt class="xref py py-class docutils literal"><span class="pre">DataStream</span></tt></a> instance with the provided stream_id</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><tt class="xref py py-class docutils literal"><span class="pre">DataStream</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.StreamsAPI.bulk_write_datapoints">
+<tt class="descname">bulk_write_datapoints</tt><big>(</big><em>datapoints</em><big>)</big><a class="headerlink" href="#devicecloud.streams.StreamsAPI.bulk_write_datapoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bulk write (or set of writes) of a collection of data points</p>
+<p>This method takes a list (or other iterable) of datapoints and writes them
+to the device cloud in an efficient manner, minimizing the number of HTTP
+requests that need to be made.</p>
+<p>As this call is performed from outside the context of any particular stream,
+each DataPoint object passed in must include information about the stream
+into which the point should be written.</p>
+<p>If all data points being written are for the same stream, you may want to
+consider using <a class="reference internal" href="#devicecloud.streams.DataStream.bulk_write_datapoints" title="devicecloud.streams.DataStream.bulk_write_datapoints"><tt class="xref py py-meth docutils literal"><span class="pre">bulk_write_datapoints()</span></tt></a> instead.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">datapoints</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">datapoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DataPoint</span><span class="p">(</span>
+        <span class="n">stream_id</span><span class="o">=</span><span class="s">&quot;my/stream</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">data_type</span><span class="o">=</span><span class="n">STREAM_TYPE_INTEGER</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s">&quot;meters&quot;</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+    <span class="p">))</span>
+<span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">bulk_write_datapoints</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Depending on the size of the list of datapoints provided, this method may
+need to make multiple calls to the device cloud (in chunks of 250).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>datapoints</strong> (<em>list</em>) &#8211; a list of datapoints to be written to the device cloud</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> &#8211; if a list of datapoints is not provided</li>
+<li><strong>ValueError</strong> &#8211; if any of the provided data points do not have all required
+information (such as information about the stream)</li>
+<li><strong>DeviceCloudHttpException</strong> &#8211; in the case of an unexpected error in communicating
+with the device cloud.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.streams.DataPoint">
+<em class="property">class </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">DataPoint</tt><big>(</big><em>data</em>, <em>stream_id=None</em>, <em>description=None</em>, <em>timestamp=None</em>, <em>quality=None</em>, <em>location=None</em>, <em>data_type=None</em>, <em>units=None</em>, <em>dp_id=None</em>, <em>customer_id=None</em>, <em>server_timestamp=None</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encapsulate information about a single data point</p>
+<p>This class encapsulates the data required for both pushing data points to the
+device cloud as well as for storing and provding methods to access data from
+streams that has been retrieved from the device cloud.</p>
+<dl class="classmethod">
+<dt id="devicecloud.streams.DataPoint.from_json">
+<em class="property">classmethod </em><tt class="descname">from_json</tt><big>(</big><em>stream</em>, <em>json_data</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.from_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new DataPoint object from device cloud JSON data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<em>DataStream</em>) &#8211; The <a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><tt class="xref py py-class docutils literal"><span class="pre">DataStream</span></tt></a> out of which this data is coming</li>
+<li><strong>json_data</strong> (<em>dict</em>) &#8211; Deserialized JSON data from the device cloud about this device</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if the data is malformed</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(<a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a>) newly created <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_id">
+<tt class="descname">get_id</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID of this data point if available</p>
+<p>The ID will only exist for data points retrieved from the data point and should
+not be set on data points that are being created.  This value is not designed
+to be set when creating data points.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_data">
+<tt class="descname">get_data</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the actual data value associated with this data point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_data">
+<tt class="descname">set_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data for this data point</p>
+<p>This data may be converted upon access at a later point in time based
+on the data type of this stream (if set).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_stream_id">
+<tt class="descname">get_stream_id</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_stream_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the stream ID for this data point if available</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_stream_id">
+<tt class="descname">set_stream_id</tt><big>(</big><em>stream_id</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_stream_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the stream id associated with this data point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_description">
+<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description associated with this data point if available</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_description">
+<tt class="descname">set_description</tt><big>(</big><em>description</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the description for this data point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_timestamp">
+<tt class="descname">get_timestamp</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the timestamp of this datapoint as a <tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> object</p>
+<p>This is the client assigned timestamp for this datapoint.  If this was not
+set by the client, it will be the same as the server timestamp.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_timestamp">
+<tt class="descname">set_timestamp</tt><big>(</big><em>timestamp</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the timestamp for this data point</p>
+<p>The provided value should be either None, a datetime.datetime object, or a
+string with either ISO8601 or unix timestamp form.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_server_timestamp">
+<tt class="descname">get_server_timestamp</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_server_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the date and time at which the server received this data point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_quality">
+<tt class="descname">get_quality</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_quality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the quality as an integer</p>
+<p>This is a user-defined value whose meaning (if any) could vary per stream.  May
+not always be set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_quality">
+<tt class="descname">set_quality</tt><big>(</big><em>quality</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_quality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the quality for this sample</p>
+<p>Quality is stored on the device cloud as a 32-bit integer, so the input
+to this function should be either None, an integer, or a string that can
+be converted to an integer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_location">
+<tt class="descname">get_location</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the location for this data point</p>
+<p>The location will be either None or a 3-tuple of floats in the form
+(latitude-degrees, longitude-degrees, altitude-meters).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_location">
+<tt class="descname">set_location</tt><big>(</big><em>location</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the location for this data point</p>
+<p>The location must be either None (if no location data is known) or a
+3-tuple of floating point values in the form
+(latitude-degrees, longitude-degrees, altitude-meters).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_data_type">
+<tt class="descname">get_data_type</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data type for this data point</p>
+<p>The data type is associted with the stream itself but may also be
+included in data point writes.  The data type information in the point
+is also used to determine which type conversions should be applied to
+the data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_data_type">
+<tt class="descname">set_data_type</tt><big>(</big><em>data_type</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the data type for ths data point</p>
+<p>The data type is actually associated with the stream itself and should
+not (generally) vary on a point-per-point basis.  That being said, if
+creating a new stream by writing a datapoint, it may be beneficial to
+include this information.</p>
+<p>The data type provided should be in the set of available data types of
+{ INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.get_units">
+<tt class="descname">get_units</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.get_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the units of this datapoints stream if available</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.set_units">
+<tt class="descname">set_units</tt><big>(</big><em>unit</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.set_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the unit for this data point</p>
+<p>Unit, as with data_type, are actually associated with the stream and not
+the individual data point.  As such, changing this within a stream is
+not encouraged.  Setting the unit on the data point is useful when the
+stream might be created with the write of a data point.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataPoint.to_xml">
+<tt class="descname">to_xml</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert this datapoint into a form suitable for pushing to device cloud</p>
+<p>An XML string will be returned that will contain all pieces of information
+set on this datapoint.  Values not set (e.g. quality) will be ommitted.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.streams.DataStream">
+<em class="property">class </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">DataStream</tt><big>(</big><em>conn</em>, <em>stream_id</em>, <em>cached_data=None</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encapsulation of a DataStream&#8217;s methods and attributes</p>
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_stream_id">
+<tt class="descname">get_stream_id</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_stream_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the id/path of this stream</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">id/path of this stream</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_data_type">
+<tt class="descname">get_data_type</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_data_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data type of this stream if it exists</p>
+<p>The data type is the type of data stored in this data stream. Valid types include:</p>
+<ul class="simple">
+<li>INTEGER - data can be represented with a network (= big-endian) 32-bit two&#8217;s-complement integer.  Data
+with this type maps to a python int.</li>
+<li>LONG - data can be represented with a network (= big-endian) 64-bit two&#8217;s complement integer.  Data
+with this type maps to a python int.</li>
+<li>FLOAT - data can be represented with a network (= big-endian) 32-bit IEEE754 floating point.  Data
+with this type maps to a python float.</li>
+<li>DOUBLE - data can be represented with a network (= big-endian) 64-bit IEEE754 floating point.  Data
+with this type maps to a python float.</li>
+<li>STRING - UTF-8.  Data with this type map to a python string</li>
+<li>BINARY - Data with this type map to a python string.</li>
+<li>UNKNOWN - Data with this type map to a python string.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>use_cached</strong> (<em>bool</em>) &#8211; If False, the function will always request the latest from the device cloud.
+If True, the device will not make a request if it already has cached data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The data type of this stream as a string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_units">
+<tt class="descname">get_units</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the unit of this stream if it exists</p>
+<p>Units are a user-defined field stored as a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>use_cached</strong> (<em>bool</em>) &#8211; If False, the function will always request the latest from the device cloud.
+If True, the device will not make a request if it already has cached data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The unit of this stream as a string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_description">
+<tt class="descname">get_description</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description associated with this data stream</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>use_cached</strong> (<em>bool</em>) &#8211; If False, the function will always request the latest from the device cloud.
+If True, the device will not make a request if it already has cached data.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><strong>devicecloud.DeviceCloudHttpException</strong></a> &#8211; in the case of an unexpected http error</li>
+<li><a class="reference internal" href="#devicecloud.streams.NoSuchStreamException" title="devicecloud.streams.NoSuchStreamException"><strong>devicecloud.streams.NoSuchStreamException</strong></a> &#8211; if this stream has not yet been created</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The description associated with this stream</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_data_ttl">
+<tt class="descname">get_data_ttl</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_data_ttl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the dataTTL for this stream</p>
+<p>The dataTtl is the time to live (TTL) in seconds for data points stored in the data stream.
+A data point expires after the configured amount of time and is automatically deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>use_cached</strong> (<em>bool</em>) &#8211; If False, the function will always request the latest from the device cloud.
+If True, the device will not make a request if it already has cached data.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><strong>devicecloud.DeviceCloudHttpException</strong></a> &#8211; in the case of an unexpected http error</li>
+<li><a class="reference internal" href="#devicecloud.streams.NoSuchStreamException" title="devicecloud.streams.NoSuchStreamException"><strong>devicecloud.streams.NoSuchStreamException</strong></a> &#8211; if this stream has not yet been created</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The dataTtl associated with this stream in seconds</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_rollup_ttl">
+<tt class="descname">get_rollup_ttl</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_rollup_ttl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the rollupTtl for this stream</p>
+<p>The rollupTtl is the time to live (TTL) in seconds for the aggregate roll-ups of data points
+stored in the stream. A roll-up expires after the configured amount of time and is
+automatically deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>use_cached</strong> (<em>bool</em>) &#8211; If False, the function will always request the latest from the device cloud.
+If True, the device will not make a request if it already has cached data.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><strong>devicecloud.DeviceCloudHttpException</strong></a> &#8211; in the case of an unexpected http error</li>
+<li><a class="reference internal" href="#devicecloud.streams.NoSuchStreamException" title="devicecloud.streams.NoSuchStreamException"><strong>devicecloud.streams.NoSuchStreamException</strong></a> &#8211; if this stream has not yet been created</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The rollupTtl associated with this stream in seconds</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.get_current_value">
+<tt class="descname">get_current_value</tt><big>(</big><em>use_cached=False</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.get_current_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the most recent DataPoint value written to a stream</p>
+<p>The current value is the last recorded data point for this stream.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>use_cached</strong> (<em>bool</em>) &#8211; If False, the function will always request the latest from the device cloud.
+If True, the device will not make a request if it already has cached data.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><strong>devicecloud.DeviceCloudHttpException</strong></a> &#8211; in the case of an unexpected http error</li>
+<li><a class="reference internal" href="#devicecloud.streams.NoSuchStreamException" title="devicecloud.streams.NoSuchStreamException"><strong>devicecloud.streams.NoSuchStreamException</strong></a> &#8211; if this stream has not yet been created</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The most recent value written to this stream (or None if nothing has been written)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a> or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete this stream from the device cloud along with its history</p>
+<p>This call will return None on success and raise an exception in the event of an error
+performing the deletion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><strong>devicecloud.DeviceCloudHttpException</strong></a> &#8211; in the case of an unexpected http error</li>
+<li><a class="reference internal" href="#devicecloud.streams.NoSuchStreamException" title="devicecloud.streams.NoSuchStreamException"><strong>devicecloud.streams.NoSuchStreamException</strong></a> &#8211; if this stream has already been deleted</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.delete_datapoint">
+<tt class="descname">delete_datapoint</tt><big>(</big><em>datapoint</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.delete_datapoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the provided datapoint from this stream</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException">devicecloud.DeviceCloudHttpException</a>:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">in the case of an unexpected http error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.delete_datapoints_in_time_range">
+<tt class="descname">delete_datapoints_in_time_range</tt><big>(</big><em>start_dt=None</em>, <em>end_dt=None</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.delete_datapoints_in_time_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete datapoints from this stream between the provided start and end times</p>
+<p>If neither a start or end time is specified, all data points in the stream
+will be deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_dt</strong> &#8211; The datetime after which data points should be deleted or None
+if all data points from the beginning of time should be deleted.</li>
+<li><strong>end_dt</strong> &#8211; The datetime before which data points should be deleted or None
+if all data points until the current time should be deleted.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException">devicecloud.DeviceCloudHttpException</a>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">in the case of an unexpected http error</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.bulk_write_datapoints">
+<tt class="descname">bulk_write_datapoints</tt><big>(</big><em>datapoints</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.bulk_write_datapoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a bulk write of a number of datapoints to this stream</p>
+<p>It is assumed that all datapoints here are to be written to this
+stream and the stream_id on each will be set by this method to
+this streams id (regardless of whether it is set or not).  To write multiple
+datapoints which span multiple streams, use <tt class="xref py py-meth docutils literal"><span class="pre">bulk_write_endpoints()</span></tt>
+instead.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>datapoints</strong> (<em>list</em>) &#8211; A list of datapoints to be written into this stream</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.write">
+<tt class="descname">write</tt><big>(</big><em>datapoint</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write some raw data to a stream using the DataPoint API</p>
+<p>This method will mutate the datapoint provided to populate it with information
+available from the stream as it is available (but without making any new HTTP
+requests).  For instance, we will add in information about the stream data
+type if it is available so that proper type conversion happens.</p>
+<p>Values already set on the datapoint will not be overridden (except for path)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>datapoint</strong> (<em>DataPoint</em>) &#8211; The <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a> that should be written to the device cloud</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.streams.DataStream.read">
+<tt class="descname">read</tt><big>(</big><em>start_time=None</em>, <em>end_time=None</em>, <em>use_client_timeline=True</em>, <em>newest_first=True</em>, <em>rollup_interval=None</em>, <em>rollup_method=None</em>, <em>timezone=None</em>, <em>page_size=1000</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read one or more DataPoints from a stream</p>
+<p>This method will attempt to read items from this stream.  An iterator over the streams
+is returned over which one can iterate.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The data points from the device cloud is a paged data set.  When iterating over the
+result set there could be delays when we hit the end of a page.  If this is undesirable,
+the caller should collect all results into a data structure first before iterating over
+the result set.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start_time</strong> (<tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> or None) &#8211; The start time for the window of data points to read.  None means
+that we should start with the old data available.</li>
+<li><strong>end_time</strong> (<tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> or None) &#8211; The end time for the window of data points to read.  None means
+that we should include all points received until this point in time.</li>
+<li><strong>use_client_timeline</strong> (<em>bool</em>) &#8211; If True, the times used will be those provided by
+clients writing data points into the cloud (which also default to server time
+if the a timestamp was not included by the client).  This is usually what you
+want.  If False, the server timestamp will be used which records when the data
+point was received.</li>
+<li><strong>newest_first</strong> (<em>bool</em>) &#8211; If True, results will be ordered from newest to oldest (descending order).
+If False, results will be returned oldest to newest.</li>
+<li><strong>rollup_interval</strong> (<em>str or None</em>) &#8211; the roll-up interval that should be used if one is desired at all.  Rollups
+will not be performed if None is specified for the interval.  Valid roll-up interval values
+are None, &#8220;half&#8221;, &#8220;hourly&#8221;, &#8220;day&#8221;, &#8220;week&#8221;, and &#8220;month&#8221;.  See <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints">DataPoints documentation</a>
+for additional details on these values.</li>
+<li><strong>rollup_method</strong> (<em>str or None</em>) &#8211; The aggregation applied to values in the points within the specified
+rollup_interval.  Available methods are None, &#8220;sum&#8221;, &#8220;average&#8221;, &#8220;min&#8221;, &#8220;max&#8221;, &#8220;count&#8221;, and
+&#8220;standarddev&#8221;.  See <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints">DataPoint documentation</a>
+for additional details on these values.</li>
+<li><strong>timezone</strong> (<em>str or None</em>) &#8211; timezone for calculating roll-ups. This determines roll-up interval
+boundaries and only applies to roll-ups of a day or larger (for example, day,
+week, or month). Note that it does not apply to the startTime and endTime parameters.
+See the <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#timestamp">Timestamps</a>
+and <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#TimeZones">Supported Time Zones</a>
+sections for more information.</li>
+<li><strong>page_size</strong> (<em>int</em>) &#8211; The number of results that we should attempt to retrieve from the
+device cloud in each page.  Generally, this can be left at its default value unless
+you have a good reason to change the parameter for performance reasons.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="filedata.html" class="btn btn-neutral float-right" title="FileData API"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="devicecore.html" class="btn btn-neutral" title="DeviceCore API"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

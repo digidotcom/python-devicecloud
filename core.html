@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Core API &mdash; python-devicecloud 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.1 documentation" href="index.html"/>
+        <link rel="next" title="DeviceCore API" href="devicecore.html"/>
+        <link rel="prev" title="python-devicecloud" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> python-devicecloud</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#module-devicecloud.streams">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#filedata-overview">FileData Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#sci-overview">SCI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Core API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/core.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="core-api">
+<h1>Core API<a class="headerlink" href="#core-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api-documentation">
+<h2>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#devicecloud.DeviceCloud" title="devicecloud.DeviceCloud"><tt class="xref py py-class docutils literal"><span class="pre">devicecloud.DeviceCloud</span></tt></a> class contains the core interface which
+will be used by all clients using the devicecloud library.</p>
+<span class="target" id="module-devicecloud"></span><dl class="exception">
+<dt id="devicecloud.DeviceCloudException">
+<em class="property">exception </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloudException</tt><a class="headerlink" href="#devicecloud.DeviceCloudException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for Device Cloud Exceptions</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="devicecloud.DeviceCloudHttpException">
+<em class="property">exception </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloudHttpException</tt><big>(</big><em>response</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudHttpException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when we failed a request to the DC over HTTP</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.DeviceCloud">
+<em class="property">class </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloud</tt><big>(</big><em>username</em>, <em>password</em>, <em>base_url='https://login.etherios.com'</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide access to core device cloud features</p>
+<p>This class is the primary interface to the device cloud through which access to individual
+device cloud services is provided.  Creating a <tt class="docutils literal"><span class="pre">DeviceCloud</span></tt> object is as easy as doing
+the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">devicecloud</span> <span class="kn">import</span> <span class="n">DeviceCloud</span>
+
+<span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;pass&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">dc</span><span class="o">.</span><span class="n">has_valid_credentials</span><span class="p">():</span>
+    <span class="k">print</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">list_devices</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>From there, access to all of the device clouds features are possible.  In some cases, methods
+for quickly performing selected actions may be provided directly via the <tt class="docutils literal"><span class="pre">DeviceCloud</span></tt> object
+while advanced usage requires using functionality exposed through other interfaces.</p>
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.has_valid_credentials">
+<tt class="descname">has_valid_credentials</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.has_valid_credentials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify that the device cloud url, username, and password are valid</p>
+<p>This method will attempt to &#8220;ping&#8221; the device cloud in order to ensure that all
+of the provided information is correct.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the credentials are valid and false if not</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="devicecloud.DeviceCloud.streams">
+<tt class="descname">streams</tt><a class="headerlink" href="#devicecloud.DeviceCloud.streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="devicecloud.DeviceCloud.filedata">
+<tt class="descname">filedata</tt><a class="headerlink" href="#devicecloud.DeviceCloud.filedata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="devicecloud.DeviceCloud.devicecore">
+<tt class="descname">devicecore</tt><a class="headerlink" href="#devicecloud.DeviceCloud.devicecore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="devicecloud.DeviceCloud.sci">
+<tt class="descname">sci</tt><a class="headerlink" href="#devicecloud.DeviceCloud.sci" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><tt class="xref py py-class docutils literal"><span class="pre">ServerCommandInterfaceAPI</span></tt></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.get_streams_api">
+<tt class="descname">get_streams_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_streams_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.streams" title="devicecloud.DeviceCloud.streams"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.streams</span></tt></a> but will create
+a new object (with a new cache) each time called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Stream API object bound to this device cloud account</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.get_filedata_api">
+<tt class="descname">get_filedata_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_filedata_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.filedata" title="devicecloud.DeviceCloud.filedata"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.filedata</span></tt></a> but will create
+a new object (with a new cache) each time called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">FileData API object bound to this device cloud account</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.get_devicecore_api">
+<tt class="descname">get_devicecore_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_devicecore_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.devicecore" title="devicecloud.DeviceCloud.devicecore"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.devicecore</span></tt></a> but will create
+a new object (with a new cache) each time called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">devicecore API object bound to this device cloud account</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.get_sci_api">
+<tt class="descname">get_sci_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_sci_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><tt class="xref py py-class docutils literal"><span class="pre">ServerCommandInterfaceAPI</span></tt></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.sci" title="devicecloud.DeviceCloud.sci"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.sci</span></tt></a> but will create
+a new object (with a new cache) each time called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SCI API object bound to this device cloud account</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><tt class="xref py py-class docutils literal"><span class="pre">ServerCommandInterfaceAPI</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="devicecore.html" class="btn btn-neutral float-right" title="DeviceCore API"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="python-devicecloud"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
