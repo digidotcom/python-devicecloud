@@ -130,7 +130,7 @@ project](https://github.com/Etherios/python-devicecloud/issues).
 For code changes, feel free to fork the project on Github and submit a
 pull request with your changes.  Additional instructions for
 developers contributing to the project can be found in the [Developer's
-Guide](HACKING.md).
+Guide](https://github.com/Etherios/python-devicecloud/blob/master/HACKING.md).
 
 License
 -------
