@@ -58,10 +58,19 @@ activated):
     $ make html
 
 The docs that are built will be located at
-docs/_build/html/index.html.  Eventually, something will be rigged up
-so that these get released to the web on something like
-readthedocs.org.
+docs/_build/html/index.html.
 
+The documentation for the project is published on github using a (Github
+Pages)[https://pages.github.com/] Project Site.  The process for
+releasing a new set of documentation is the following:
+
+1. Create a fresh clone of the project and checkout the `gh-pages`
+   branch.  Although this is the same repo, the tree is completely
+   separate from the main python-devicecloud codebase.
+2. Remove all contents from the working area
+3. From the python-devicecloud repo, `cp -r docs/_build/html/*
+   /path/to/other/repo/`.
+4. Commit and push the update `gh-pages` branch to github
 
 Open Source License Header
 --------------------------

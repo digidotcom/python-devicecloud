@@ -1,14 +1,8 @@
-# Python Device Cloud API
-A verbose library for making web service calls to the [Etherios Device Cloud](https://login.etherios.com).
+Python Device Cloud Library
+===========================
 
-Installation
-------------
-
-This library can be installed using [pip](https://github.com/pypa/pip).
-
-```sh
-pip install python-devicecloud
-```
+Be sure to check out the [full API
+documentation](http://etherios.github.io/python-devicecloud) as well.
 
 Overview
 --------
@@ -36,25 +30,41 @@ Example
 The library provides access to a wide array of features, but here is a
 couple quick examples to give you a taste of what the API looks like.
 
-    from devicecloud import DeviceCloud
+```python
+from devicecloud import DeviceCloud
 
-    dc = DeviceCloud('user', 'pass')
+dc = DeviceCloud('user', 'pass')
 
-    # show the MAC address of all devices that are currently connected
-    #
-    # This is done using the device cloud DeviceCore functionality
-    print "== Connected Devices =="
-    for device in dc.devicecore.list_devices():
-        if device.is_connected():
-            print device.get_mac()
+# show the MAC address of all devices that are currently connected
+#
+# This is done using the device cloud DeviceCore functionality
+print "== Connected Devices =="
+for device in dc.devicecore.list_devices():
+    if device.is_connected():
+        print device.get_mac()
 
-    # get the name and current value of all data streams having values
-    # with a floating point type
-    #
-    # This is done using the device cloud stream functionality
-    for stream in dc.streams.get_streams():
-        if stream.get_data_type().lower() in ('float', 'double'):
-            print "%s -> %s" % (stream.get_name(), stream.get_current_value())
+# get the name and current value of all data streams having values
+# with a floating point type
+#
+# This is done using the device cloud stream functionality
+for stream in dc.streams.get_streams():
+    if stream.get_data_type().lower() in ('float', 'double'):
+        print "%s -> %s" % (stream.get_name(), stream.get_current_value())
+```
+
+For more examples and detailed documentation, be sure to checkout out
+the [Full API Documentation](https://etherios.github.io/python-devicecloud).
+
+Installation
+------------
+
+This library can be installed using
+[pip](https://github.com/pypa/pip).  Python versions 2.7+ (including
+Python 3) are supported by the library.
+
+```sh
+pip install python-devicecloud
+```
 
 
 Supported Features
@@ -65,13 +75,29 @@ between the device cloud API and this library.  For now, however, that
 is not the case.  The current features are supported by the library:
 
 * Getting basic device information via DeviceCore
-* Setting some information on device via DeviceCore
-* Performing simple operations on FileData
-* Accessing, Creating, Pushing Data Into, and Deleting Data Streams
+* Listing devices associated with a device cloud account
+* Interacting with Device Cloud Data Streams
+  * Create Streams
+  * Get Stream (by id)
+  * List all streams
+  * Get metadata for a stream
+  * Write a single datapoint to a stream
+  * Write many datapoints to a stream (homogeneous bulk write)
+  * Write many datapoints to multiple streams (heterogeneous bulk write)
+  * Read data points from a stream (includes control over order of
+    returned data set as well as allowing for retrieving data
+    roll-ups, etc.)
+* Support for accessing Device Cloud FileData store
+  * Get filedata matching a provided condition (path, file extension,
+    size, etc.)
+  * Write files to filedata store
+  * Recursively walk filedata directory tree from some root location
+  * Get full metadata and contents of files and directories.
 * Low level support for performing basic SCI commands with limited parsing
   of results and support for only a subset of available services/commands.
 
-The following features are *not* supported at this time:
+The following features are *not* supported at this time.  Feedback on
+which features should be highest priority is always welcome.
 
 * Alarms
 * Monitors
@@ -92,10 +118,19 @@ The following features are *not* supported at this time:
 * SM/UDP Support
 * Carrier Information Access
 
-Roadmap and History
---------------------
+Contributing
+------------
 
-Roadmap TBD
+Contributions to the library are very welcome in whatever form can be
+provided.  This could include issue reports, bug fixes, or features
+additions.  For issue reports, please [create an issue against the
+Github
+project](https://github.com/Etherios/python-devicecloud/issues).
+
+For code changes, feel free to fork the project on Github and submit a
+pull request with your changes.  Additional instructions for
+developers contributing to the project can be found in the [Developer's
+Guide](HACKING.md).
 
 License
 -------
