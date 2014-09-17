@@ -824,9 +824,6 @@ class DataStream(object):
              rollup_interval=None, rollup_method=None, timezone=None, page_size=1000):
         """Read one or more DataPoints from a stream
 
-        This method will attempt to read items from this stream.  An iterator over the streams
-        is returned over which one can iterate.
-
         .. warning::
            The data points from the device cloud is a paged data set.  When iterating over the
            result set there could be delays when we hit the end of a page.  If this is undesirable,
@@ -864,11 +861,11 @@ class DataStream(object):
             See the `Timestamps <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#timestamp>`_
             and `Supported Time Zones <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#TimeZones>`_
             sections for more information.
-
         :type timezone: str or None
         :param int page_size: The number of results that we should attempt to retrieve from the
             device cloud in each page.  Generally, this can be left at its default value unless
             you have a good reason to change the parameter for performance reasons.
+        :returns: A generator object which one can iterate over the DataPoints read.
 
         """
         # Validate function inputs

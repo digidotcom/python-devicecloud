@@ -12,7 +12,7 @@ Documention Map
    streams
    filedata
    sci
-   examples
+   cookbook
 
 Introduction
 ============
