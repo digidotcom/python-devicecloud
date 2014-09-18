@@ -8,6 +8,8 @@ Python Device Cloud Library
 [![License](https://pypip.in/license/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
 
 Be sure to check out the [full documentation](http://etherios.github.io/python-devicecloud).
+A [Changelog](https://github.com/etherios/python-devicecloud/blob/master/CHANGELOG.md)
+is also available.
 
 Overview
 --------

@@ -1,4 +1,16 @@
+import re
+import os
 from setuptools import setup, find_packages
+
+
+def get_version():
+    verstrline = open("devicecloud/version.py", "r").read()
+    version_string_re = re.compile(r"^__version__ = ['\"]([^'\"]*)['\"]", re.MULTILINE)
+    match = version_string_re.search(verstrline)
+    if match:
+        return match.group(1)
+    else:
+        raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
 
 def get_long_description():
@@ -21,21 +33,25 @@ def get_long_description():
         doc = pandoc.Document()
         doc.markdown = long_description
         long_description = doc.rst
+        open("README.rst", "w").write(doc.rst)
     except:
-        print("Could not find pandoc or convert properly")
-        print("  make sure you have pandoc (system) and pyandoc (python module) installed")
+        if os.path.exists("README.rst"):
+            long_description = open("README.rst").read()
+        else:
+            print("Could not find pandoc or convert properly")
+            print("  make sure you have pandoc (system) and pyandoc (python module) installed")
 
     return long_description
 
 
 setup(
     name="devicecloud",
-    version="0.1",
+    version=get_version(),
     description="Python API to the Device Cloud by Etherios",
     long_description=get_long_description(),
     url="https://github.com/etherios/python-devicecloud",
-    author="Stephen Stack",
-    author_email="stephen.stack@etherios.com",
+    author="Etherios, Inc.",
+    author_email="paul.osborne@etherios.com",  # TODO: mailing list?
     packages=find_packages(),
     install_requires=open('requirements.txt').read().split(),
     classifiers=[
