@@ -3,9 +3,11 @@ Python Device Cloud Library
 
 [![Build Status](https://travis-ci.org/Etherios/python-devicecloud.svg?branch=master)](https://travis-ci.org/Etherios/python-devicecloud)
 [![Coverage Status](https://img.shields.io/coveralls/Etherios/python-devicecloud.svg)](https://coveralls.io/r/Etherios/python-devicecloud)
+[![Latest Version](https://pypip.in/version/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
+[![Supported Python versions](https://pypip.in/py_versions/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
+[![License](https://pypip.in/license/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
 
-Be sure to check out the [full API
-documentation](http://etherios.github.io/python-devicecloud) as well.
+Be sure to check out the [full documentation](http://etherios.github.io/python-devicecloud).
 
 Overview
 --------
