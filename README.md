@@ -54,7 +54,7 @@ for device in dc.devicecore.list_devices():
 # This is done using the device cloud stream functionality
 for stream in dc.streams.get_streams():
     if stream.get_data_type().lower() in ('float', 'double'):
-        print "%s -> %s" % (stream.get_name(), stream.get_current_value())
+        print "%s -> %s" % (stream.get_stream_id(), stream.get_current_value())
 ```
 
 For more examples and detailed documentation, be sure to checkout out
