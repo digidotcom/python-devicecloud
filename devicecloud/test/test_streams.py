@@ -272,6 +272,15 @@ class TestStreamsAPI(HttpTestBase):
                                        description="My Test",
                                        data_ttl=1234,
                                        rollup_ttl=5678)
+        self.assertEqual(
+            self._get_last_request().body,
+            six.b('<DataStream>'
+                  '<streamId>teststream</streamId>'
+                  '<dataType>STRING</dataType>'
+                  '<description>My Test</description>'
+                  '<dataTtl>1234</dataTtl>'
+                  '<rollupTtl>5678</rollupTtl>'
+                  '</DataStream>'))
         self.assertEqual(stream.get_stream_id(), "teststream")
         self.assertEqual(stream.get_data_type(), "STRING")
         self.assertEqual(stream.get_description(), "My Test")
