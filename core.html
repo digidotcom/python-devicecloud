@@ -64,12 +64,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devicecore.html#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-api-documentation">DeviceCore API Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="streams.html#module-devicecloud.streams">API Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#api-documentation">API Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
@@ -82,7 +82,10 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+</ul>
+</li>
 </ul>
 
         
@@ -173,19 +176,19 @@ of the provided information is correct.</p>
 <dl class="attribute">
 <dt id="devicecloud.DeviceCloud.streams">
 <tt class="descname">streams</tt><a class="headerlink" href="#devicecloud.DeviceCloud.streams" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a></p>
+<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="devicecloud.DeviceCloud.filedata">
 <tt class="descname">filedata</tt><a class="headerlink" href="#devicecloud.DeviceCloud.filedata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a></p>
+<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="devicecloud.DeviceCloud.devicecore">
 <tt class="descname">devicecore</tt><a class="headerlink" href="#devicecloud.DeviceCloud.devicecore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a></p>
+<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -197,7 +200,7 @@ of the provided information is correct.</p>
 <dl class="method">
 <dt id="devicecloud.DeviceCloud.get_streams_api">
 <tt class="descname">get_streams_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_streams_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a> bound to this device cloud instance</p>
+<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt> bound to this device cloud instance</p>
 <p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.streams" title="devicecloud.DeviceCloud.streams"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.streams</span></tt></a> but will create
 a new object (with a new cache) each time called.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -206,7 +209,7 @@ a new object (with a new cache) each time called.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Stream API object bound to this device cloud account</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -215,7 +218,7 @@ a new object (with a new cache) each time called.</p>
 <dl class="method">
 <dt id="devicecloud.DeviceCloud.get_filedata_api">
 <tt class="descname">get_filedata_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_filedata_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a> bound to this device cloud instance</p>
+<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt> bound to this device cloud instance</p>
 <p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.filedata" title="devicecloud.DeviceCloud.filedata"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.filedata</span></tt></a> but will create
 a new object (with a new cache) each time called.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -224,7 +227,7 @@ a new object (with a new cache) each time called.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">FileData API object bound to this device cloud account</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -233,7 +236,7 @@ a new object (with a new cache) each time called.</p>
 <dl class="method">
 <dt id="devicecloud.DeviceCloud.get_devicecore_api">
 <tt class="descname">get_devicecore_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_devicecore_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a> bound to this device cloud instance</p>
+<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt> bound to this device cloud instance</p>
 <p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.devicecore" title="devicecloud.DeviceCloud.devicecore"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.devicecore</span></tt></a> but will create
 a new object (with a new cache) each time called.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -242,7 +245,7 @@ a new object (with a new cache) each time called.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">devicecore API object bound to this device cloud account</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></td>
 </tr>
 </tbody>
 </table>

@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Cookbook &mdash; python-devicecloud 0.1 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.1 documentation" href="index.html"/>
+        <link rel="prev" title="SCI (Server Command Interface) API" href="sci.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> python-devicecloud</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-api-documentation">DeviceCore API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#filedata-overview">FileData Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#sci-overview">SCI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-streams">Using Streams</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Cookbook</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/cookbook.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="cookbook">
+<h1>Cookbook<a class="headerlink" href="#cookbook" title="Permalink to this headline">¶</a></h1>
+<p>This page is meant to show complete examples for common uses of the library.
+For more granular or specific examples of API usage check out the individual API pages.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are also examples checked into source control under /devicecloud/examples/<a href="#id1"><span class="problematic" id="id2">*</span></a>_playground.py
+which will provide additional example uses of the library.</p>
+</div>
+<p>Each example will assume an instance of <a class="reference internal" href="core.html#devicecloud.DeviceCloud" title="devicecloud.DeviceCloud"><tt class="xref py py-class docutils literal"><span class="pre">devicecloud.DeviceCloud</span></tt></a> has been
+created with something like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>dc = DeviceCloud(&lt;username&gt;, &lt;password&gt;)
+</pre></div>
+</div>
+<div class="section" id="using-streams">
+<h2>Using Streams<a class="headerlink" href="#using-streams" title="Permalink to this headline">¶</a></h2>
+<p><strong>Description:</strong></p>
+<blockquote>
+<div>For this example, let&#8217;s create a DataStream that represents a class room.  As students
+enter the classroom there is a DataPoint representing them written to the stream.</div></blockquote>
+<p>First let&#8217;s get or create the stream:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classroom</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_stream_if_exists</span><span class="p">(</span><span class="s">&#39;classroom&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">classroom</span><span class="p">:</span>
+    <span class="n">classroom</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">create_stream</span><span class="p">(</span>
+        <span class="n">stream_id</span><span class="o">=</span><span class="s">&#39;classroom&#39;</span><span class="p">,</span>
+        <span class="n">data_type</span><span class="o">=</span><span class="n">STREAM_TYPE_STRING</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">&#39;Stream representing a classroom of students&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>A student named Bob enters the classroom so we write a DataPoint representing Bob
+to the stream.  To represent Bob let&#8217;s use a JSON object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">student</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Bob&#39;</span><span class="p">,</span>
+    <span class="s">&#39;student_id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">datapoint</span> <span class="o">=</span> <span class="n">DataPoint</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">student</span><span class="p">))</span>
+<span class="n">classroom</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">datapoint</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, two students enter at the same time.  For this we can write both data points
+as a batch which only uses one HTTP request (up to 250 data points):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">students</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;James&#39;</span><span class="p">,</span>
+        <span class="s">&#39;student_id&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+        <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Henry&#39;</span><span class="p">,</span>
+        <span class="s">&#39;student_id&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+<span class="n">datapoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">DataPoint</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">students</span><span class="p">]</span>
+<span class="n">classroom</span><span class="o">.</span><span class="n">bulk_write_datapoints</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, let&#8217;s print the name of the student who most recently entered the classroom:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">most_recent_student</span> <span class="o">=</span> <span class="n">classroom</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">most_recent_student</span><span class="o">.</span><span class="n">get_data</span><span class="p">())[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>  <span class="c"># Prints &#39;Henry&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="sci.html" class="btn btn-neutral" title="SCI (Server Command Interface) API"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

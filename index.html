@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -79,7 +81,10 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+</ul>
+</li>
 </ul>
 
         
@@ -125,7 +130,7 @@
 <li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 </ul>
 </div>
 </div>
@@ -165,7 +170,7 @@ quick example of what the API looks like:</p>
 <span class="c"># This is done using the device cloud stream functionality</span>
 <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_streams</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">stream</span><span class="o">.</span><span class="n">get_data_type</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;float&#39;</span><span class="p">,</span> <span class="s">&#39;double&#39;</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">stream</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">())</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> -&gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">stream</span><span class="o">.</span><span class="n">get_stream_id</span><span class="p">(),</span> <span class="n">stream</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>

@@ -82,7 +82,10 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+</ul>
+</li>
 </ul>
 
         
@@ -859,8 +862,6 @@ type if it is available so that proper type conversion happens.</p>
 <dt id="devicecloud.streams.DataStream.read">
 <tt class="descname">read</tt><big>(</big><em>start_time=None</em>, <em>end_time=None</em>, <em>use_client_timeline=True</em>, <em>newest_first=True</em>, <em>rollup_interval=None</em>, <em>rollup_method=None</em>, <em>timezone=None</em>, <em>page_size=1000</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataStream.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one or more DataPoints from a stream</p>
-<p>This method will attempt to read items from this stream.  An iterator over the streams
-is returned over which one can iterate.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">The data points from the device cloud is a paged data set.  When iterating over the
@@ -872,7 +873,7 @@ the result set.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start_time</strong> (<tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> or None) &#8211; The start time for the window of data points to read.  None means
 that we should start with the old data available.</li>
 <li><strong>end_time</strong> (<tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> or None) &#8211; The end time for the window of data points to read.  None means
@@ -902,6 +903,9 @@ sections for more information.</li>
 device cloud in each page.  Generally, this can be left at its default value unless
 you have a good reason to change the parameter for performance reasons.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A generator object which one can iterate over the DataPoints read.</p>
 </td>
 </tr>
 </tbody>

@@ -12,7 +12,7 @@ Documention Map
    streams
    filedata
    sci
-   examples
+   cookbook
 
 Introduction
 ============
@@ -58,7 +58,7 @@ quick example of what the API looks like::
     # This is done using the device cloud stream functionality
     for stream in dc.streams.get_streams():
         if stream.get_data_type().lower() in ('float', 'double'):
-            print "%s -> %s" % (stream.get_name(), stream.get_current_value())
+            print "%s -> %s" % (stream.get_stream_id(), stream.get_current_value())
 
 Indices and tables
 ==================
