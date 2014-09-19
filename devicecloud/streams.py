@@ -13,7 +13,8 @@ import datetime
 import six
 from devicecloud.apibase import APIBase
 from devicecloud import DeviceCloudException, DeviceCloudHttpException
-from devicecloud.util import conditional_write, to_none_or_dt, validate_type, isoformat
+from devicecloud.util import conditional_write, to_none_or_dt, validate_type, isoformat, \
+    dc_utc_timestamp_to_dt
 from six import StringIO
 
 
@@ -67,6 +68,10 @@ class StreamException(DeviceCloudException):
 
 class NoSuchStreamException(StreamException):
     """Failure to find a stream based on a given id"""
+
+
+class InvalidRollupDatatype(StreamException):
+    """Roll-up's are only valid on numerical data types"""
 
 
 class StreamsAPI(APIBase):
@@ -277,6 +282,29 @@ class DataPoint(object):
             location=json_data.get("location"),
             dp_id=json_data.get("id"),
         )
+
+    @classmethod
+    def from_rollup_json(cls, stream, json_data):
+        """Rollup json data from the server looks slightly different
+
+        :param DataStream stream: The :class:`~DataStream` out of which this data is coming
+        :param dict json_data: Deserialized JSON data from the device cloud about this device
+        :raises ValueError: if the data is malformed
+        :return: (:class:`~DataPoint`) newly created :class:`~DataPoint`
+        """
+        dp = cls.from_json(stream, json_data)
+
+        # Special handling for timestamp
+        timestamp = isoformat(dc_utc_timestamp_to_dt(int(json_data.get("timestamp"))))
+
+        # Special handling for data, all rollup data is float type
+        type_converter = DSTREAM_TYPE_MAP[dp.get_data_type()]
+        data = type_converter[0](float(json_data.get("data")))
+
+        # Update the special fields
+        dp.set_timestamp(timestamp)
+        dp.set_data(data)
+        return dp
 
     def __init__(self, data, stream_id=None, description=None, timestamp=None,
                  quality=None, location=None, data_type=None, units=None, dp_id=None,
@@ -831,7 +859,7 @@ class DataStream(object):
            the result set.
 
         :param start_time: The start time for the window of data points to read.  None means
-            that we should start with the old data available.
+            that we should start with the oldest data available.
         :type start_time: :class:`datetime.datetime` or None
         :param end_time: The end time for the window of data points to read.  None means
             that we should include all points received until this point in time.
@@ -868,6 +896,23 @@ class DataStream(object):
         :returns: A generator object which one can iterate over the DataPoints read.
 
         """
+
+        is_rollup = False
+        if (rollup_interval is not None) or (rollup_method is not None):
+            is_rollup = True
+            numeric_types = [
+                STREAM_TYPE_INTEGER,
+                STREAM_TYPE_LONG,
+                STREAM_TYPE_FLOAT,
+                STREAM_TYPE_DOUBLE,
+                STREAM_TYPE_STRING,
+                STREAM_TYPE_BINARY,
+                STREAM_TYPE_UNKNOWN,
+            ]
+
+            if self.get_data_type(use_cached=True) not in numeric_types:
+                raise InvalidRollupDatatype('Rollups only support numerical DataPoints')
+
         # Validate function inputs
         start_time = to_none_or_dt(validate_type(start_time, datetime.datetime, type(None)))
         end_time = to_none_or_dt(validate_type(end_time, datetime.datetime, type(None)))
@@ -929,5 +974,8 @@ class DataStream(object):
             result_size = int(result["resultSize"])  # how many are actually included here?
             query_parameters["pageCursor"] = result.get("pageCursor")  # will not be present if result set is empty
             for item_info in result.get("items", []):
-                data_point = DataPoint.from_json(self, item_info)
+                if is_rollup:
+                    data_point = DataPoint.from_rollup_json(self, item_info)
+                else:
+                    data_point = DataPoint.from_json(self, item_info)
                 yield data_point

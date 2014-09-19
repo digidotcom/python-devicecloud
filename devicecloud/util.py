@@ -69,6 +69,7 @@ def validate_type(input, *types):
         raise TypeError("Input expected to one of following types: %s" % (types, ))
     return input
 
+
 def isoformat(dt):
     """Return an ISO-8601 formatted string from the provided datetime object"""
     if not isinstance(dt, datetime.datetime):
@@ -78,3 +79,8 @@ def isoformat(dt):
         raise ValueError("naive datetime objects are not allowed beyond the library boundaries")
 
     return dt.isoformat().replace("+00:00", "Z")  # nicer to look at
+
+
+def dc_utc_timestamp_to_dt(dc_timestamp_in_milleseconds):
+    """Return a UTC datetime object"""
+    return arrow.Arrow.utcfromtimestamp(dc_timestamp_in_milleseconds / 1000).datetime

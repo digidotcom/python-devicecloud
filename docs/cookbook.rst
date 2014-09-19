@@ -14,13 +14,11 @@ created with something like so::
 
     dc = DeviceCloud(<username>, <password>)
 
-Using Streams
-^^^^^^^^^^^^^^
+Creating Streams and Data Points
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Description:**
-
-    For this example, let's create a DataStream that represents a class room.  As students
-    enter the classroom there is a DataPoint representing them written to the stream.
+For this example, let's create a DataStream that represents a class room.  As students
+enter the classroom there is a DataPoint representing them written to the stream.
 
 First let's get or create the stream::
 
@@ -65,3 +63,83 @@ Finally, let's print the name of the student who most recently entered the class
 
     most_recent_student = classroom.get_current_value()
     print json.loads(most_recent_student.get_data())['name']  # Prints 'Henry'
+
+
+Delete a Stream
+^^^^^^^^^^^^^^^^
+
+Let's delete the classroom stream from the above example so we can start fresh in the
+next example::
+
+    classroom.delete()
+
+Roll-up Data
+^^^^^^^^^^^^^^
+
+Roll-up data is a way to group data points based on time intervals in which they
+were written to the cloud.  From our previous example lets figure out which students
+entered the classroom throughout the day and which hour they entered.
+
+First let's write some test data to the cloud.  Since roll-ups only work on numerical
+data types we will student id's instead of JSON.
+
+Create a new data stream that is of type int::
+
+    classroom = dc.streams.create_stream(
+            stream_id='classroom',
+            data_type=STREAM_TYPE_INTEGER,
+            description='Stream representing a classroom of students (as id's)',
+        )
+
+Next is a function that fills the classroom with data points that have randomly
+generated timestamp values within the next 24 hours::
+
+    now = time.time()
+    one_day_in_seconds = 86400
+
+    datapoints = list()
+    for student_id in xrange(100):
+        deviation = random.randint(0, one_day_in_seconds)
+        random_time = now + deviation
+        datapoint = DataPoint(data=student_id,
+                              timestamp=datetime.datetime.fromtimestamp(random_time))
+        datapoints.append(datapoint)
+
+    classroom.bulk_write_datapoints(datapoints)
+
+Finally, let's figure out which students entered the classroom which hours of the day::
+
+    rollup_data = classroom.read(rollup_interval='hour', rollup_method='count')
+    hourly_data = {}
+    for dp in rollup_data:
+        hourly_data[dp.get_timestamp().hour] = dp.get_data()
+    pprint.pprint(hourly_data)
+
+The result is a dictionary where the key's are the hour in the day and the values are the
+number of students who entered the classroom that hour::
+
+    {0: 10,
+     1: 10,
+     2: 9,
+     3: 3,
+     4: 3,
+     5: 6,
+     6: 9,
+     7: 11,
+     8: 5,
+     9: 7,
+     10: 9,
+     11: 9,
+     12: 7,
+     13: 6,
+     14: 13,
+     15: 8,
+     16: 13,
+     17: 9,
+     18: 7,
+     19: 7,
+     20: 11,
+     21: 8,
+     22: 6,
+     23: 11}
+
