@@ -5,14 +5,13 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
-import json
-
-__version__ = "0.1"
-
 from requests.auth import HTTPBasicAuth
 import logging
 import requests
 import time
+import json
+
+from devicecloud.version import __version__
 
 __all__ = (
     'DeviceCloud',
