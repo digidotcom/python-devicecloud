@@ -114,7 +114,7 @@ class StreamsAPI(APIBase):
             data_type = str(data_type).upper()
         if not data_type in (set([None, ]) | set(list(DSTREAM_TYPE_MAP.keys()))):
             raise ValueError("data_type %r is not valid" % data_type)
-        description = validate_type(stream_id, type(None), *six.string_types)
+        description = validate_type(description, type(None), *six.string_types)
         data_ttl = validate_type(data_ttl, type(None), *six.integer_types)
         rollup_ttl = validate_type(rollup_ttl, type(None), *six.integer_types)
         units = validate_type(units, type(None), *six.string_types)
