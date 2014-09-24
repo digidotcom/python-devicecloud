@@ -15,15 +15,41 @@ class DeviceCoreAPI(APIBase):
     def __init__(self, conn, sci):
         APIBase.__init__(self, conn)
         self._sci = sci
+        self._devices_cache = None
 
-    def list_devices(self):
-        """Retrieve a list of :class:`Device` objects for this device cloud account"""
-        devicecore_data = self._conn.get_json("/ws/DeviceCore")
-        json_dump = devicecore_data["items"]
-        devices = []
-        for device_json in json_dump:
-            devices.append(Device(self._conn, self._sci, device_json))
-        return devices
+    def get_devices(self, cached=True):
+        """Retrieve a dict of :class:`Device` objects for this device cloud account
+
+        :param cached: Retrieve a cached dictionary of the devices
+        :returns: Dictionary of devices in form {<mac>: :class:`~Device`}
+        """
+        if (self._devices_cache is None) or (cached is False):
+            self._devices_cache = dict()
+            devicecore_data = self._conn.get_json("/ws/DeviceCore")
+            json_dump = devicecore_data["items"]
+            for device_json in json_dump:
+                device = Device(self._conn, self._sci, device_json)
+                self._devices_cache[device.get_mac()] = device
+        return self._devices_cache
+
+    def get_device(self, mac):
+        """Get a reference to a single connected device
+
+        :param mac: Mac address of the device in the form xx:xx:xx:xx:xx:xx
+        :returns: :class:`~Device` object or None
+        """
+
+        if self._devices_cache is None:
+            # No cache available, grab a fresh one and get the device if available
+            return self.get_devices(cached=False).get(mac)
+        else:
+            # Try the existing cache
+            found = self._devices_cache.get(mac)
+            if found:
+                return found
+            else:
+                # Update the cache and return device if available
+                return self.get_devices(cached=False).get(mac)
 
 
 class Device(object):
