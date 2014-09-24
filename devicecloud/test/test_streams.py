@@ -15,8 +15,6 @@ from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuch
 from devicecloud.test.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
 
-
-
 # Example HTTP Responses
 import httpretty
 import six
@@ -658,9 +656,11 @@ class TestDataStreamRead(HttpTestBase):
         self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
         test_stream = self.dc.streams.get_stream("test")
         points = list(test_stream.read(rollup_interval=ROLLUP_INTERVAL_HALF))
-        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["rollupInterval"][0], "half")
+        self.assertEqual(httpretty.httpretty.latest_requests[-1].querystring["rollupInterval"][0], "half")
 
     def test_rollup_interval_invalid(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
         test_stream = self.dc.streams.get_stream("test")
         self.assertRaises(ValueError, six.next, test_stream.read(rollup_interval='invalid'))
 
@@ -669,9 +669,10 @@ class TestDataStreamRead(HttpTestBase):
         self.prepare_response("GET", "/ws/DataPoint/test", GET_DATA_POINTS_ONE)
         test_stream = self.dc.streams.get_stream("test")
         points = list(test_stream.read(rollup_method=ROLLUP_METHOD_COUNT))
-        self.assertEqual(httpretty.httpretty.latest_requests[-2].querystring["rollupMethod"][0], "count")
+        self.assertEqual(httpretty.httpretty.latest_requests[-1].querystring["rollupMethod"][0], "count")
 
     def test_rollup_method_invalid(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
         test_stream = self.dc.streams.get_stream("test")
         self.assertRaises(ValueError, six.next, test_stream.read(rollup_method='invalid'))
 
@@ -753,6 +754,33 @@ class TestDataPoint(HttpTestBase):
         self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
         dp = stream.get_current_value()
         repr(dp)
+
+    def test_rollup_datapoint(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM)
+        example_json = {
+            "id": "07d77854-0557-11e4-ab44-fa163e7ebc6b",
+            "timestamp": "1404683207981",
+            "timestampISO": "2014-07-06T21:46:47.981Z",
+            "serverTimestamp": "1404683207981",
+            "serverTimestampISO": "2014-07-06T21:46:47.981Z",
+            "data": "0.0",
+            "description": "Test",
+            "quality": "20",
+            "location": "1.0,2.0,3.0"
+        }
+        stream = self._get_stream("test", with_cached_data=True)
+        dp = DataPoint.from_rollup_json(stream, example_json)
+        self.assertEqual(dp.get_data(), 0.0)
+        orig_dt = dp.get_timestamp()
+        dt_wo_ms = datetime.datetime(year=orig_dt.year,
+                                     month=orig_dt.month,
+                                     day=orig_dt.day,
+                                     hour=orig_dt.hour,
+                                     minute=orig_dt.minute,
+                                     second=orig_dt.second,
+                                     tzinfo=orig_dt.tzinfo)
+        self.assertEqual(six.b(dt_wo_ms.isoformat()),
+                         six.b('2014-07-06T21:46:47+00:00'))
 
 
 if __name__ == "__main__":
