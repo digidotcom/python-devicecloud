@@ -114,7 +114,7 @@ class DeviceCloud(object):
 
         dc = DeviceCloud('user', 'pass')
         if dc.has_valid_credentials():
-            print dc.devicecore.list_devices()
+            print dc.devicecore.get_devices()
 
     From there, access to all of the device clouds features are possible.  In some cases, methods
     for quickly performing selected actions may be provided directly via the ``DeviceCloud`` object
