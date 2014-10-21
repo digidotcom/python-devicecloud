@@ -10,6 +10,7 @@ import unittest
 
 from dateutil.tz import tzutc
 from devicecloud.test.test_utilities import HttpTestBase
+import six
 
 
 EXAMPLE_GET_DEVICES = {
@@ -85,9 +86,9 @@ class TestDeviceCore(HttpTestBase):
     def test_dc_get_devices(self):
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         devices = self.dc.devicecore.get_devices()
-        dev1 = devices.next()
-        dev2 = devices.next()
-        self.assertRaises(StopIteration, devices.next)
+        dev1 = six.next(devices)
+        dev2 = six.next(devices)
+        self.assertRaises(StopIteration, six.next, devices)
 
         self.assertEqual(dev1.get_mac(), "00:40:9D:58:17:5B")
         self.assertEqual(dev1.get_mac_last4(), "175B")
@@ -127,7 +128,7 @@ class TestDeviceCore(HttpTestBase):
         del get_devices_update["items"][1]  # remove the other item... close enough
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         devices = self.dc.devicecore.get_devices()
-        device = devices.next()
+        device = six.next(devices)
         self.prepare_json_response("GET", "/ws/DeviceCore/702077", get_devices_update)
         self.assertEqual(device.get_device_type(), "ConnectPort X5 R")
         self.assertEqual(device.get_device_type(False), "Turboencabulator")
