@@ -39,6 +39,11 @@ class DeviceCoreAPI(APIBase):
         :returns: :class:`~Device` object or None
         """
 
+        # TODO: Getting all of the devices from DC can be an expensive operation,
+        #       support small requests at some point.
+
+        # TODO: Support multiple descriptors (args) to retrieve devices
+
         if self._devices_cache is None:
             # No cache available, grab a fresh one and get the device if available
             return self.get_devices(cached=False).get(mac)
