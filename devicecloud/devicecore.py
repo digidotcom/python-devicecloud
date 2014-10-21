@@ -6,7 +6,16 @@
 # Etherios, Inc. is a Division of Digi International.
 
 from devicecloud.apibase import APIBase
-from devicecloud.util import iso8601_to_dt
+from devicecloud.conditions import Attribute, Expression
+from devicecloud.util import iso8601_to_dt, validate_type
+import six
+
+
+dev_mac = Attribute('devMac')
+group_id = Attribute('grpId')
+group_path = Attribute('grpPath')
+dev_connectware_id = Attribute('devConnectwareId')
+# TODO: Can we support location based device lookups? (e.g. lat/long?)
 
 
 class DeviceCoreAPI(APIBase):
@@ -15,46 +24,35 @@ class DeviceCoreAPI(APIBase):
     def __init__(self, conn, sci):
         APIBase.__init__(self, conn)
         self._sci = sci
-        self._devices_cache = None
 
-    def get_devices(self, cached=True):
-        """Retrieve a dict of :class:`Device` objects for this device cloud account
+    def get_devices(self, condition=None, page_size=1000):
+        """Retrieve :class:`Device`(s) from this device cloud account
 
-        :param cached: Retrieve a cached dictionary of the devices
-        :returns: Dictionary of devices in form {<mac>: :class:`~Device`}
-        """
-        if (self._devices_cache is None) or (cached is False):
-            self._devices_cache = dict()
-            devicecore_data = self._conn.get_json("/ws/DeviceCore")
-            json_dump = devicecore_data["items"]
-            for device_json in json_dump:
-                device = Device(self._conn, self._sci, device_json)
-                self._devices_cache[device.get_mac()] = device
-        return self._devices_cache
-
-    def get_device(self, mac):
-        """Get a reference to a single connected device
-
-        :param mac: Mac address of the device in the form xx:xx:xx:xx:xx:xx
-        :returns: :class:`~Device` object or None
+        :param condition: An :class:`.Expression` which defines the condition
+            which must be matched on the devicecore.
+        :returns: Generator of :class:`~Device`(s)
         """
 
-        # TODO: Getting all of the devices from DC can be an expensive operation,
-        #       support small requests at some point.
+        condition = validate_type(condition, type(None), Expression, *six.string_types)
+        page_size = validate_type(page_size, *six.integer_types)
+        offset = 0
+        remaining_size = 1  # just needs to be non-zero
 
-        # TODO: Support multiple descriptors (args) to retrieve devices
-
-        if self._devices_cache is None:
-            # No cache available, grab a fresh one and get the device if available
-            return self.get_devices(cached=False).get(mac)
-        else:
-            # Try the existing cache
-            found = self._devices_cache.get(mac)
-            if found:
-                return found
-            else:
-                # Update the cache and return device if available
-                return self.get_devices(cached=False).get(mac)
+        while remaining_size > 0:
+            req = (
+                "/ws/DeviceCore?embed=true"
+                "&start={offset}"
+                "&size={page_size}".format(
+                    page_size=page_size,
+                    offset=offset)
+            )
+            if condition is not None:
+                req = "".join([req, "&condition={0}".format(condition.compile())])
+            response = self._conn.get_json(req)
+            offset += page_size
+            remaining_size = int(response.get("remainingSize", "0"))
+            for device_json in response.get("items", []):
+                yield Device(self._conn, self._sci, device_json)
 
 
 class Device(object):
@@ -83,7 +81,8 @@ class Device(object):
 
         """
         if not use_cached:
-            devicecore_data = self._conn.get_json("/ws/DeviceCore/{}".format(self.get_device_id()))
+            devicecore_data = self._conn.get_json(
+                "/ws/DeviceCore/{}".format(self.get_device_id()))
             self._device_json = devicecore_data["items"][0]  # should only be 1
         return self._device_json
 
@@ -226,7 +225,7 @@ class Device(object):
         """Get the Zigbee PAN ID from the device if present"""
         return self.get_device_json(use_cached).get("dpPanId")
 
-    def get_zb_extended_address(self,  use_cached=True):
+    def get_zb_extended_address(self, use_cached=True):
         """Get the Zigbee extended address of this device if present"""
         return self.get_device_json(use_cached).get("xpExtAddr")
 

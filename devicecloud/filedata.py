@@ -113,7 +113,7 @@ class FileDataAPI(APIBase):
             "archive": archive_str
         }
         self._conn.put(
-            "/ws/FileData{path}{name}".format(path=path,name=name),
+            "/ws/FileData{path}{name}".format(path=path, name=name),
             sio.getvalue(),
             params=params)
 

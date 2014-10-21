@@ -85,13 +85,9 @@ class TestDeviceCore(HttpTestBase):
     def test_dc_get_devices(self):
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         devices = self.dc.devicecore.get_devices()
-        self.assertEqual(len(devices), 2)
-
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        dev1 = self.dc.devicecore.get_device("00:40:9D:58:17:5B")
-
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        dev2 = self.dc.devicecore.get_device("00:1d:09:2b:7d:8c")
+        dev1 = devices.next()
+        dev2 = devices.next()
+        self.assertRaises(StopIteration, devices.next)
 
         self.assertEqual(dev1.get_mac(), "00:40:9D:58:17:5B")
         self.assertEqual(dev1.get_mac_last4(), "175B")
@@ -130,27 +126,12 @@ class TestDeviceCore(HttpTestBase):
         get_devices_update["items"][0]["dpDeviceType"] = "Turboencabulator"
         del get_devices_update["items"][1]  # remove the other item... close enough
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        device = self.dc.devicecore.get_device("00:40:9D:58:17:5B")
+        devices = self.dc.devicecore.get_devices()
+        device = devices.next()
         self.prepare_json_response("GET", "/ws/DeviceCore/702077", get_devices_update)
         self.assertEqual(device.get_device_type(), "ConnectPort X5 R")
         self.assertEqual(device.get_device_type(False), "Turboencabulator")
         self.assertEqual(device.get_device_type(), "Turboencabulator")  # make sure cache updated
-
-    def test_get_device_in_cache(self):
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        self.dc.devicecore.get_devices()
-        dev = self.dc.devicecore.get_device("00:40:9D:58:17:5B")
-        self.assertEqual(dev.get_mac(), "00:40:9D:58:17:5B")
-
-    def test_get_device_not_in_cache(self):
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        dev = self.dc.devicecore.get_device("00:40:9D:58:17:5B")
-        self.assertEqual(dev.get_mac(), "00:40:9D:58:17:5B")
-
-    def test_get_device_not_on_account(self):
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        dev = self.dc.devicecore.get_device("xx:xx:xx:xx:xx:xx")
-        self.assertEqual(dev, None)
 
 
 if __name__ == '__main__':
