@@ -18,6 +18,15 @@ dev_connectware_id = Attribute('devConnectwareId')
 # TODO: Can we support location based device lookups? (e.g. lat/long?)
 
 
+ADD_GROUP_TEMPLATE = \
+"""
+<DeviceCore>
+    <devConnectwareId>{connectware_id}</devConnectwareId>
+    <grpPath>{group_path}</grpPath>
+</DeviceCore>
+"""
+
+
 class DeviceCoreAPI(APIBase):
     """Encapsulate DeviceCore interface"""
 
@@ -66,8 +75,6 @@ class Device(object):
 
     # TODO: provide ability to set/update available data items
     # TODO: add/remove tags
-    # TODO: add device to group
-    # TODO: remove device from a group
     # TODO: provision a new device (probably add top-level method for this)
 
     def __init__(self, conn, sci, device_json):
@@ -248,3 +255,22 @@ class Device(object):
     def get_current_connect_pw(self, use_cached=True):
         """Get the current connection password for this device"""
         return self.get_device_json(use_cached).get("dpCurrentConnectPw")
+
+    def add_to_group(self, group_path):
+        """Add a device to a group, if the group doesn't exist it is created
+
+        :param group_path: Path or "name" of the group
+        """
+
+        if self.get_group_path() != group_path:
+            post_data = ADD_GROUP_TEMPLATE.format(connectware_id=self.get_connectware_id(),
+                                                  group_path=group_path)
+            self._conn.put('/ws/DeviceCore', post_data)
+
+    def remove_from_group(self):
+        """Place a device back into the root group"""
+
+        if self.get_group_path() != '':
+            post_data = ADD_GROUP_TEMPLATE.format(connectware_id=self.get_connectware_id(),
+                                                  group_path='')
+            self._conn.put('/ws/DeviceCore', post_data)
