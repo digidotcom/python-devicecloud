@@ -28,8 +28,14 @@ class DeviceCoreAPI(APIBase):
     def get_devices(self, condition=None, page_size=1000):
         """Retrieve :class:`Device`(s) from this device cloud account
 
+        .. note::
+
+            This method returns a generator.
+
+
         :param condition: An :class:`.Expression` which defines the condition
             which must be matched on the devicecore.
+        :param int page_size: The number of results to fetch in a single page.
         :returns: Generator of :class:`~Device`(s)
         """
 

@@ -82,6 +82,33 @@ EXAMPLE_GET_DEVICES = {
 }
 
 
+GET_DEVICES_PAGE1 = """\
+{
+    "resultTotalRows": "2",
+    "requestedStartRow": "0",
+    "resultSize": "1",
+    "requestedSize": "1",
+    "remainingSize": "1",
+    "items": [
+ {"id": {"devId": "702077","devVersion": "6"},"devRecordStartDate": "2013-02-28T19:54:00.000Z","devMac": "00:40:9D:58:17:5B","devCellularModemId": "354374042391400","devConnectwareId": "00000000-00000000-00409DFF-FF58175B","cstId": "1872","grpId": "2331","devEffectiveStartDate": "2013-02-28T19:53:00.000Z","devTerminated": "false","dvVendorId": "4261412864","dpDeviceType": "ConnectPort X5 R","dpFirmwareLevel": "34537482","dpFirmwareLevelDesc": "2.15.0.10","dpRestrictedStatus": "0","dpLastKnownIp": "10.35.1.107","dpGlobalIp": "204.182.3.237","dpConnectionStatus": "0","dpLastConnectTime": "2013-04-08T04:01:20.633Z","dpContact": "","dpDescription": "","dpLocation": "","dpMapLat": "34.964465","dpMapLong": "40.268198","dpServerId": "","dpZigbeeCapabilities": "0","dpCapabilities": "6707","grpPath": "","dpLastDisconnectTime": "2013-04-16T19:46:06.557Z"}
+   ]
+ }
+"""
+
+GET_DEVICES_PAGE2 = """\
+{
+    "resultTotalRows": "2",
+    "requestedStartRow": "1",
+    "resultSize": "1",
+    "requestedSize": "1",
+    "remainingSize": "0",
+    "items": [
+ {"id": {"devId": "702078","devVersion": "6"},"devRecordStartDate": "2013-02-28T19:54:00.000Z","devMac": "00:40:9D:58:17:5B","devCellularModemId": "354374042391400","devConnectwareId": "00000000-00000000-00409DFF-FF58175B","cstId": "1872","grpId": "2331","devEffectiveStartDate": "2013-02-28T19:53:00.000Z","devTerminated": "false","dvVendorId": "4261412864","dpDeviceType": "ConnectPort X5 R","dpFirmwareLevel": "34537482","dpFirmwareLevelDesc": "2.15.0.10","dpRestrictedStatus": "0","dpLastKnownIp": "10.35.1.107","dpGlobalIp": "204.182.3.237","dpConnectionStatus": "0","dpLastConnectTime": "2013-04-08T04:01:20.633Z","dpContact": "","dpDescription": "","dpLocation": "","dpMapLat": "34.964465","dpMapLong": "40.268198","dpServerId": "","dpZigbeeCapabilities": "0","dpCapabilities": "6707","grpPath": "","dpLastDisconnectTime": "2013-04-16T19:46:06.557Z"}
+   ]
+ }
+"""
+
+
 class TestDeviceCore(HttpTestBase):
     def test_dc_get_devices(self):
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
@@ -121,6 +148,16 @@ class TestDeviceCore(HttpTestBase):
         self.assertEqual(dev1.get_server_id(), '')
         self.assertEqual(dev1.get_provision_id(), None)
         self.assertEqual(dev1.get_current_connect_pw(), None)
+
+    def test_dc_get_devices_paged(self):
+        self.prepare_response("GET", "/ws/DeviceCore", GET_DEVICES_PAGE1)
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev1 = six.next(gen)
+        self.prepare_response("GET", "/ws/DeviceCore", GET_DEVICES_PAGE2)
+        dev2 = six.next(gen)
+        self.assertRaises(StopIteration, six.next, gen)
+        self.assertEqual(dev1.get_device_id(), '702077')
+        self.assertEqual(dev2.get_device_id(), '702078')
 
     def test_refresh_from_cache(self):
         get_devices_update = copy.deepcopy(EXAMPLE_GET_DEVICES)
