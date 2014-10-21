@@ -48,7 +48,7 @@ quick example of what the API looks like::
     #
     # This is done using the device cloud DeviceCore functionality
     print "== Connected Devices =="
-    for device in dc.devicecore.list_devices():
+    for device in dc.devicecore.get_devices():
         if device.is_connected():
             print device.get_mac()
 

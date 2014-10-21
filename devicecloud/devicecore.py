@@ -6,7 +6,16 @@
 # Etherios, Inc. is a Division of Digi International.
 
 from devicecloud.apibase import APIBase
-from devicecloud.util import iso8601_to_dt
+from devicecloud.conditions import Attribute, Expression
+from devicecloud.util import iso8601_to_dt, validate_type
+import six
+
+
+dev_mac = Attribute('devMac')
+group_id = Attribute('grpId')
+group_path = Attribute('grpPath')
+dev_connectware_id = Attribute('devConnectwareId')
+# TODO: Can we support location based device lookups? (e.g. lat/long?)
 
 
 class DeviceCoreAPI(APIBase):
@@ -16,14 +25,40 @@ class DeviceCoreAPI(APIBase):
         APIBase.__init__(self, conn)
         self._sci = sci
 
-    def list_devices(self):
-        """Retrieve a list of :class:`Device` objects for this device cloud account"""
-        devicecore_data = self._conn.get_json("/ws/DeviceCore")
-        json_dump = devicecore_data["items"]
-        devices = []
-        for device_json in json_dump:
-            devices.append(Device(self._conn, self._sci, device_json))
-        return devices
+    def get_devices(self, condition=None, page_size=1000):
+        """Retrieve :class:`Device`(s) from this device cloud account
+
+        .. note::
+
+            This method returns a generator.
+
+
+        :param condition: An :class:`.Expression` which defines the condition
+            which must be matched on the devicecore.
+        :param int page_size: The number of results to fetch in a single page.
+        :returns: Generator of :class:`~Device`(s)
+        """
+
+        condition = validate_type(condition, type(None), Expression, *six.string_types)
+        page_size = validate_type(page_size, *six.integer_types)
+        offset = 0
+        remaining_size = 1  # just needs to be non-zero
+
+        while remaining_size > 0:
+            req = (
+                "/ws/DeviceCore?embed=true"
+                "&start={offset}"
+                "&size={page_size}".format(
+                    page_size=page_size,
+                    offset=offset)
+            )
+            if condition is not None:
+                req = "".join([req, "&condition={0}".format(condition.compile())])
+            response = self._conn.get_json(req)
+            offset += page_size
+            remaining_size = int(response.get("remainingSize", "0"))
+            for device_json in response.get("items", []):
+                yield Device(self._conn, self._sci, device_json)
 
 
 class Device(object):
@@ -52,7 +87,8 @@ class Device(object):
 
         """
         if not use_cached:
-            devicecore_data = self._conn.get_json("/ws/DeviceCore/{}".format(self.get_device_id()))
+            devicecore_data = self._conn.get_json(
+                "/ws/DeviceCore/{}".format(self.get_device_id()))
             self._device_json = devicecore_data["items"][0]  # should only be 1
         return self._device_json
 
@@ -195,7 +231,7 @@ class Device(object):
         """Get the Zigbee PAN ID from the device if present"""
         return self.get_device_json(use_cached).get("dpPanId")
 
-    def get_zb_extended_address(self,  use_cached=True):
+    def get_zb_extended_address(self, use_cached=True):
         """Get the Zigbee extended address of this device if present"""
         return self.get_device_json(use_cached).get("xpExtAddr")
 

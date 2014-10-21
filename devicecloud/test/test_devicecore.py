@@ -9,7 +9,10 @@ import datetime
 import unittest
 
 from dateutil.tz import tzutc
+from devicecloud.devicecore import dev_mac
 from devicecloud.test.test_utilities import HttpTestBase
+import httpretty
+import six
 
 
 EXAMPLE_GET_DEVICES = {
@@ -81,30 +84,40 @@ EXAMPLE_GET_DEVICES = {
 }
 
 
+GET_DEVICES_PAGE1 = """\
+{
+    "resultTotalRows": "2",
+    "requestedStartRow": "0",
+    "resultSize": "1",
+    "requestedSize": "1",
+    "remainingSize": "1",
+    "items": [
+ {"id": {"devId": "702077","devVersion": "6"},"devRecordStartDate": "2013-02-28T19:54:00.000Z","devMac": "00:40:9D:58:17:5B","devCellularModemId": "354374042391400","devConnectwareId": "00000000-00000000-00409DFF-FF58175B","cstId": "1872","grpId": "2331","devEffectiveStartDate": "2013-02-28T19:53:00.000Z","devTerminated": "false","dvVendorId": "4261412864","dpDeviceType": "ConnectPort X5 R","dpFirmwareLevel": "34537482","dpFirmwareLevelDesc": "2.15.0.10","dpRestrictedStatus": "0","dpLastKnownIp": "10.35.1.107","dpGlobalIp": "204.182.3.237","dpConnectionStatus": "0","dpLastConnectTime": "2013-04-08T04:01:20.633Z","dpContact": "","dpDescription": "","dpLocation": "","dpMapLat": "34.964465","dpMapLong": "40.268198","dpServerId": "","dpZigbeeCapabilities": "0","dpCapabilities": "6707","grpPath": "","dpLastDisconnectTime": "2013-04-16T19:46:06.557Z"}
+   ]
+ }
+"""
+
+GET_DEVICES_PAGE2 = """\
+{
+    "resultTotalRows": "2",
+    "requestedStartRow": "1",
+    "resultSize": "1",
+    "requestedSize": "1",
+    "remainingSize": "0",
+    "items": [
+ {"id": {"devId": "702078","devVersion": "6"},"devRecordStartDate": "2013-02-28T19:54:00.000Z","devMac": "00:40:9D:58:17:5B","devCellularModemId": "354374042391400","devConnectwareId": "00000000-00000000-00409DFF-FF58175B","cstId": "1872","grpId": "2331","devEffectiveStartDate": "2013-02-28T19:53:00.000Z","devTerminated": "false","dvVendorId": "4261412864","dpDeviceType": "ConnectPort X5 R","dpFirmwareLevel": "34537482","dpFirmwareLevelDesc": "2.15.0.10","dpRestrictedStatus": "0","dpLastKnownIp": "10.35.1.107","dpGlobalIp": "204.182.3.237","dpConnectionStatus": "0","dpLastConnectTime": "2013-04-08T04:01:20.633Z","dpContact": "","dpDescription": "","dpLocation": "","dpMapLat": "34.964465","dpMapLong": "40.268198","dpServerId": "","dpZigbeeCapabilities": "0","dpCapabilities": "6707","grpPath": "","dpLastDisconnectTime": "2013-04-16T19:46:06.557Z"}
+   ]
+ }
+"""
+
+
 class TestDeviceCore(HttpTestBase):
-    def _get_device(self, mac):
-        devices = self.dc.devicecore.list_devices()
-        self.assertEqual(len(devices), 2)
-
-        # get a ref to device with mac "00:40:9D:58:17:5B"
-        for device in devices:
-            if device.get_mac() == mac:
-                break
-        else:
-            self.fail("No device with expected MAC address")
-
-        return device
-
     def test_dc_get_devices(self):
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        devices = self.dc.devicecore.list_devices()
-        self.assertEqual(len(devices), 2)
-
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        dev1 = self._get_device("00:40:9D:58:17:5B")
-
-        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        dev2 = self._get_device("00:1d:09:2b:7d:8c")
+        devices = self.dc.devicecore.get_devices()
+        dev1 = six.next(devices)
+        dev2 = six.next(devices)
+        self.assertRaises(StopIteration, six.next, devices)
 
         self.assertEqual(dev1.get_mac(), "00:40:9D:58:17:5B")
         self.assertEqual(dev1.get_mac_last4(), "175B")
@@ -138,12 +151,33 @@ class TestDeviceCore(HttpTestBase):
         self.assertEqual(dev1.get_provision_id(), None)
         self.assertEqual(dev1.get_current_connect_pw(), None)
 
+    def test_dc_get_devices_paged(self):
+        self.prepare_response("GET", "/ws/DeviceCore", GET_DEVICES_PAGE1)
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev1 = six.next(gen)
+        self.prepare_response("GET", "/ws/DeviceCore", GET_DEVICES_PAGE2)
+        dev2 = six.next(gen)
+        self.assertRaises(StopIteration, six.next, gen)
+        self.assertEqual(dev1.get_device_id(), '702077')
+        self.assertEqual(dev2.get_device_id(), '702078')
+
+    def test_dc_get_devices_with_condition(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        gen = self.dc.devicecore.get_devices(dev_mac == 'xx:xx:xx:xx:xx', page_size=1)
+        six.next(gen)
+        qs = httpretty.last_request().querystring
+        self.assertEqual(qs['condition'][0], "devMac='xx:xx:xx:xx:xx'")
+        self.assertEqual(qs['size'][0], "1")
+        self.assertEqual(qs['embed'][0], "true")
+        self.assertEqual(qs['start'][0], "0")
+
     def test_refresh_from_cache(self):
         get_devices_update = copy.deepcopy(EXAMPLE_GET_DEVICES)
         get_devices_update["items"][0]["dpDeviceType"] = "Turboencabulator"
         del get_devices_update["items"][1]  # remove the other item... close enough
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
-        device = self._get_device("00:40:9D:58:17:5B")
+        devices = self.dc.devicecore.get_devices()
+        device = six.next(devices)
         self.prepare_json_response("GET", "/ws/DeviceCore/702077", get_devices_update)
         self.assertEqual(device.get_device_type(), "ConnectPort X5 R")
         self.assertEqual(device.get_device_type(False), "Turboencabulator")
