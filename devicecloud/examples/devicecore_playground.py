@@ -29,4 +29,4 @@ if __name__ == '__main__':
         (dev_mac == '00:40:9D:50:B0:EA')
     )
     for dev in devices:
-        print dev
+        print(dev)

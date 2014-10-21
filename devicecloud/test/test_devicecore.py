@@ -9,7 +9,9 @@ import datetime
 import unittest
 
 from dateutil.tz import tzutc
+from devicecloud.devicecore import dev_mac
 from devicecloud.test.test_utilities import HttpTestBase
+import httpretty
 import six
 
 
@@ -158,6 +160,16 @@ class TestDeviceCore(HttpTestBase):
         self.assertRaises(StopIteration, six.next, gen)
         self.assertEqual(dev1.get_device_id(), '702077')
         self.assertEqual(dev2.get_device_id(), '702078')
+
+    def test_dc_get_devices_with_condition(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        gen = self.dc.devicecore.get_devices(dev_mac == 'xx:xx:xx:xx:xx', page_size=1)
+        six.next(gen)
+        qs = httpretty.last_request().querystring
+        self.assertEqual(qs['condition'][0], "devMac='xx:xx:xx:xx:xx'")
+        self.assertEqual(qs['size'][0], "1")
+        self.assertEqual(qs['embed'][0], "true")
+        self.assertEqual(qs['start'][0], "0")
 
     def test_refresh_from_cache(self):
         get_devices_update = copy.deepcopy(EXAMPLE_GET_DEVICES)
