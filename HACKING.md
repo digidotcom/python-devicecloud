@@ -44,7 +44,10 @@ against all supported versions of python, just do the following:
     $ ./toxtest.sh
 
 This might take awhile the first time as it will build from source a
-version of the interpreter for each version supported.
+version of the interpreter for each version supported.  If you recieve
+errors from pyenv, there may be addition dependencies required.
+Please visit https://github.com/yyuu/pyenv/wiki/Common-build-problems
+for additional pointers.
 
 
 Build the Documentation
