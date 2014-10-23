@@ -189,9 +189,10 @@ class TestDeviceCore(HttpTestBase):
         self.prepare_response("PUT", "/ws/DeviceCore", '')
         gen = self.dc.devicecore.get_devices(page_size=1)
         dev = six.next(gen)
-        dev.add_to_group('testgrp')
         expected = ADD_GROUP_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
                                              group_path='testgrp')
+        dev.add_to_group('testgrp')
+        self.assertIsNone(dev._device_json)
         self.assertEqual(six.b(expected), httpretty.last_request().body)
 
     def test_remove_device_from_group(self):
@@ -200,9 +201,10 @@ class TestDeviceCore(HttpTestBase):
         gen = self.dc.devicecore.get_devices(page_size=1)
         dev = six.next(gen)
         dev.get_group_path = lambda: 'something other than empty string'
-        dev.remove_from_group()
         expected = ADD_GROUP_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
                                              group_path='')
+        dev.remove_from_group()
+        self.assertIsNone(dev._device_json)
         self.assertEqual(six.b(expected), httpretty.last_request().body)
 
 if __name__ == '__main__':

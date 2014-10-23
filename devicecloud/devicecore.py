@@ -267,6 +267,9 @@ class Device(object):
                                                   group_path=group_path)
             self._conn.put('/ws/DeviceCore', post_data)
 
+            # Invalidate cache
+            self._device_json = None
+
     def remove_from_group(self):
         """Place a device back into the root group"""
 
@@ -274,3 +277,6 @@ class Device(object):
             post_data = ADD_GROUP_TEMPLATE.format(connectware_id=self.get_connectware_id(),
                                                   group_path='')
             self._conn.put('/ws/DeviceCore', post_data)
+
+            # Invalidate cache
+            self._device_json = None
