@@ -6,8 +6,8 @@ For more granular or specific examples of API usage check out the individual API
 
 .. note::
 
-    There are also examples checked into source control under /devicecloud/examples/*_playground.py
-    which will provide additional example uses of the library.
+   There are also examples checked into source control under /devicecloud/examples/\*_playground.py
+   which will provide additional example uses of the library.
 
 Each example will assume an instance of :class:`devicecloud.DeviceCloud` has been
 created with something like so::
