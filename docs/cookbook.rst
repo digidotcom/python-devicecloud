@@ -14,8 +14,8 @@ created with something like so::
 
     dc = DeviceCloud(<username>, <password>)
 
-Creating Streams and Data Points
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Streams - Creating Streams and Data Points
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For this example, let's create a DataStream that represents a class room.  As students
 enter the classroom there is a DataPoint representing them written to the stream.
@@ -65,16 +65,16 @@ Finally, let's print the name of the student who most recently entered the class
     print json.loads(most_recent_student.get_data())['name']  # Prints 'Henry'
 
 
-Delete a Stream
-^^^^^^^^^^^^^^^^
+Streams - Deleting
+^^^^^^^^^^^^^^^^^^^^
 
 Let's delete the classroom stream from the above example so we can start fresh in the
 next example::
 
     classroom.delete()
 
-Roll-up Data
-^^^^^^^^^^^^^^
+Streams - Roll-up Data
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Roll-up data is a way to group data points based on time intervals in which they
 were written to the cloud.  From our previous example lets figure out which students
@@ -143,3 +143,23 @@ number of students who entered the classroom that hour::
      22: 6,
      23: 11}
 
+
+Device Core - Groups
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+    This assumes your device is provisioned.
+
+First, get a reference to the device which you would like to add a specific group::
+
+    device = devicecore.get_device('00:40:9D:50:B0:EA')
+
+Then you can add it to a group and fetch it to make sure it works::
+
+    device.add_to_group('mygroup')
+    device.get_group_path()  # prints 'mygroup' (the DC sometimes needs a second to catch up)
+
+Or remove it::
+
+    device.remove_from_group()

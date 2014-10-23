@@ -12,6 +12,7 @@ from dateutil.tz import tzutc
 from devicecloud.devicecore import dev_mac
 from devicecloud.test.test_utilities import HttpTestBase
 import httpretty
+from devicecloud.devicecore import ADD_GROUP_TEMPLATE
 import six
 
 
@@ -183,6 +184,28 @@ class TestDeviceCore(HttpTestBase):
         self.assertEqual(device.get_device_type(False), "Turboencabulator")
         self.assertEqual(device.get_device_type(), "Turboencabulator")  # make sure cache updated
 
+    def test_add_device_to_group(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        expected = ADD_GROUP_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                             group_path='testgrp')
+        dev.add_to_group('testgrp')
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_remove_device_from_group(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        dev.get_group_path = lambda: 'something other than empty string'
+        expected = ADD_GROUP_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                             group_path='')
+        dev.remove_from_group()
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
 
 if __name__ == '__main__':
     unittest.main()
