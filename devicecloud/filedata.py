@@ -47,26 +47,12 @@ class FileDataAPI(APIBase):
 
         condition = validate_type(condition, type(None), Expression, *six.string_types)
         page_size = validate_type(page_size, *six.integer_types)
-        offset = 0
-        remaining_size = 1  # just needs to be non-zero
-
         if condition is None:
             condition = (fd_path == "~/")  # home directory
 
-        while remaining_size > 0:
-            response = self._conn.get_json(
-                "/ws/FileData?embed=true"
-                "&start={offset}"
-                "&size={page_size}"
-                "&condition={condition}".format(
-                    condition=condition.compile(),
-                    page_size=page_size,
-                    offset=offset))
-
-            offset += page_size
-            remaining_size = int(response.get("remainingSize", "0"))
-            for fd_json in response.get("items", []):
-                yield FileDataObject.from_json(self, fd_json)
+        params = {"embed": "true", "condition": condition.compile()}
+        for fd_json in self._conn.iter_json_pages("/ws/FileData", page_size=page_size, **params):
+            yield FileDataObject.from_json(self, fd_json)
 
     def write_file(self, path, name, data, content_type=None, archive=False):
         """Write a file to the file data store at the given path

@@ -63,24 +63,13 @@ class DeviceCoreAPI(APIBase):
 
         condition = validate_type(condition, type(None), Expression, *six.string_types)
         page_size = validate_type(page_size, *six.integer_types)
-        offset = 0
-        remaining_size = 1  # just needs to be non-zero
 
-        while remaining_size > 0:
-            req = (
-                "/ws/DeviceCore?embed=true"
-                "&start={offset}"
-                "&size={page_size}".format(
-                    page_size=page_size,
-                    offset=offset)
-            )
-            if condition is not None:
-                req = "".join([req, "&condition={0}".format(condition.compile())])
-            response = self._conn.get_json(req)
-            offset += page_size
-            remaining_size = int(response.get("remainingSize", "0"))
-            for device_json in response.get("items", []):
-                yield Device(self._conn, self._sci, device_json)
+        params = {"embed": "true"}
+        if condition is not None:
+            params["condition"] = condition.compile()
+
+        for device_json in self._conn.iter_json_pages("/ws/DeviceCore", page_size=page_size, **params):
+            yield Device(self._conn, self._sci, device_json)
 
 
 class Device(object):
