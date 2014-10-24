@@ -4,9 +4,10 @@
 #
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
-import json
 import unittest
+
 from devicecloud.test.test_utilities import HttpTestBase
+import six
 
 
 TEST_BASIC_RESPONSE = """\
@@ -50,11 +51,10 @@ TEST_PAGED_RESPONSE_PAGE2 = """\
 """
 
 
-
 class TestDeviceCloudConnection(HttpTestBase):
 
     def test_iter_json_with_params(self):
-        it = self.dc._conn.iter_json_pages("/test/path", foo="bar", key="value")
+        it = self.dc.get_connection().iter_json_pages("/test/path", foo="bar", key="value")
         self.prepare_response("GET", "/test/path", TEST_BASIC_RESPONSE)
         self.assertEqual(len(list(it)), 2)
         self.assertDictEqual(self._get_last_request_params(), {
@@ -65,11 +65,11 @@ class TestDeviceCloudConnection(HttpTestBase):
         })
 
     def test_iter_json_pages_paged_noparams(self):
-        it = self.dc._conn.iter_json_pages("/test/path", page_size=1)
+        it = self.dc.get_connection().iter_json_pages("/test/path", page_size=1)
         self.prepare_response("GET", "/test/path", TEST_PAGED_RESPONSE_PAGE1)
-        self.assertEqual(it.next()["id"], 1)
+        self.assertEqual(six.next(it)["id"], 1)
         self.prepare_response("GET", "/test/path", TEST_PAGED_RESPONSE_PAGE2)
-        self.assertEqual(it.next()["id"], 2)
+        self.assertEqual(six.next(it)["id"], 2)
         self.assertDictEqual(self._get_last_request_params(), {
             "size": "1",
             "start": "1"
