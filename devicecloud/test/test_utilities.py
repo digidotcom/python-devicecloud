@@ -10,6 +10,7 @@ import json
 
 from devicecloud import DeviceCloud
 import httpretty
+import six.moves.urllib.parse as urllib_parse
 
 
 class HttpTestBase(unittest.TestCase):
@@ -25,6 +26,11 @@ class HttpTestBase(unittest.TestCase):
 
     def _get_last_request(self):
         return httpretty.last_request()
+
+    def _get_last_request_params(self):
+        # Get the query params from the last request as a dictionary
+        params = urllib_parse.parse_qs(urllib_parse.urlparse(self._get_last_request().path).query)
+        return {k: v[0] for k, v in params.items()}  # convert from list values to single-value
 
     def prepare_response(self, method, path, data, status=200, match_querystring=False):
         # TODO:
