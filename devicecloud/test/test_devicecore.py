@@ -9,7 +9,7 @@ import datetime
 import unittest
 
 from dateutil.tz import tzutc
-from devicecloud.devicecore import dev_mac
+from devicecloud.devicecore import dev_mac, group_id
 from devicecloud.test.test_utilities import HttpTestBase
 import httpretty
 from devicecloud.devicecore import ADD_GROUP_TEMPLATE
@@ -111,8 +111,78 @@ GET_DEVICES_PAGE2 = """\
  }
 """
 
+EXAMPLE_GET_GROUPS = """\
+{
+  "resultTotalRows": "2",
+  "requestedStartRow": "0",
+  "resultSize": "2",
+  "requestedSize": "1000",
+  "remainingSize": "0",
+  "items": [
+    { "grpId": "11817", "grpName": "7603_Etherios", "grpDescription": "7603_Etherios root group", "grpPath": "\/7603_Etherios\/", "grpParentId": "1"},
+    { "grpId": "13542", "grpName": "Demo", "grpPath": "\/7603_Etherios\/Demo\/", "grpParentId": "11817"}
+  ]
+}
+"""
 
-class TestDeviceCore(HttpTestBase):
+EXAMPLE_GET_GROUPS_EXTENDED = """\
+{
+  "resultTotalRows": "4",
+  "requestedStartRow": "0",
+  "resultSize": "4",
+  "requestedSize": "1000",
+  "remainingSize": "0",
+  "items": [
+    { "grpId": "11817", "grpName": "7603_Etherios", "grpDescription": "7603_Etherios root group", "grpPath": "\/7603_Etherios\/", "grpParentId": "1"},
+    { "grpId": "13542", "grpName": "Demo", "grpPath": "\/7603_Etherios\/Demo\/", "grpParentId": "11817"},
+    { "grpId": "13544", "grpName": "SubDir2", "grpPath": "\/7603_Etherios\/Demo\/SubDir2\/", "grpParentId": "13542"},
+    { "grpId": "13545", "grpName": "Another Second Level", "grpDescription": "Another Second Level", "grpPath": "\/7603_Etherios\/Another Second Level\/", "grpParentId": "11817"}
+  ]
+}
+"""
+
+
+class TestDeviceCoreGroups(HttpTestBase):
+
+    def test_get_groups(self):
+        self.prepare_response("GET", "/ws/Group", EXAMPLE_GET_GROUPS)
+        it = self.dc.devicecore.get_groups()
+
+        grp = six.next(it)
+        self.assertEqual(grp.is_root(), True)
+        self.assertEqual(grp.get_id(), "11817")
+        self.assertEqual(grp.get_name(), "7603_Etherios")
+        self.assertEqual(grp.get_description(), "7603_Etherios root group")
+        self.assertEqual(grp.get_path(), "/7603_Etherios/")
+        self.assertEqual(grp.get_parent_id(), "1")
+
+        grp = six.next(it)
+        self.assertEqual(grp.is_root(), False)
+        self.assertEqual(grp.get_id(), "13542")
+        self.assertEqual(grp.get_name(), "Demo")
+        self.assertEqual(grp.get_description(), "")
+        self.assertEqual(grp.get_path(), "/7603_Etherios/Demo/")
+        self.assertEqual(grp.get_parent_id(), "11817")
+
+    def test_repr_and_tree_print(self):
+        self.prepare_response("GET", "/ws/Group", EXAMPLE_GET_GROUPS_EXTENDED)
+        fobj = six.StringIO()
+        root = self.dc.devicecore.get_group_tree_root()
+        root.print_subtree(fobj)  # the order of the traversal can vary, so just assert on the length
+        if six.PY2:
+            self.assertEqual(len(fobj.getvalue()), 513)
+        elif six.PY3:
+            self.assertEqual(len(fobj.getvalue()), 495)  # no u'' on repr for strings
+
+    def test_get_groups_condition(self):
+        self.prepare_response("GET",  "/ws/Group", EXAMPLE_GET_GROUPS)
+        list(self.dc.devicecore.get_groups(group_id == "123"))
+        params = self._get_last_request_params()
+        self.assertEqual(params["condition"], "grpId='123'")
+
+
+class TestDeviceCoreDevices(HttpTestBase):
+
     def test_dc_get_devices(self):
         self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
         devices = self.dc.devicecore.get_devices()
