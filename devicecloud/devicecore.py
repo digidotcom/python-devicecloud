@@ -4,6 +4,7 @@
 #
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
+import sys
 
 from devicecloud.apibase import APIBase
 from devicecloud.conditions import Attribute, Expression
@@ -63,24 +64,174 @@ class DeviceCoreAPI(APIBase):
 
         condition = validate_type(condition, type(None), Expression, *six.string_types)
         page_size = validate_type(page_size, *six.integer_types)
-        offset = 0
-        remaining_size = 1  # just needs to be non-zero
 
-        while remaining_size > 0:
-            req = (
-                "/ws/DeviceCore?embed=true"
-                "&start={offset}"
-                "&size={page_size}".format(
-                    page_size=page_size,
-                    offset=offset)
-            )
-            if condition is not None:
-                req = "".join([req, "&condition={0}".format(condition.compile())])
-            response = self._conn.get_json(req)
-            offset += page_size
-            remaining_size = int(response.get("remainingSize", "0"))
-            for device_json in response.get("items", []):
-                yield Device(self._conn, self._sci, device_json)
+        params = {"embed": "true"}
+        if condition is not None:
+            params["condition"] = condition.compile()
+
+        for device_json in self._conn.iter_json_pages("/ws/DeviceCore", page_size=page_size, **params):
+            yield Device(self._conn, self._sci, device_json)
+
+    def get_group_tree_root(self, page_size=1000):
+        r"""Return the root group for this accounts' group tree
+
+        This will return the root group for this tree but with all links
+        between nodes (i.e. children starting from root) populated.
+
+        Examples::
+
+            # print the group hierarchy to stdout
+            dc.devicecore.get_group_tree_root().print_subtree()
+
+            # gather statistics about devices in each group including
+            # the count from its subgroups (recursively)
+            #
+            # This also shows how you can go from a group reference to devices
+            # for that particular group.
+            stats = {}  # group -> devices count including children
+            def count_nodes(group):
+                count_for_this_node = \
+                    len(list(dc.devicecore.get_devices(group_path == group.get_path())))
+                subnode_count = 0
+                for child in group.get_children():
+                    subnode_count += count_nodes(child)
+                total = count_for_this_node + subnode_count
+                stats[group] = total
+                return total
+            count_nodes(dc.devicecore.get_group_tree_root())
+
+        :param int page_size: The number of results to fetch in a
+            single page.  In general, the default will suffice.
+        :returns: The root group for this device cloud accounts group
+            hierarchy.
+
+        """
+
+        # first pass, build mapping
+        group_map = {}  # map id -> group
+        page_size = validate_type(page_size, *six.integer_types)
+        for group in self.get_groups(page_size=page_size):
+            group_map[group.get_id()] = group
+
+        # second pass, find root and populate list of children for each node
+        root = None
+        for group_id, group in group_map.items():
+            if group.is_root():
+                root = group
+            else:
+                parent = group_map[group.get_parent_id()]
+                parent.add_child(group)
+        return root
+
+    def get_groups(self, condition=None, page_size=1000):
+        """Return an iterator over all groups in this device cloud account
+
+        Optionally, a condition can be specified to limit the number of
+        groups returned.
+
+        Examples::
+
+            # Get all groups and print information about them
+            for group in dc.devicecore.get_groups():
+                print group
+
+            # Iterate over all devices which are in a group with a specific
+            # ID.
+            group = dc.devicore.get_groups(group_id == 123)[0]
+            for device in dc.devicecore.get_devices(group_path == group.get_path()):
+                print device.get_mac()
+
+        :param condition: A condition to use when filtering the results set.  If
+            unspecified, all groups will be returned.
+        :param int page_size: The number of results to fetch in a
+            single page.  In general, the default will suffice.
+        :returns: Generator over the groups in this device cloud account.  No
+            guarantees about the order of results is provided and child links
+            between nodes will not be populated.
+
+        """
+        query_kwargs = {}
+        if condition is not None:
+            query_kwargs["condition"] = condition.compile()
+        for group_data in self._conn.iter_json_pages("/ws/Group", page_size=page_size, **query_kwargs):
+            yield Group.from_json(group_data)
+
+
+class Group(object):
+    """Provides access to information about a group in the device cloud
+
+    .. note::
+
+       This is primarily a container object and does not provide any functions itself at
+       this time.  Information from here can be used along with other APIs to, for example,
+       get all devices with a given group path.  This may change in the future.
+
+    """
+
+    def __init__(self, group_id, name, description, path, parent_id):
+        self._id = group_id
+        self._name = name
+        self._description = description
+        self._path = path
+        self._parent_id = parent_id
+        self._children = []
+
+    @classmethod
+    def from_json(cls, json_data):
+        """Build and return a new Group object from json data (used internally)"""
+        # Example Data:
+        # { "grpId": "11817", "grpName": "7603_Etherios", "grpDescription": "7603_Etherios root group",
+        #   "grpPath": "\/7603_Etherios\/", "grpParentId": "1"}
+        return cls(
+            group_id=json_data["grpId"],
+            name=json_data["grpName"],
+            description=json_data.get("grpDescription", ""),
+            path=json_data["grpPath"],
+            parent_id=json_data["grpParentId"],
+        )
+
+    def __repr__(self):
+        return "Group(group_id={!r}, name={!r}, description{!r}, path={!r}, parent_id={!r})".format(
+            self._id, self._name, self._description, self._path, self._parent_id
+        )
+
+    def print_subtree(self, fobj=sys.stdout, level=0):
+        """Print this group node and the subtree rooted at it"""
+        fobj.write("{}{!r}\n".format(" " * (level * 2), self))
+        for child in self.get_children():
+            child.print_subtree(fobj, level + 1)
+
+    def is_root(self):
+        """Return True if the group is the root for this account"""
+        return self.get_parent_id() == "1"
+
+    def add_child(self, group):
+        """Add a child group reference to this one"""
+        self._children.append(group)
+
+    def get_children(self):
+        """Return each child :class:`Group` of this one in a list"""
+        return self._children[:]
+
+    def get_id(self):
+        """Get the ID of this group as as string"""
+        return self._id
+
+    def get_name(self):
+        """Get the name of this group as a string"""
+        return self._name
+
+    def get_description(self):
+        """Get the description of this group as a string"""
+        return self._description
+
+    def get_path(self):
+        """Get the full path of this group as a string"""
+        return self._path
+
+    def get_parent_id(self):
+        """Get the ID of this groups parent as a string"""
+        return self._parent_id
 
 
 class Device(object):
