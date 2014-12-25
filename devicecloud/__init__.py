@@ -36,11 +36,45 @@ class DeviceCloudException(Exception):
 
 
 class DeviceCloudHttpException(DeviceCloudException):
-    """Exception raised when we failed a request to the DC over HTTP"""
+    """Exception raised when we failed a request to the DC over HTTP
+
+    This exception will be raised whenever a non-success HTTP status
+    code is received from the device cloud and there is no other logic
+    in place for gracefully handling the error case.
+
+    Often, if there is an error with a request to the device cloud, the device
+    cloud will respond with an error status and include additional information
+    about the nature of the error in the response body.  This information
+    can be accessed via the :attr:`~response` property.
+
+    """
 
     def __init__(self, response, *args, **kwargs):
         DeviceCloudException.__init__(self, *args, **kwargs)
-        self.response = response
+        self._response = response
+
+    def __str__(self):
+        return "HTTP Status {code}: {content}".format(
+            code=self.response.status_code,
+            content=self.response.content
+        )
+
+    @property
+    def response(self):
+        """Get the requests response object for the failing HTTP request
+
+        This object will be an instance of :class:`requests.Response` which
+        in turn provides information including the content (body) of the response
+        and the HTTP status code::
+
+            try:
+                dc.sci.send_request(...)
+            except DeviceCloudHttpException as e:
+                print "HTTP Error: %s" % e.response.status_code
+                print e.response.content
+
+        """
+        return self._response
 
 
 class DeviceCloudConnection(object):
