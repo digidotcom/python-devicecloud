@@ -5,6 +5,7 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 import unittest
+from devicecloud import DeviceCloudHttpException
 
 from devicecloud.test.test_utilities import HttpTestBase
 import six
@@ -50,6 +51,12 @@ TEST_PAGED_RESPONSE_PAGE2 = """\
 }
 """
 
+TEST_ERROR_RESPONSE = six.b("""\
+<sci_reply version="1.0"><send_message><device id="00000000-00000000-00409DFF-FF736460"><error id="303">\
+<desc>Invalid target. Device not found.</desc></error></device>\
+<error>Invalid SCI request. No valid targets found.</error></send_message></sci_reply>\
+""")
+
 
 class TestDeviceCloudConnection(HttpTestBase):
 
@@ -74,6 +81,17 @@ class TestDeviceCloudConnection(HttpTestBase):
             "size": "1",
             "start": "1"
         })
+
+    def test_http_exception(self):
+        self.prepare_response("POST", "/test/path", TEST_ERROR_RESPONSE, status=400)
+        try:
+            self.dc.get_connection().post("/test/path", "bad data")
+        except DeviceCloudHttpException as e:
+            str(e)  # ensure this does not stack trace at least
+            self.assertEqual(e.response.status_code, 400)
+            self.assertEqual(e.response.content, TEST_ERROR_RESPONSE)
+        else:
+            self.fail("DeviceCloudHttpException not raised")
 
 if __name__ == "__main__":
     unittest.main()
