@@ -121,6 +121,13 @@ class TestFileData(HttpTestBase):
         self.assertEqual(base64.decodestring(six.b(fd_data)), data)
         self.assertEqual(root.find("fdArchive").text, "true")
 
+    def test_delete_path(self):
+        self.prepare_response("DELETE", "/ws/FileData/test", "")
+        self.dc.filedata.delete_file("/test")
+        req = self._get_last_request()
+        self.assertEqual(req.method, "DELETE")
+        self.assertEqual(req.path, "/ws/FileData/test")
+
     def test_walk(self):
         self.prepare_response("GET", "/ws/FileData", GET_HOME_RESULT)
         gen = self.dc.filedata.walk()
@@ -161,6 +168,20 @@ class TestFileData(HttpTestBase):
 
 
 class TestFileDataObject(HttpTestBase):
+
+    def test_file_delete(self):
+        self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
+        objects = list(self.dc.filedata.get_filedata())
+        self.assertEqual(len(objects), 2)
+        obj = objects[0]
+        self.assertEqual(obj.get_full_path(), "/db/blah/test.txt")
+
+        self.prepare_response("DELETE", "/ws/FileData/db/blah/test.txt", "")
+        obj.delete()
+        req = self._get_last_request()
+        self.assertEqual(req.method, "DELETE")
+        self.assertEqual(req.path, "/ws/FileData/db/blah/test.txt")
+
     def test_file_metadata_access(self):
         self.prepare_response("GET", "/ws/FileData", GET_FILEDATA_SIMPLE)
         objects = list(self.dc.filedata.get_filedata())
