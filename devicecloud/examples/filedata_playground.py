@@ -7,20 +7,20 @@
 from getpass import getpass
 
 from devicecloud import DeviceCloud
-from devicecloud.filedata import fd_name, fd_size, fd_type
+from devicecloud.filedata import fd_name, fd_size, fd_type, fd_path
 import six
-
+from six.moves import input
 
 def get_authenticated_dc():
     while True:
-        user = raw_input("username: ")
+        user = input("username: ")
         password = getpass("password: ")
-        dc = DeviceCloud(user, password, base_url="https://test-idigi-com-2v5p9uat81qu.runscope.net")
+        dc = DeviceCloud(user, password, base_url="https://login-etherios-com-2v5p9uat81qu.runscope.net")
         if dc.has_valid_credentials():
-            print ("Credentials accepted!")
+            print("Credentials accepted!")
             return dc
         else:
-            print ("Invalid username or password provided, try again")
+            print("Invalid username or password provided, try again")
 
 
 if __name__ == '__main__':
@@ -29,13 +29,10 @@ if __name__ == '__main__':
     dc.filedata.write_file("/~/test_dir/", "test_file.txt", six.b("Helllo, world!"), "text/plain")
     dc.filedata.write_file("/~/test_dir/", "test_file2.txt", six.b("Hello, again!"))
 
-    query = None  # (fd_path == '/db/public/')
-    for dirpath, directories, files in dc.filedata.walk():
+    for dirpath, directories, files in dc.filedata.walk("/"):
         for fd_file in files:
-            print fd_file
+            print(fd_file)
 
-    for fd in dc.filedata.get_filedata(
-            (fd_type == "file") &
-            (fd_size < 250) &
-            (fd_name.like('%.txt')), page_size=1):
+
+    for fd in dc.filedata.get_filedata(fd_path=="~/"):
         print (fd)

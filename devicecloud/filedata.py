@@ -103,6 +103,23 @@ class FileDataAPI(APIBase):
             sio.getvalue(),
             params=params)
 
+    def delete_file(self, path):
+        """Delete a file or directory from the filedata store
+
+        This method removes a file or directory (recursively) from
+        the filedata store.
+
+        :param path: The path of the file or directory to remove
+            from the file data store.
+
+        """
+        path = validate_type(path, *six.string_types)
+        if not path.startswith("/"):
+            path = "/" + path
+
+        self._conn.delete("/ws/FileData{path}".format(path=path))
+
+
     def walk(self, root="~/"):
         """Emulation of os.walk behavior against the device cloud filedata store
 
@@ -154,6 +171,10 @@ class FileDataObject(object):
     def __init__(self, fdapi, json_data):
         self._fdapi = fdapi
         self._json_data = json_data
+
+    def delete(self):
+        """Delete this file or directory"""
+        return self._fdapi.delete_file(self.get_full_path())
 
     def get_data(self):
         """Get the data associated with this filedata object
