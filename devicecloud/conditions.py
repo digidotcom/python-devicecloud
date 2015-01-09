@@ -16,8 +16,6 @@ import datetime
 
 from devicecloud.util import isoformat, to_none_or_dt
 
-import six
-
 
 def _quoted(value):
     """Return a single-quoted and escaped (percent-encoded) version of value
@@ -32,7 +30,8 @@ def _quoted(value):
     else:
         value = str(value)
 
-    return "'{}'".format(six.moves.urllib.parse.quote(value))
+    return "'{}'".format(value)
+
 
 
 class Expression(object):

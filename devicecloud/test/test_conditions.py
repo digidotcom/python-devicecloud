@@ -16,11 +16,11 @@ class TestConditions(unittest.TestCase):
 
     def test_eq(self):
         a = Attribute("a")
-        self.assertEqual((a == "a string").compile(), "a='a%20string'")
+        self.assertEqual((a == "a string").compile(), "a='a string'")
 
     def test_like(self):
         a = Attribute("a")
-        self.assertEqual(a.like(r"%.txt").compile(), "a like '%25.txt'")
+        self.assertEqual(a.like(r"%.txt").compile(), "a like '%.txt'")
 
     def test_and(self):
         a = Attribute("a")
@@ -32,12 +32,12 @@ class TestConditions(unittest.TestCase):
         a = Attribute("a")
         b = Attribute("b")
         expr = (a.like("%.csv")) | (b < 1024)
-        self.assertEqual(expr.compile(), "a like '%25.csv' or b<'1024'")
+        self.assertEqual(expr.compile(), "a like '%.csv' or b<'1024'")
 
     def test_datacmp(self):
         a = Attribute("a")
         self.assertEqual((a < datetime.datetime(2014, 7, 7)).compile(),
-                         "a<'2014-07-07T00%3A00%3A00Z'")
+                         "a<'2014-07-07T00:00:00Z'")
 
     def test_multi_combination(self):
         a = Attribute("a")
