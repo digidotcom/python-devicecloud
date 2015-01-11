@@ -61,11 +61,13 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
         #
         SID_FMT="pythondc-inttest/test_bulk_write_datapoints_multiple_streams-{}"
         datapoints = []
+        dt = datetime.datetime.now()
         for i in range(300):
             datapoints.append(DataPoint(
                 stream_id=SID_FMT.format(i % 3),
                 data_type=STREAM_TYPE_INTEGER,
                 units="meters",
+                timestamp=dt - datetime.timedelta(seconds=300 - i),
                 data=i,
             ))
         self._dc.streams.bulk_write_datapoints(datapoints)
@@ -82,10 +84,12 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
         # stream and read them back.
         #
         datapoints = []
+        dt = datetime.datetime.now()
         for i in range(300):
             datapoints.append(DataPoint(
                 data_type=STREAM_TYPE_INTEGER,
                 units="meters",
+                timestamp=dt - datetime.timedelta(seconds=300 - i),
                 data=i,
             ))
 
