@@ -4,14 +4,13 @@
 #
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
-from devicecloud.util import validate_type
-
-from requests.auth import HTTPBasicAuth
 import logging
-import requests
 import time
 import json
 
+from devicecloud.util import validate_type
+from requests.auth import HTTPBasicAuth
+import requests
 from devicecloud.version import __version__
 import six
 
@@ -27,6 +26,28 @@ SUCCESSFUL_STATUS_CODES = [
     202,  # Accepted
     204,  # No Content (success for DELETE operation)
 ]
+
+HTTP_THROTTLED_CODES = [
+    429
+]
+
+# How long in seconds should we delay if a request is throttled?
+#
+# With a start of 1 second delay and a max of 10 and a default of 5 retries with a backoff coefficient
+# of 1.5, then the backoff sequence will be the following:
+#
+#     1, 1.5, 2.25, 3.375, ~5
+#
+# With total delays of the following adding up at each period:
+#
+#     1, 2.5, 4.75, 8.125, 13.1875
+#
+# Assuming a 10s window, this will ensure that we hit a new window before the 5 retries
+# are exhausted
+DEFAULT_THROTTLE_RETRIES = 5
+DEFAULT_THROTTLE_DELAY_INIT = 1.0
+DEFAULT_THROTTLE_DELAY_MAX = 10.0
+DEFAULT_THROTTLE_DELAY_BACKOFF_COEFFICIENT = 1.5
 
 logger = logging.getLogger("devicecloud")
 
@@ -89,23 +110,51 @@ class DeviceCloudConnection(object):
 
     """
 
-    def __init__(self, auth, base_url):
+    def __init__(self, auth, base_url,
+                 throttle_retries=DEFAULT_THROTTLE_RETRIES,
+                 throttle_delay_init=DEFAULT_THROTTLE_DELAY_INIT,
+                 throttle_delay_max=DEFAULT_THROTTLE_DELAY_MAX,
+                 throttle_delay_backoff_coefficient=DEFAULT_THROTTLE_DELAY_BACKOFF_COEFFICIENT):
         self._auth = auth
         self._base_url = base_url
+        self._throttle_retries = throttle_retries
+        self._throttle_delay_init = throttle_delay_init
+        self._throttle_delay_max = throttle_delay_max
+        self._throttle_delay_backoff_coefficient = throttle_delay_backoff_coefficient
 
     def _make_url(self, path):
         if not path.startswith("/"):
             path = "/" + path
         return "%s%s" % (self._base_url, path)
 
-    def _make_request(self, retries, method, url, **kwargs):
-        remaining_attempts = retries + 1
+    def _make_request(self, method, url, **kwargs):
+        #
+        # Make a request, retrying up to 'retries' times backing off according to defined constants
+        #
+        throttle_retries = kwargs.pop('throttle_retries', kwargs.pop('retries', self._throttle_retries))
+        throttle_delay_init = kwargs.pop('throttle_delay_init', self._throttle_delay_init)
+        throttle_delay_max = kwargs.pop('throttle_delay_max', self._throttle_delay_max)
+        throttle_delay_backoff_coefficient = \
+            kwargs.pop('throttle_delay_backoff_coefficient', self._throttle_delay_backoff_coefficient)
+
+        remaining_attempts = throttle_retries + 1
+        retry_delay = throttle_delay_init
         while remaining_attempts > 0:
             response = requests.request(method, url, auth=self._auth, **kwargs)
             if response.status_code in SUCCESSFUL_STATUS_CODES:
                 return response
-            remaining_attempts -= 1
-            time.sleep(1)
+            elif response.status_code in HTTP_THROTTLED_CODES:
+                remaining_attempts -= 1
+                if remaining_attempts > 0:
+                    logger.info("Request throttled on attempt {attempt}/{max_attempts}, retrying in {delay} seconds".format(
+                        attempt=(throttle_retries + 1 - remaining_attempts),
+                        max_attempts=throttle_retries,
+                        delay=retry_delay
+                    ))
+                    time.sleep(retry_delay)
+                    retry_delay = min(retry_delay * throttle_delay_backoff_coefficient, throttle_delay_max)
+            else:
+                break
 
         err = "DC %s to %s failed - HTTP(%s)" % (method, url, response.status_code)
         raise DeviceCloudHttpException(response, err)
@@ -149,7 +198,7 @@ class DeviceCloudConnection(object):
         """
         return self.get("/ws/DeviceCore?size=1")
 
-    def get(self, path, retries=0, **kwargs):
+    def get(self, path, **kwargs):
         """Perform an HTTP GET request of the specified path in the device cloud
 
         Make an HTTP GET request against the device cloud with this accounts
@@ -167,9 +216,9 @@ class DeviceCloudConnection(object):
 
         """
         url = self._make_url(path)
-        return self._make_request(retries, "GET", url, **kwargs)
+        return self._make_request("GET", url, **kwargs)
 
-    def get_json(self, path, retries=0, **kwargs):
+    def get_json(self, path, **kwargs):
         """Perform an HTTP GET request with JSON headers of the specified path against the device cloud
 
         Make an HTTP GET request against the device cloud with this accounts
@@ -194,10 +243,10 @@ class DeviceCloudConnection(object):
         url = self._make_url(path)
         headers = kwargs.setdefault('headers', {})
         headers.update({'Accept': 'application/json'})
-        response = self._make_request(retries, "GET", url, **kwargs)
+        response = self._make_request("GET", url, **kwargs)
         return json.loads(response.text)
 
-    def post(self, path, data, retries=0, **kwargs):
+    def post(self, path, data, **kwargs):
         """Perform an HTTP POST request of the specified path in the device cloud
 
         Make an HTTP POST request against the device cloud with this accounts
@@ -217,9 +266,9 @@ class DeviceCloudConnection(object):
 
         """
         url = self._make_url(path)
-        return self._make_request(retries, "POST", url, data=data, **kwargs)
+        return self._make_request("POST", url, data=data, **kwargs)
 
-    def put(self, path, data, retries=0, **kwargs):
+    def put(self, path, data, **kwargs):
         """Perform an HTTP PUT request of the specified path in the device cloud
 
         Make an HTTP PUT request against the device cloud with this accounts
@@ -240,9 +289,9 @@ class DeviceCloudConnection(object):
         """
 
         url = self._make_url(path)
-        return self._make_request(retries, "PUT", url, data=data, **kwargs)
+        return self._make_request("PUT", url, data=data, **kwargs)
 
-    def delete(self, path, retries=0, **kwargs):
+    def delete(self, path, retries=DEFAULT_THROTTLE_RETRIES, **kwargs):
         """Perform an HTTP DELETE request of the specified path in the device cloud
 
         Make an HTTP DELETE request against the device cloud with this accounts
@@ -260,7 +309,7 @@ class DeviceCloudConnection(object):
 
         """
         url = self._make_url(path)
-        return self._make_request(retries, "DELETE", url)
+        return self._make_request("DELETE", url, **kwargs)
 
 
 class DeviceCloud(object):
@@ -282,10 +331,21 @@ class DeviceCloud(object):
 
     """
 
-    def __init__(self, username, password, base_url=None):
+    def __init__(self, username, password, base_url=None,
+                 throttle_retries=DEFAULT_THROTTLE_RETRIES,
+                 throttle_delay_init=DEFAULT_THROTTLE_DELAY_INIT,
+                 throttle_delay_max=DEFAULT_THROTTLE_DELAY_MAX,
+                 throttle_delay_backoff_coefficient=DEFAULT_THROTTLE_DELAY_BACKOFF_COEFFICIENT):
         if base_url is None:
-            base_url = "https://login.etherios.com"
-        self._conn = DeviceCloudConnection(HTTPBasicAuth(username, password), base_url)
+            base_url = "https://login.etherios.com"        
+        self._conn = DeviceCloudConnection(
+            auth=HTTPBasicAuth(username, password),
+            base_url=base_url,
+            throttle_retries=throttle_retries,
+            throttle_delay_init=throttle_delay_init,
+            throttle_delay_max=throttle_delay_max,
+            throttle_delay_backoff_coefficient=throttle_delay_backoff_coefficient
+        )
         self._streams_api = None  # streams property api ref
         self._filedata_api = None  # filedata property api ref
         self._devicecore_api = None  # devicecore property api ref
