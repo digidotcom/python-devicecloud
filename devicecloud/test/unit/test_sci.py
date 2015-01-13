@@ -8,7 +8,7 @@
 import unittest
 
 from devicecloud.sci import DeviceTarget
-from devicecloud.test.test_utilities import HttpTestBase
+from devicecloud.test.unit.test_utilities import HttpTestBase
 import httpretty
 import six
 

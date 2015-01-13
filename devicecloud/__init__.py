@@ -282,7 +282,9 @@ class DeviceCloud(object):
 
     """
 
-    def __init__(self, username, password, base_url="https://login.etherios.com"):
+    def __init__(self, username, password, base_url=None):
+        if base_url is None:
+            base_url = "https://login.etherios.com"
         self._conn = DeviceCloudConnection(HTTPBasicAuth(username, password), base_url)
         self._streams_api = None  # streams property api ref
         self._filedata_api = None  # filedata property api ref

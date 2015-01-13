@@ -10,7 +10,7 @@ import unittest
 
 from dateutil.tz import tzutc
 from devicecloud.devicecore import dev_mac, group_id
-from devicecloud.test.test_utilities import HttpTestBase
+from devicecloud.test.unit.test_utilities import HttpTestBase
 import httpretty
 from devicecloud.devicecore import ADD_GROUP_TEMPLATE
 import six

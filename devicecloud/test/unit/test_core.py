@@ -5,9 +5,9 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 import unittest
-from devicecloud import DeviceCloudHttpException
 
-from devicecloud.test.test_utilities import HttpTestBase
+from devicecloud import DeviceCloudHttpException
+from devicecloud.test.unit.test_utilities import HttpTestBase
 import six
 
 
