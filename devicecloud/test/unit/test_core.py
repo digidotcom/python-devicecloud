@@ -5,9 +5,10 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 import unittest
-from devicecloud import DeviceCloudHttpException
 
-from devicecloud.test.test_utilities import HttpTestBase
+from devicecloud import DeviceCloudHttpException
+from devicecloud.test.unit.test_utilities import HttpTestBase
+from mock import patch, call
 import six
 
 
@@ -59,6 +60,18 @@ TEST_ERROR_RESPONSE = six.b("""\
 
 
 class TestDeviceCloudConnection(HttpTestBase):
+
+    @patch("time.sleep", return_value=None)
+    def test_throttle_retries(self, patched_time_sleep):
+        self.prepare_response("GET", "/test/path", "", status=429)
+        self.assertRaises(DeviceCloudHttpException, self.dc.get_connection().get, "/test/path", retries=5)
+        patched_time_sleep.assert_has_calls([
+            call(1.5 ** 0),
+            call(1.5 ** 1),
+            call(1.5 ** 2),
+            call(1.5 ** 3),
+            call(1.5 ** 4),
+        ])
 
     def test_iter_json_with_params(self):
         it = self.dc.get_connection().iter_json_pages("/test/path", foo="bar", key="value")

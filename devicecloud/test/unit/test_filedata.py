@@ -4,7 +4,7 @@ from xml.etree import ElementTree
 import datetime
 
 from dateutil.tz import tzutc
-from devicecloud.test.test_utilities import HttpTestBase
+from devicecloud.test.unit.test_utilities import HttpTestBase
 import six
 
 

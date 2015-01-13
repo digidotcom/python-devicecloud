@@ -1,0 +1,6 @@
+-r test-requirements.txt
+coverage
+tox
+pyandoc
+sphinx
+sphinx_rtd_theme

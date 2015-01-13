@@ -12,8 +12,9 @@ import xml.etree.ElementTree as ET
 from dateutil.tz import tzutc
 from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException, ROLLUP_INTERVAL_HALF, \
     ROLLUP_METHOD_COUNT, STREAM_TYPE_INTEGER
-from devicecloud.test.test_utilities import HttpTestBase
+from devicecloud.test.unit.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
+
 
 # Example HTTP Responses
 import httpretty
