@@ -11,6 +11,8 @@ from devicecloud.conditions import Attribute, Expression
 from devicecloud.util import iso8601_to_dt, validate_type
 import six
 
+import xml.etree.ElementTree as ET
+
 
 dev_mac = Attribute('devMac')
 group_id = Attribute('grpId')
@@ -155,6 +157,56 @@ class DeviceCoreAPI(APIBase):
             query_kwargs["condition"] = condition.compile()
         for group_data in self._conn.iter_json_pages("/ws/Group", page_size=page_size, **query_kwargs):
             yield Group.from_json(group_data)
+
+    def provision_by_mac(self, mac_list):
+        """
+        Provision a series of devices.
+
+        The device IDs will be generated from the supplied iterable of MAC
+        address (usually the device's primary network interface).
+
+        Returns a list (or single item, if supplied) of response dictionaries
+        corresponding to each item for which provisioning was requested.
+        """
+        nonlist = isinstance(mac_list, *six.string_types)
+        if nonlist:
+            mac_list = [mac_list]
+        messages = ["<DeviceCore><devMac>" +
+                    mac + "</devMac></DeviceCore>" for mac in mac_list]
+        r = self._provision(messages)
+        if nonlist:
+            r = r[0]
+        return r
+
+    def provision_by_id(self, device_id_list):
+        """
+        Provisions a series of devices.
+
+        The iterable passed must iterate over a series of device IDs.
+
+        Returns a list (or single item, if supplied) of response dictionaries
+        corresponding to each item for which provisioning was requested.
+        """
+        nonlist = isinstance(device_id_list, *six.string_types)
+        if nonlist:
+            device_id_list = [device_id_list]
+        messages = ["<DeviceCore><devConnectwareId>" +
+                    did + "</devConnectwareId></DeviceCore>" for did in device_id_list]
+        r = self._provision(messages)
+        if nonlist:
+            r = r[0]
+        return r
+
+    def _provision(self, messages):
+        resp = self._conn.post('/ws/DeviceCore', '<list>' + ''.join(messages) + '</list>')
+        resp_xml = ET.fromstring(resp.content)
+        results = []
+        for child in list(resp_xml):
+            if child.tag == 'location':
+                results.append({'location': child.text, 'error': False})
+            else:
+                results.append({'location': None, 'error': child.text})
+        return results
 
 
 class Group(object):

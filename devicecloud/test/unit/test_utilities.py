@@ -32,16 +32,17 @@ class HttpTestBase(unittest.TestCase):
         params = urllib_parse.parse_qs(urllib_parse.urlparse(self._get_last_request().path).query)
         return {k: v[0] for k, v in params.items()}  # convert from list values to single-value
 
-    def prepare_response(self, method, path, data, status=200, match_querystring=False):
+    def prepare_response(self, method, path, data=None, status=200, match_querystring=False, **kwargs):
         # TODO:
         #   Should probably assert on more request headers and
         #   respond with correct content type, etc.
-
+        if data is not None:
+            kwargs['body'] = data
         httpretty.register_uri(method,
                                "https://login.etherios.com{}".format(path),
-                               data,
                                match_querystring=match_querystring,
-                               status=status)
+                               status=status,
+                               **kwargs)
 
     def prepare_json_response(self, method, path, data, status=200):
         self.prepare_response(method, path, json.dumps(data), status=status)
