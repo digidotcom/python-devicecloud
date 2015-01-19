@@ -14,10 +14,12 @@ import requests
 from devicecloud.version import __version__
 import six
 
+
 __all__ = (
     'DeviceCloud',
     'DeviceCloudException',
     'DeviceCloudHttpException',
+    'DeviceCloudConnection',
 )
 
 SUCCESSFUL_STATUS_CODES = [
@@ -338,7 +340,7 @@ class DeviceCloud(object):
                  throttle_delay_max=DEFAULT_THROTTLE_DELAY_MAX,
                  throttle_delay_backoff_coefficient=DEFAULT_THROTTLE_DELAY_BACKOFF_COEFFICIENT):
         if base_url is None:
-            base_url = "https://login.etherios.com"        
+            base_url = "https://login.etherios.com"
         self._conn = DeviceCloudConnection(
             auth=HTTPBasicAuth(username, password),
             base_url=base_url,
@@ -351,6 +353,7 @@ class DeviceCloud(object):
         self._filedata_api = None  # filedata property api ref
         self._devicecore_api = None  # devicecore property api ref
         self._sci_api = None  # sci property api ref
+        self._legacy_api = None  # legacy property api ref
 
     def has_valid_credentials(self):
         """Verify that the device cloud url, username, and password are valid
@@ -396,6 +399,11 @@ class DeviceCloud(object):
         if self._sci_api is None:
             self._sci_api = self.get_sci_api()
         return self._sci_api
+
+    @property
+    def ws(self):
+        """Property providing access to the :class:`.WebServiceStub` with a base of ``/ws``"""
+        return self.get_web_service_stub()
 
     def get_connection(self):
         """Get the low-level :class:`~DeviceCloudConnection` for this device cloud instance
@@ -461,3 +469,17 @@ class DeviceCloud(object):
         from devicecloud.sci import ServerCommandInterfaceAPI
 
         return ServerCommandInterfaceAPI(self._conn)
+
+    def get_web_service_stub(self):
+        """Returns a :class:`.WebServiceStub` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.legacy` but will create
+        a new object (with a new cache) each time called.
+
+        :return: WebServiceStub object bound to this device cloud account with a base of ``/ws``
+        :rtype: :class:`.WebServiceStub`
+
+        """
+        from devicecloud.ws import WebServiceStub
+
+        return WebServiceStub(self._conn, "/ws")
