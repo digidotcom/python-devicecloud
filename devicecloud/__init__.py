@@ -25,6 +25,7 @@ SUCCESSFUL_STATUS_CODES = [
     201,  # Created
     202,  # Accepted
     204,  # No Content (success for DELETE operation)
+    207,  # Multi-Status (some success for provisioning, parse it before raising exception)
 ]
 
 HTTP_THROTTLED_CODES = [
