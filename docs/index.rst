@@ -12,6 +12,7 @@ Documention Map
    streams
    filedata
    sci
+   ws
    cookbook
 
 Introduction
