@@ -16,6 +16,7 @@ Enhancements:
 * Support for group operations in devicecore is now present
 * Filedata files and directories can now be deleted
 * A new 'ws' API has been added for making direct web service requests
+* DeviceCore now has support for provisioning one or multiple devices
 
 API Changes:
 
