@@ -111,6 +111,7 @@ is not the case.  The current features are supported by the library:
   of results and support for only a subset of available services/commands.
 * APIs to make direct web service calls to the device cloud with some details
   handled by the library (see DeviceCloudConnection and 'ws' documentation)
+* Device Provisioning via Mac Address, IMEI or Device ID
 
 The following features are *not* supported at this time.  Feedback on
 which features should be highest priority is always welcome.
@@ -126,7 +127,6 @@ which features should be highest priority is always welcome.
 * FileDataHistory
 * NetworkInterface support
 * XBee specific support (XBeeCore)
-* Device Provisioning
 * Smart Energy APIs
 * SMS Support
 * Satellite/Iridium Support
