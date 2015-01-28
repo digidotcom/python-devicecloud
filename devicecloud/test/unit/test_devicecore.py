@@ -9,6 +9,7 @@ import datetime
 import unittest
 
 from dateutil.tz import tzutc
+from devicecloud import DeviceCloudHttpException
 from devicecloud.devicecore import dev_mac, group_id
 from devicecloud.test.unit.test_utilities import HttpTestBase
 import httpretty
@@ -141,6 +142,35 @@ EXAMPLE_GET_GROUPS_EXTENDED = """\
 }
 """
 
+PROVISION_SUCCESS_RESPONSE1 = """\
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<result>
+  <location>DeviceCore/946246/0</location>
+</result>
+"""
+
+PROVISION_MULTIPLE_SUCCESS_RESPONSE1 = """\
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<result>
+  <location>DeviceCore/1397876/0</location>
+  <location>DeviceCore/946246/0</location>
+</result>
+"""
+
+PROVISION_ERROR1 = """\
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<result>
+  <error>The device 00000000-00000000-BC5FF4FF-FFF7908A is already provisioned.</error>
+</result>
+"""
+
+PROVISION_MIXED_RESULT_RESPONSE = """\
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<result>
+  <location>DeviceCore/1397876/0</location>
+  <error>The device 00000000-00000000-D48564FF-FF9D4FEE is already provisioned.</error>
+</result>
+"""
 
 class TestDeviceCoreGroups(HttpTestBase):
 
@@ -179,6 +209,132 @@ class TestDeviceCoreGroups(HttpTestBase):
         list(self.dc.devicecore.get_groups(group_id == "123"))
         params = self._get_last_request_params()
         self.assertEqual(params["condition"], "grpId='123'")
+
+
+class TestDeviceCoreProvisioning(HttpTestBase):
+
+    def test_provision_one_simple_device_id(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_SUCCESS_RESPONSE1, status=207)
+        res = self.dc.devicecore.provision_device(device_id='00000000-00000000-0000DEFF-FFADBEEFF')
+        req = self._get_last_request()
+        self.assertEqual(req.body, six.b(
+            "<list>"
+            "<DeviceCore>"
+            "<devConnectwareId>00000000-00000000-0000DEFF-FFADBEEFF</devConnectwareId>"
+            "</DeviceCore>"
+            "</list>"))
+        self.assertDictEqual(res, {"error": False, "error_msg": None, "location": "DeviceCore/946246/0"})
+
+    def test_provision_one_simple_mac(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_SUCCESS_RESPONSE1, status=207)
+        res = self.dc.devicecore.provision_device(mac_address="DE:AD:BE:EF:00:00")
+        req = self._get_last_request()
+        self.assertEqual(req.body, six.b(
+            "<list>"
+            "<DeviceCore>"
+            "<devMac>DE:AD:BE:EF:00:00</devMac>"
+            "</DeviceCore>"
+            "</list>"))
+        self.assertDictEqual(res, {"error": False, "error_msg": None, "location": "DeviceCore/946246/0"})
+
+    def test_provision_imei(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_SUCCESS_RESPONSE1, status=207)
+        res = self.dc.devicecore.provision_device(imei="990000862471854")
+        req = self._get_last_request()
+        self.assertEqual(req.body, six.b(
+             "<list>"
+            "<DeviceCore>"
+            "<devCellularModemId>990000862471854</devCellularModemId>"
+            "</DeviceCore>"
+            "</list>"))
+        self.assertDictEqual(res, {"error": False, "error_msg": None, "location": "DeviceCore/946246/0"})
+
+    def test_provision_all_the_fixins(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_SUCCESS_RESPONSE1, status=207)
+        res = self.dc.devicecore.provision_device(
+            mac_address="DE:AD:BE:EF:00:00",
+            group_path="/group/path",
+            metadata="Sweet, sweet metadata",
+            map_lat=44.9807496,
+            map_long=-93.1397815,
+            contact="Saint Paul Parks Department",
+            description="Buried Treasure",
+        )
+        req = self._get_last_request()
+        self.assertEqual(req.body, six.b(
+            '<list>'
+            '<DeviceCore>'
+            '<devMac>DE:AD:BE:EF:00:00</devMac>'
+            '<grpPath>/group/path</grpPath>'
+            '<dpUserMetaData>Sweet, sweet metadata</dpUserMetaData>'
+            '<dpMapLong>-93.1397815</dpMapLong>'
+            '<dpMapLat>44.9807496</dpMapLat>'
+            '<dpContact>Saint Paul Parks Department</dpContact>'
+            '<dpDescription>Buried Treasure</dpDescription>'
+            '</DeviceCore>'
+            '</list>'))
+        self.assertDictEqual(res, {"error": False, "error_msg": None, "location": "DeviceCore/946246/0"})
+
+    def test_provision_multiple_simple(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_MULTIPLE_SUCCESS_RESPONSE1, status=207)
+        res = self.dc.devicecore.provision_devices([
+            {'device_id': "00000000-00000000-0000DEFF-FFADBEEFF"},
+            {'mac_address': 'DE:AD:BE:EF:00:00'}
+        ])
+        req = self._get_last_request()
+        self.assertEqual(req.body, six.b(
+                '<list>'
+                '<DeviceCore>'
+                '<devConnectwareId>00000000-00000000-0000DEFF-FFADBEEFF</devConnectwareId>'
+                '</DeviceCore>'
+                ''
+                '<DeviceCore>'
+                '<devMac>DE:AD:BE:EF:00:00</devMac>'
+                '</DeviceCore>'
+                '</list>'))
+        self.assertTrue(len(res), 2)
+        self.assertDictEqual(res[0], {"error": False, "error_msg": None, "location": "DeviceCore/1397876/0"})
+        self.assertDictEqual(res[1], {"error": False, "error_msg": None, "location": "DeviceCore/946246/0"})
+
+    def test_without_required_param(self):
+        self.assertRaises(ValueError, self.dc.devicecore.provision_device, description="I should not work")
+
+    def test_bad_request_400(self):
+        self.prepare_response('POST', '/ws/DeviceCore', 'Bad Request', status=400)
+        self.assertRaises(DeviceCloudHttpException,
+                          self.dc.devicecore.provision_device, mac_address="DE:AD:BE:EF:00:00")
+
+    def test_bad_request_500(self):
+        self.prepare_response('POST', '/ws/DeviceCore', 'Bad Request', status=500)
+        self.assertRaises(DeviceCloudHttpException,
+                          self.dc.devicecore.provision_device, mac_address="DE:AD:BE:EF:00:00")
+
+    def test_error_response(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_ERROR1, status=207)
+        res = self.dc.devicecore.provision_device(imei="990000862471854")
+        self.assertDictEqual(res, {
+            "error": True,
+            "error_msg": 'The device 00000000-00000000-BC5FF4FF-FFF7908A is already provisioned.',
+            "location": None}
+        )
+
+    def test_mixed_error_success_response(self):
+        self.prepare_response("POST", "/ws/DeviceCore", PROVISION_MIXED_RESULT_RESPONSE, status=207)
+        res = self.dc.devicecore.provision_devices([
+            {'device_id': "00000000-00000000-0000DEFF-FFADBEEFF"},
+            {'mac_address': 'DE:AD:BE:EF:00:00'}
+        ])
+        self.assertTrue(len(res), 2)
+        self.assertDictEqual(res[0], {
+            'error': False,
+            'error_msg': None,
+            'location': 'DeviceCore/1397876/0',
+        })
+        self.assertDictEqual(res[1], {
+            'error': True,
+            'error_msg': 'The device 00000000-00000000-D48564FF-FF9D4FEE is already provisioned.',
+            'location': None,
+        })
 
 
 class TestDeviceCoreDevices(HttpTestBase):
