@@ -5,13 +5,12 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 import sys
+import xml.etree.ElementTree as ET
 
 from devicecloud.apibase import APIBase
 from devicecloud.conditions import Attribute, Expression
 from devicecloud.util import iso8601_to_dt, validate_type
 import six
-
-import xml.etree.ElementTree as ET
 
 
 dev_mac = Attribute('devMac')
@@ -158,54 +157,140 @@ class DeviceCoreAPI(APIBase):
         for group_data in self._conn.iter_json_pages("/ws/Group", page_size=page_size, **query_kwargs):
             yield Group.from_json(group_data)
 
-    def provision_by_mac(self, mac_list):
+    def provision_device(self, **kwargs):
+        """Provision a single device with the specified information
+
+        This API call provisions a new device on this cloud account.  In order for this
+        to work, a `mac_address`, `device_id`, or `imei` must be provided.  All
+        other parameters are optional and can be specified in addition to the primary
+        identifier for the device.
+
+        This request will always return a dictionary unless the request fails altogether.  The
+        dictionary returned will have the following form::
+
+            {
+                "error": <bool>,
+                "error_msg": <string|None>,
+                "location": <string|None>,
+            }
+
+        :param str mac_address: The MAC address of the device being added as a string in
+            the form "00:00:00:00:00:00".  This is one of the options for the required
+            primary id.
+        :param str device_id: The ID of the device to add.  This is the 'devConnectwareId'
+            referenced in the API docs and should look like "00000000-00000000-000000FF-FF000000".
+            This is one of the options for the required primary id.
+        :param str imei: The IMEI of the device to be added (if no MAC/ID available).  This is one
+            of the options for the required primary id.
+        :param str group_path: (optional) Path of group that this device should be added to.
+        :param str metadata: (optional) Arbitrary metadata to associate with this device.
+        :param float map_lat: (optional) Latitude of this device in degrees
+        :param float map_long: (optional) Longitude of this device in degrees
+        :param str contact: (optional) Contact associted with this device (or whatever you want).
+        :param str description: (optional) Textual description of this device.
+
+        :raises DeviceCloudHttpException: If there is an unexpected error reported by the device cloud.
+        :raises ValueError: If any input fields are known to have a bad form.
+        :return: A dictionary matching the format specified above.
+
         """
-        Provision a series of devices.
+        # This snippet is from the device cloud API Explorer and shows the pieces of
+        # information that may be specified when adding a device.
+        #
+        # <DeviceCore>
+        #   <!--Devices can be created by MAC address, IMEI
+        #       (generally only if the device has no MAC address), or deviceID. -->
+        #   <!-- <devMac>00:00:00:00:00:00</devMac> -->
+        #   <!-- <devCellularModemId>112222223333334</devCellularModemId> -->
+        #   <!-- <devConnectwareId>00000000-00000000-000000FF-FF000000</devConnectwareId> -->
+        #   <!-- Optional elements that can be included to describe the device. -->
+        #   <!-- <grpPath>test</grpPath> -->
+        #   <!-- <dpUserMetaData>In the test lab.</dpUserMetaData> -->
+        #   <!-- <dpTags>needs-upgrade</dpTags> -->
+        #   <!-- <dpMapLat>44.0</dpMapLat>  (will be overwritten if the device reports a value)-->
+        #   <!-- <dpMapLong>-92.5</dpMapLong>  (will be overwritten if the device reports a value) -->
+        #   <!-- <dpContact>Joe</dpContact>  (will be overwritten if the device reports a value) -->
+        #   <!-- <dpDescription>Test device</dpDescription>  (will be overwritten if the device reports a value) -->
+        # </DeviceCore>
 
-        The device IDs will be generated from the supplied iterable of MAC
-        address (usually the device's primary network interface).
+        results = self.provision_devices([kwargs, ])
+        return results[0]
 
-        Returns a list (or single item, if supplied) of response dictionaries
-        corresponding to each item for which provisioning was requested.
+    def provision_devices(self, devices):
+        """Provision multiple devices with a single API call
+
+        This method takes an iterable of dictionaries where the values in the dictionary are
+        expected to match the arguments of a call to :meth:`provision_device`.  The
+        contents of each dictionary will be validated.
+
+        :param list devices: An iterable of dictionaries each containing information about
+            a device to be provision.  The form of the dictionary should match the keyword
+            arguments taken by :meth:`provision_device`.
+        :raises DeviceCloudHttpException: If there is an unexpected error reported by the device cloud.
+        :raises ValueError: If any input fields are known to have a bad form.
+        :return: A list of dictionaries in the form described for :meth:`provision_device` in the
+            order matching the requested device list.  Note that it is possible for there to
+            be mixed success and error when provisioning multiple devices.
+
         """
-        nonlist = isinstance(mac_list, *six.string_types)
-        if nonlist:
-            mac_list = [mac_list]
-        messages = ["<DeviceCore><devMac>" +
-                    mac + "</devMac></DeviceCore>" for mac in mac_list]
-        r = self._provision(messages)
-        if nonlist:
-            r = r[0]
-        return r
+        # Validate all the input for each device provided
+        sio = six.StringIO()
 
-    def provision_by_id(self, device_id_list):
-        """
-        Provisions a series of devices.
+        def write_tag(tag, val):
+            sio.write("<{tag}>{val}</{tag}>".format(tag=tag, val=val))
 
-        The iterable passed must iterate over a series of device IDs.
+        def maybe_write_element(tag, val):
+            if val is not None:
+                write_tag(tag, val)
+                return True
+            return False
 
-        Returns a list (or single item, if supplied) of response dictionaries
-        corresponding to each item for which provisioning was requested.
-        """
-        nonlist = isinstance(device_id_list, *six.string_types)
-        if nonlist:
-            device_id_list = [device_id_list]
-        messages = ["<DeviceCore><devConnectwareId>" +
-                    did + "</devConnectwareId></DeviceCore>" for did in device_id_list]
-        r = self._provision(messages)
-        if nonlist:
-            r = r[0]
-        return r
+        sio.write("<list>")
+        for d in devices:
+            sio.write("<DeviceCore>")
 
-    def _provision(self, messages):
-        resp = self._conn.post('/ws/DeviceCore', '<list>' + ''.join(messages) + '</list>')
-        resp_xml = ET.fromstring(resp.content)
-        results = []
-        for child in list(resp_xml):
-            if child.tag == 'location':
-                results.append({'location': child.text, 'error': False})
+            mac_address = d.get("mac_address")
+            device_id = d.get("device_id")
+            imei = d.get("imei")
+            if mac_address is not None:
+                write_tag("devMac", mac_address)
+            elif device_id is not None:
+                write_tag("devConnectwareId", device_id)
+            elif imei is not None:
+                write_tag("devCellularModemId", imei)
             else:
-                results.append({'location': None, 'error': child.text})
+                raise ValueError("mac_address, device_id, or imei must be provided for device %r" % d)
+
+            # Write optional elements if present.
+            maybe_write_element("grpPath", d.get("group_path"))
+            maybe_write_element("dpUserMetaData", d.get("metadata"))
+            maybe_write_element("dpTags", d.get("tags"))
+            maybe_write_element("dpMapLong", d.get("map_long"))
+            maybe_write_element("dpMapLat", d.get("map_lat"))
+            maybe_write_element("dpContact", d.get("contact"))
+            maybe_write_element("dpDescription", d.get("description"))
+
+            sio.write("</DeviceCore>")
+        sio.write("</list>")
+
+        # Send the request, set the Accept XML as a nicety
+        results = []
+        response = self._conn.post("/ws/DeviceCore", sio.getvalue(), headers={'Accept': 'application/xml'})
+        root = ET.fromstring(response.content)  # <result> tag is root of <list> response
+        for child in root:
+            if child.tag.lower() == "location":
+                results.append({
+                    "error": False,
+                    "error_msg": None,
+                    "location": child.text
+                })
+            else:  # we expect "error" but handle generically
+                results.append({
+                    "error": True,
+                    "location": None,
+                    "error_msg": child.text
+                })
+
         return results
 
 
@@ -291,7 +376,6 @@ class Device(object):
 
     # TODO: provide ability to set/update available data items
     # TODO: add/remove tags
-    # TODO: provision a new device (probably add top-level method for this)
 
     def __init__(self, conn, sci, device_json):
         self._conn = conn
