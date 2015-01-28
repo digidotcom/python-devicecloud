@@ -5,4 +5,4 @@
 # Copyright (c) 2014 Etherios, Inc. All rights reserved.
 # Etherios, Inc. is a Division of Digi International.
 
-__version__ = "0.1.1"
+__version__ = "0.2"
