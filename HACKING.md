@@ -7,7 +7,7 @@ Environment Setup
 All the requirements in order to perform development on the product
 should be installable in a virtualenv.
 
-    $ pip install -r test-requirements.txt
+    $ pip install -r dev-requirements.txt
 
 In order to build a release you will also need to install pandoc.  On
 Ubuntu, you should be able to do:
@@ -49,6 +49,19 @@ errors from pyenv, there may be addition dependencies required.
 Please visit https://github.com/yyuu/pyenv/wiki/Common-build-problems
 for additional pointers.
 
+### Running Integration and Unittests
+
+There are some additional integration tests that run against an actual
+device cloud account.  These are a bit more fragile and when something
+fails, you may need to go to your device cloud account to clean things
+up.
+
+To run those tests, you can just do the following.  This script runs
+the toxtest.sh script with environment variables set with your
+account information.  The tests that were skipped before will now
+be run with each supported version of the interpreter:
+
+    $ ./inttest.sh
 
 Build the Documentation
 -----------------------
@@ -84,5 +97,5 @@ Each source file should be prefixed with the following header:
     # License, v. 2.0. If a copy of the MPL was not distributed with this
     # file, You can obtain one at http://mozilla.org/MPL/2.0/.
     #
-    # Copyright (c) 2014 Etherios, Inc. All rights reserved.
+    # Copyright (c) 2015 Etherios, Inc. All rights reserved.
     # Etherios, Inc. is a Division of Digi International.
