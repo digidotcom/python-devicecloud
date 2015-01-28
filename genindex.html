@@ -81,8 +81,12 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
 </ul>
 </li>
 </ul>
@@ -129,8 +133,8 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#L"><strong>L</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -139,6 +143,16 @@
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.add_child">add_child() (devicecloud.devicecore.Group method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Device.add_to_group">add_to_group() (devicecloud.devicecore.Device method)</a>
+  </dt>
+
+  </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="sci.html#devicecloud.sci.AllTarget">AllTarget (class in devicecloud.sci)</a>
@@ -185,15 +199,29 @@
   </dt>
 
       
-  <dt><a href="streams.html#devicecloud.streams.DataStream.delete">delete() (devicecloud.streams.DataStream method)</a>
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.delete">delete() (devicecloud.DeviceCloudConnection method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="filedata.html#devicecloud.filedata.FileDataObject.delete">(devicecloud.filedata.FileDataObject method)</a>
+  </dt>
+
+        
+  <dt><a href="streams.html#devicecloud.streams.DataStream.delete">(devicecloud.streams.DataStream method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="streams.html#devicecloud.streams.DataStream.delete_datapoint">delete_datapoint() (devicecloud.streams.DataStream method)</a>
   </dt>
 
       
   <dt><a href="streams.html#devicecloud.streams.DataStream.delete_datapoints_in_time_range">delete_datapoints_in_time_range() (devicecloud.streams.DataStream method)</a>
+  </dt>
+
+      
+  <dt><a href="filedata.html#devicecloud.filedata.FileDataAPI.delete_file">delete_file() (devicecloud.filedata.FileDataAPI method)</a>
   </dt>
 
       
@@ -224,6 +252,10 @@
 
       
   <dt><a href="streams.html#module-devicecloud.streams">devicecloud.streams (module)</a>
+  </dt>
+
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection">DeviceCloudConnection (class in devicecloud)</a>
   </dt>
 
       
@@ -264,18 +296,28 @@
   <dt><a href="filedata.html#devicecloud.filedata.FileDataDirectory">FileDataDirectory (class in devicecloud.filedata)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="filedata.html#devicecloud.filedata.FileDataFile">FileDataFile (class in devicecloud.filedata)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="filedata.html#devicecloud.filedata.FileDataObject">FileDataObject (class in devicecloud.filedata)</a>
   </dt>
 
       
-  <dt><a href="streams.html#devicecloud.streams.DataPoint.from_json">from_json() (devicecloud.streams.DataPoint class method)</a>
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.from_json">from_json() (devicecloud.devicecore.Group class method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="streams.html#devicecloud.streams.DataPoint.from_json">(devicecloud.streams.DataPoint class method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="streams.html#devicecloud.streams.DataPoint.from_rollup_json">from_rollup_json() (devicecloud.streams.DataPoint class method)</a>
   </dt>
 
   </dl></td>
@@ -284,6 +326,18 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.get">get() (devicecloud.DeviceCloudConnection method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.get_children">get_children() (devicecloud.devicecore.Group method)</a>
+  </dt>
+
+      
+  <dt><a href="core.html#devicecloud.DeviceCloud.get_connection">get_connection() (devicecloud.DeviceCloud method)</a>
+  </dt>
+
       
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_connectware_id">get_connectware_id() (devicecloud.devicecore.Device method)</a>
   </dt>
@@ -348,6 +402,10 @@
 
       <dd><dl>
         
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.get_description">(devicecloud.devicecore.Group method)</a>
+  </dt>
+
+        
   <dt><a href="streams.html#devicecloud.streams.DataPoint.get_description">(devicecloud.streams.DataPoint method)</a>
   </dt>
 
@@ -370,6 +428,10 @@
 
       
   <dt><a href="core.html#devicecloud.DeviceCloud.get_devicecore_api">get_devicecore_api() (devicecloud.DeviceCloud method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI.get_devices">get_devices() (devicecloud.devicecore.DeviceCoreAPI method)</a>
   </dt>
 
       
@@ -405,11 +467,29 @@
   </dt>
 
       
-  <dt><a href="streams.html#devicecloud.streams.DataPoint.get_id">get_id() (devicecloud.streams.DataPoint method)</a>
+  <dt><a href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI.get_group_tree_root">get_group_tree_root() (devicecloud.devicecore.DeviceCoreAPI method)</a>
   </dt>
 
       
+  <dt><a href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI.get_groups">get_groups() (devicecloud.devicecore.DeviceCoreAPI method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.get_id">get_id() (devicecloud.devicecore.Group method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="streams.html#devicecloud.streams.DataPoint.get_id">(devicecloud.streams.DataPoint method)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_ip">get_ip() (devicecloud.devicecore.Device method)</a>
+  </dt>
+
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.get_json">get_json() (devicecloud.DeviceCloudConnection method)</a>
   </dt>
 
       
@@ -420,6 +500,8 @@
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_last_known_ip">get_last_known_ip() (devicecloud.devicecore.Device method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="filedata.html#devicecloud.filedata.FileDataObject.get_last_modified_date">get_last_modified_date() (devicecloud.filedata.FileDataObject method)</a>
   </dt>
@@ -428,8 +510,6 @@
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_latlon">get_latlon() (devicecloud.devicecore.Device method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_location">get_location() (devicecloud.devicecore.Device method)</a>
   </dt>
@@ -453,13 +533,29 @@
   </dt>
 
       
-  <dt><a href="filedata.html#devicecloud.filedata.FileDataObject.get_name">get_name() (devicecloud.filedata.FileDataObject method)</a>
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.get_name">get_name() (devicecloud.devicecore.Group method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="filedata.html#devicecloud.filedata.FileDataObject.get_name">(devicecloud.filedata.FileDataObject method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.get_parent_id">get_parent_id() (devicecloud.devicecore.Group method)</a>
   </dt>
 
       
-  <dt><a href="filedata.html#devicecloud.filedata.FileDataObject.get_path">get_path() (devicecloud.filedata.FileDataObject method)</a>
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.get_path">get_path() (devicecloud.devicecore.Group method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="filedata.html#devicecloud.filedata.FileDataObject.get_path">(devicecloud.filedata.FileDataObject method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_provision_id">get_provision_id() (devicecloud.devicecore.Device method)</a>
   </dt>
@@ -553,11 +649,19 @@
   </dt>
 
       
+  <dt><a href="core.html#devicecloud.DeviceCloud.get_web_service_stub">get_web_service_stub() (devicecloud.DeviceCloud method)</a>
+  </dt>
+
+      
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_zb_extended_address">get_zb_extended_address() (devicecloud.devicecore.Device method)</a>
   </dt>
 
       
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.get_zb_pan_id">get_zb_pan_id() (devicecloud.devicecore.Device method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group">Group (class in devicecloud.devicecore)</a>
   </dt>
 
       
@@ -581,17 +685,21 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="streams.html#devicecloud.streams.InvalidRollupDatatype">InvalidRollupDatatype</a>
+  </dt>
+
+      
   <dt><a href="devicecore.html#devicecloud.devicecore.Device.is_connected">is_connected() (devicecloud.devicecore.Device method)</a>
   </dt>
 
   </dl></td>
-</tr></table>
-
-<h2 id="L">L</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI.list_devices">list_devices() (devicecloud.devicecore.DeviceCoreAPI method)</a>
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.is_root">is_root() (devicecloud.devicecore.Group method)</a>
+  </dt>
+
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.iter_json_pages">iter_json_pages() (devicecloud.DeviceCloudConnection method)</a>
   </dt>
 
   </dl></td>
@@ -607,11 +715,53 @@
   </dl></td>
 </tr></table>
 
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.ping">ping() (devicecloud.DeviceCloudConnection method)</a>
+  </dt>
+
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.post">post() (devicecloud.DeviceCloudConnection method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Group.print_subtree">print_subtree() (devicecloud.devicecore.Group method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI.provision_device">provision_device() (devicecloud.devicecore.DeviceCoreAPI method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI.provision_devices">provision_devices() (devicecloud.devicecore.DeviceCoreAPI method)</a>
+  </dt>
+
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudConnection.put">put() (devicecloud.DeviceCloudConnection method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="streams.html#devicecloud.streams.DataStream.read">read() (devicecloud.streams.DataStream method)</a>
+  </dt>
+
+      
+  <dt><a href="devicecore.html#devicecloud.devicecore.Device.remove_from_group">remove_from_group() (devicecloud.devicecore.Device method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="core.html#devicecloud.DeviceCloudHttpException.response">response (devicecloud.DeviceCloudHttpException attribute)</a>
   </dt>
 
   </dl></td>
@@ -730,6 +880,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="core.html#devicecloud.DeviceCloud.ws">ws (devicecloud.DeviceCloud attribute)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 

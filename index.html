@@ -81,8 +81,12 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
 </ul>
 </li>
 </ul>
@@ -130,6 +134,7 @@
 <li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 </ul>
 </div>
@@ -160,7 +165,7 @@ quick example of what the API looks like:</p>
 <span class="c">#</span>
 <span class="c"># This is done using the device cloud DeviceCore functionality</span>
 <span class="k">print</span> <span class="s">&quot;== Connected Devices ==&quot;</span>
-<span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">list_devices</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">device</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
         <span class="k">print</span> <span class="n">device</span><span class="o">.</span><span class="n">get_mac</span><span class="p">()</span>
 

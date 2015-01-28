@@ -82,8 +82,12 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
 </ul>
 </li>
 </ul>
@@ -230,6 +234,12 @@ points stored on the device cloud.</p>
 <dt id="devicecloud.streams.NoSuchStreamException">
 <em class="property">exception </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">NoSuchStreamException</tt><a class="headerlink" href="#devicecloud.streams.NoSuchStreamException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Failure to find a stream based on a given id</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="devicecloud.streams.InvalidRollupDatatype">
+<em class="property">exception </em><tt class="descclassname">devicecloud.streams.</tt><tt class="descname">InvalidRollupDatatype</tt><a class="headerlink" href="#devicecloud.streams.InvalidRollupDatatype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll-up&#8217;s are only valid on numerical data types</p>
 </dd></dl>
 
 <dl class="class">
@@ -396,6 +406,31 @@ streams that has been retrieved from the device cloud.</p>
 <dt id="devicecloud.streams.DataPoint.from_json">
 <em class="property">classmethod </em><tt class="descname">from_json</tt><big>(</big><em>stream</em>, <em>json_data</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.from_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new DataPoint object from device cloud JSON data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stream</strong> (<em>DataStream</em>) &#8211; The <a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><tt class="xref py py-class docutils literal"><span class="pre">DataStream</span></tt></a> out of which this data is coming</li>
+<li><strong>json_data</strong> (<em>dict</em>) &#8211; Deserialized JSON data from the device cloud about this device</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises ValueError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if the data is malformed</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(<a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a>) newly created <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><tt class="xref py py-class docutils literal"><span class="pre">DataPoint</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="devicecloud.streams.DataPoint.from_rollup_json">
+<em class="property">classmethod </em><tt class="descname">from_rollup_json</tt><big>(</big><em>stream</em>, <em>json_data</em><big>)</big><a class="headerlink" href="#devicecloud.streams.DataPoint.from_rollup_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rollup json data from the server looks slightly different</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -875,7 +910,7 @@ the result set.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>start_time</strong> (<tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> or None) &#8211; The start time for the window of data points to read.  None means
-that we should start with the old data available.</li>
+that we should start with the oldest data available.</li>
 <li><strong>end_time</strong> (<tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt> or None) &#8211; The end time for the window of data points to read.  None means
 that we should include all points received until this point in time.</li>
 <li><strong>use_client_timeline</strong> (<em>bool</em>) &#8211; If True, the times used will be those provided by

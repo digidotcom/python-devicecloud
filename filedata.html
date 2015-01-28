@@ -82,8 +82,12 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
 </ul>
 </li>
 </ul>
@@ -298,6 +302,23 @@ file.  If this is not required, leave as false.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="devicecloud.filedata.FileDataAPI.delete_file">
+<tt class="descname">delete_file</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.delete_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a file or directory from the filedata store</p>
+<p>This method removes a file or directory (recursively) from
+the filedata store.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> &#8211; The path of the file or directory to remove
+from the file data store.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="devicecloud.filedata.FileDataAPI.walk">
 <tt class="descname">walk</tt><big>(</big><em>root='~/'</em><big>)</big><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.walk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Emulation of os.walk behavior against the device cloud filedata store</p>
@@ -324,6 +345,12 @@ is the root directory for this device cloud account (~).</td>
 <dt id="devicecloud.filedata.FileDataObject">
 <em class="property">class </em><tt class="descclassname">devicecloud.filedata.</tt><tt class="descname">FileDataObject</tt><big>(</big><em>fdapi</em>, <em>json_data</em><big>)</big><a class="headerlink" href="#devicecloud.filedata.FileDataObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate state and logic surrounding a &#8220;filedata&#8221; element</p>
+<dl class="method">
+<dt id="devicecloud.filedata.FileDataObject.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.filedata.FileDataObject.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete this file or directory</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="devicecloud.filedata.FileDataObject.get_data">
 <tt class="descname">get_data</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_data" title="Permalink to this definition">¶</a></dt>

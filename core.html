@@ -64,12 +64,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-api-documentation">DeviceCore API Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="streams.html#api-documentation">API Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#module-devicecloud.streams">API Documentation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
@@ -82,8 +82,12 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
 </ul>
 </li>
 </ul>
@@ -136,11 +140,254 @@ will be used by all clients using the devicecloud library.</p>
 <dt id="devicecloud.DeviceCloudHttpException">
 <em class="property">exception </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloudHttpException</tt><big>(</big><em>response</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudHttpException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception raised when we failed a request to the DC over HTTP</p>
+<p>This exception will be raised whenever a non-success HTTP status
+code is received from the device cloud and there is no other logic
+in place for gracefully handling the error case.</p>
+<p>Often, if there is an error with a request to the device cloud, the device
+cloud will respond with an error status and include additional information
+about the nature of the error in the response body.  This information
+can be accessed via the <a class="reference internal" href="#devicecloud.DeviceCloudHttpException.response" title="devicecloud.DeviceCloudHttpException.response"><tt class="xref py py-attr docutils literal"><span class="pre">response</span></tt></a> property.</p>
+<dl class="attribute">
+<dt id="devicecloud.DeviceCloudHttpException.response">
+<tt class="descname">response</tt><a class="headerlink" href="#devicecloud.DeviceCloudHttpException.response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the requests response object for the failing HTTP request</p>
+<p>This object will be an instance of <tt class="xref py py-class docutils literal"><span class="pre">requests.Response</span></tt> which
+in turn provides information including the content (body) of the response
+and the HTTP status code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="n">dc</span><span class="o">.</span><span class="n">sci</span><span class="o">.</span><span class="n">send_request</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">DeviceCloudHttpException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;HTTP Error: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.DeviceCloudConnection">
+<em class="property">class </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloudConnection</tt><big>(</big><em>auth</em>, <em>base_url</em>, <em>throttle_retries=5</em>, <em>throttle_delay_init=1.0</em>, <em>throttle_delay_max=10.0</em>, <em>throttle_delay_backoff_coefficient=1.5</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide low-level access to the Device Cloud web services</p>
+<p>This is a convenience object that provides methods that make sending requests to the
+device cloud easier.  This object is used extensively within the library but can
+also be used externally (for instance, to support an API exposed by the device
+cloud that is not currently supported in the library).</p>
+<p>This object is accessible via <a class="reference internal" href="#devicecloud.DeviceCloud.get_connection" title="devicecloud.DeviceCloud.get_connection"><tt class="xref py py-meth docutils literal"><span class="pre">get_connection()</span></tt></a>.</p>
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.iter_json_pages">
+<tt class="descname">iter_json_pages</tt><big>(</big><em>path</em>, <em>page_size=1000</em>, <em>**params</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.iter_json_pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over JSON items from a paginated resource</p>
+<p>Legacy resources (prior to V1) implemented a common paging interfaces for
+several different resources.  This method handles the details of iterating
+over the paged result set, yielding only the JSON data for each item
+within the aggregate resource.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; The base path to the resource being requested (e.g. /ws/Group)</li>
+<li><strong>page_size</strong> (<em>int</em>) &#8211; The number of items that should be requested for each page.  A larger
+page_size may mean fewer HTTP requests but could also increase the time to get a first
+result back from the device cloud.</li>
+<li><strong>params</strong> &#8211; These are additional query parameters that should be sent with each
+request to the device cloud.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.ping">
+<tt class="descname">ping</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ping the Device Cloud using the authorization provided</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The response of getting a single device from DeviceCore on success</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference internal" href="#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCloudHttpException</span></tt></a> if there is a problem</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.get">
+<tt class="descname">get</tt><big>(</big><em>path</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an HTTP GET request of the specified path in the device cloud</p>
+<p>Make an HTTP GET request against the device cloud with this accounts
+credentials and base url.  This method uses the
+<a class="reference external" href="http://docs.python-requests.org/en/latest/">requests</a> library
+<a class="reference external" href="http://docs.python-requests.org/en/latest/api/#requests.request">request method</a>
+and all keyword arguments will be passed on to that method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; The device cloud path to GET</li>
+<li><strong>retries</strong> (<em>int</em>) &#8211; The number of times the request should be retried if an
+unsuccessful response is received.  Most likely, you should leave this at 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises DeviceCloudHttpException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if a non-success response to the request is received
+from the device cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A requests <tt class="docutils literal"><span class="pre">Response</span></tt> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.get_json">
+<tt class="descname">get_json</tt><big>(</big><em>path</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.get_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an HTTP GET request with JSON headers of the specified path against the device cloud</p>
+<p>Make an HTTP GET request against the device cloud with this accounts
+credentials and base url.  This method uses the
+<a class="reference external" href="http://docs.python-requests.org/en/latest/">requests</a> library
+<a class="reference external" href="http://docs.python-requests.org/en/latest/api/#requests.request">request method</a>
+and all keyword arguments will be passed on to that method.</p>
+<p>This method will automatically add the <tt class="docutils literal"><span class="pre">Accept:</span> <span class="pre">application/json</span></tt> and parse the
+JSON response from the device cloud.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; The device cloud path to GET</li>
+<li><strong>retries</strong> (<em>int</em>) &#8211; The number of times the request should be retried if an
+unsuccessful response is received.  Most likely, you should leave this at 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises DeviceCloudHttpException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if a non-success response to the request is received
+from the device cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A python data structure containing the results of calling <tt class="docutils literal"><span class="pre">json.loads</span></tt> on the
+body of the response from the device cloud.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.post">
+<tt class="descname">post</tt><big>(</big><em>path</em>, <em>data</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an HTTP POST request of the specified path in the device cloud</p>
+<p>Make an HTTP POST request against the device cloud with this accounts
+credentials and base url.  This method uses the
+<a class="reference external" href="http://docs.python-requests.org/en/latest/">requests</a> library
+<a class="reference external" href="http://docs.python-requests.org/en/latest/api/#requests.request">request method</a>
+and all keyword arguments will be passed on to that method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; The device cloud path to POST</li>
+<li><strong>retries</strong> (<em>int</em>) &#8211; The number of times the request should be retried if an
+unsuccessful response is received.  Most likely, you should leave this at 0.</li>
+<li><strong>data</strong> &#8211; The data to be posted in the body of the POST request (see docs for
+<tt class="docutils literal"><span class="pre">requests.post</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises DeviceCloudHttpException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if a non-success response to the request is received
+from the device cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A requests <tt class="docutils literal"><span class="pre">Response</span></tt> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.put">
+<tt class="descname">put</tt><big>(</big><em>path</em>, <em>data</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an HTTP PUT request of the specified path in the device cloud</p>
+<p>Make an HTTP PUT request against the device cloud with this accounts
+credentials and base url.  This method uses the
+<a class="reference external" href="http://docs.python-requests.org/en/latest/">requests</a> library
+<a class="reference external" href="http://docs.python-requests.org/en/latest/api/#requests.request">request method</a>
+and all keyword arguments will be passed on to that method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; The device cloud path to PUT</li>
+<li><strong>retries</strong> (<em>int</em>) &#8211; The number of times the request should be retried if an
+unsuccessful response is received.  Most likely, you should leave this at 0.</li>
+<li><strong>data</strong> &#8211; The data to be posted in the body of the POST request (see docs for
+<tt class="docutils literal"><span class="pre">requests.post</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises DeviceCloudHttpException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if a non-success response to the request is received
+from the device cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A requests <tt class="docutils literal"><span class="pre">Response</span></tt> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloudConnection.delete">
+<tt class="descname">delete</tt><big>(</big><em>path</em>, <em>retries=5</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloudConnection.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an HTTP DELETE request of the specified path in the device cloud</p>
+<p>Make an HTTP DELETE request against the device cloud with this accounts
+credentials and base url.  This method uses the
+<a class="reference external" href="http://docs.python-requests.org/en/latest/">requests</a> library
+<a class="reference external" href="http://docs.python-requests.org/en/latest/api/#requests.request">request method</a>
+and all keyword arguments will be passed on to that method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; The device cloud path to DELETE</li>
+<li><strong>retries</strong> (<em>int</em>) &#8211; The number of times the request should be retried if an
+unsuccessful response is received.  Most likely, you should leave this at 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises DeviceCloudHttpException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if a non-success response to the request is received
+from the device cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A requests <tt class="docutils literal"><span class="pre">Response</span></tt> object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="devicecloud.DeviceCloud">
-<em class="property">class </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloud</tt><big>(</big><em>username</em>, <em>password</em>, <em>base_url='https://login.etherios.com'</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">devicecloud.</tt><tt class="descname">DeviceCloud</tt><big>(</big><em>username</em>, <em>password</em>, <em>base_url=None</em>, <em>throttle_retries=5</em>, <em>throttle_delay_init=1.0</em>, <em>throttle_delay_max=10.0</em>, <em>throttle_delay_backoff_coefficient=1.5</em><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide access to core device cloud features</p>
 <p>This class is the primary interface to the device cloud through which access to individual
 device cloud services is provided.  Creating a <tt class="docutils literal"><span class="pre">DeviceCloud</span></tt> object is as easy as doing
@@ -149,7 +396,7 @@ the following:</p>
 
 <span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;pass&#39;</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">dc</span><span class="o">.</span><span class="n">has_valid_credentials</span><span class="p">():</span>
-    <span class="k">print</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">list_devices</span><span class="p">()</span>
+    <span class="k">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>From there, access to all of the device clouds features are possible.  In some cases, methods
@@ -176,19 +423,19 @@ of the provided information is correct.</p>
 <dl class="attribute">
 <dt id="devicecloud.DeviceCloud.streams">
 <tt class="descname">streams</tt><a class="headerlink" href="#devicecloud.DeviceCloud.streams" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></p>
+<dd><p>Property providing access to the <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="devicecloud.DeviceCloud.filedata">
 <tt class="descname">filedata</tt><a class="headerlink" href="#devicecloud.DeviceCloud.filedata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></p>
+<dd><p>Property providing access to the <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="devicecloud.DeviceCloud.devicecore">
 <tt class="descname">devicecore</tt><a class="headerlink" href="#devicecloud.DeviceCloud.devicecore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></p>
+<dd><p>Property providing access to the <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -197,10 +444,24 @@ of the provided information is correct.</p>
 <dd><p>Property providing access to the <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><tt class="xref py py-class docutils literal"><span class="pre">ServerCommandInterfaceAPI</span></tt></a></p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="devicecloud.DeviceCloud.ws">
+<tt class="descname">ws</tt><a class="headerlink" href="#devicecloud.DeviceCloud.ws" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <tt class="xref py py-class docutils literal"><span class="pre">WebServiceStub</span></tt> with a base of <tt class="docutils literal"><span class="pre">/ws</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.get_connection">
+<tt class="descname">get_connection</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the low-level <a class="reference internal" href="#devicecloud.DeviceCloudConnection" title="devicecloud.DeviceCloudConnection"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCloudConnection</span></tt></a> for this device cloud instance</p>
+<p>This object provides a low-level interface for making authenticated requests
+to the device cloud.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="devicecloud.DeviceCloud.get_streams_api">
 <tt class="descname">get_streams_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_streams_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt> bound to this device cloud instance</p>
+<dd><p>Returns a <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a> bound to this device cloud instance</p>
 <p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.streams" title="devicecloud.DeviceCloud.streams"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.streams</span></tt></a> but will create
 a new object (with a new cache) each time called.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -209,7 +470,7 @@ a new object (with a new cache) each time called.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Stream API object bound to this device cloud account</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><tt class="xref py py-class docutils literal"><span class="pre">StreamsAPI</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -218,7 +479,7 @@ a new object (with a new cache) each time called.</p>
 <dl class="method">
 <dt id="devicecloud.DeviceCloud.get_filedata_api">
 <tt class="descname">get_filedata_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_filedata_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt> bound to this device cloud instance</p>
+<dd><p>Returns a <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a> bound to this device cloud instance</p>
 <p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.filedata" title="devicecloud.DeviceCloud.filedata"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.filedata</span></tt></a> but will create
 a new object (with a new cache) each time called.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -227,7 +488,7 @@ a new object (with a new cache) each time called.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">FileData API object bound to this device cloud account</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><tt class="xref py py-class docutils literal"><span class="pre">FileDataAPI</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -236,7 +497,7 @@ a new object (with a new cache) each time called.</p>
 <dl class="method">
 <dt id="devicecloud.DeviceCloud.get_devicecore_api">
 <tt class="descname">get_devicecore_api</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_devicecore_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt> bound to this device cloud instance</p>
+<dd><p>Returns a <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a> bound to this device cloud instance</p>
 <p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.devicecore" title="devicecloud.DeviceCloud.devicecore"><tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.devicecore</span></tt></a> but will create
 a new object (with a new cache) each time called.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -245,7 +506,7 @@ a new object (with a new cache) each time called.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">devicecore API object bound to this device cloud account</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><tt class="xref py py-class docutils literal"><span class="pre">DeviceCoreAPI</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -264,6 +525,24 @@ a new object (with a new cache) each time called.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">SCI API object bound to this device cloud account</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><tt class="xref py py-class docutils literal"><span class="pre">ServerCommandInterfaceAPI</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.DeviceCloud.get_web_service_stub">
+<tt class="descname">get_web_service_stub</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.DeviceCloud.get_web_service_stub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <tt class="xref py py-class docutils literal"><span class="pre">WebServiceStub</span></tt> bound to this device cloud instance</p>
+<p>This provides access to the same API as <tt class="xref py py-attr docutils literal"><span class="pre">DeviceCloud.legacy</span></tt> but will create
+a new object (with a new cache) each time called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">WebServiceStub object bound to this device cloud account with a base of <tt class="docutils literal"><span class="pre">/ws</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">WebServiceStub</span></tt></td>
 </tr>
 </tbody>
 </table>

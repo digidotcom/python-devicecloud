@@ -82,8 +82,12 @@
 <li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cookbook.html#using-streams">Using Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
 </ul>
 </li>
 </ul>
@@ -135,9 +139,279 @@ connected, etc.</p>
 <em class="property">class </em><tt class="descclassname">devicecloud.devicecore.</tt><tt class="descname">DeviceCoreAPI</tt><big>(</big><em>conn</em>, <em>sci</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate DeviceCore interface</p>
 <dl class="method">
-<dt id="devicecloud.devicecore.DeviceCoreAPI.list_devices">
-<tt class="descname">list_devices</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.list_devices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve a list of <a class="reference internal" href="#devicecloud.devicecore.Device" title="devicecloud.devicecore.Device"><tt class="xref py py-class docutils literal"><span class="pre">Device</span></tt></a> objects for this device cloud account</p>
+<dt id="devicecloud.devicecore.DeviceCoreAPI.get_devices">
+<tt class="descname">get_devices</tt><big>(</big><em>condition=None</em>, <em>page_size=1000</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.get_devices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates over each <a class="reference internal" href="#devicecloud.devicecore.Device" title="devicecloud.devicecore.Device"><tt class="xref py py-class docutils literal"><span class="pre">Device</span></tt></a> for this device cloud account</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># get a list of all devices</span>
+<span class="n">all_devices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">())</span>
+
+<span class="c"># build a mapping of devices by their vendor id using a</span>
+<span class="c"># dict comprehension</span>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">()</span>  <span class="c"># generator object</span>
+<span class="n">devs_by_vendor_id</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="o">.</span><span class="n">get_vendor_id</span><span class="p">():</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">devices</span><span class="p">}</span>
+
+<span class="c"># iterate over all devices in &#39;minnesota&#39; group and</span>
+<span class="c"># print the device mac and location</span>
+<span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">group_path</span> <span class="o">==</span> <span class="s">&#39;minnesota&#39;</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> at </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">get_mac</span><span class="p">(),</span> <span class="n">device</span><span class="o">.</span><span class="n">get_location</span><span class="p">())</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>condition</strong> &#8211; An <tt class="xref py py-class docutils literal"><span class="pre">Expression</span></tt> which defines the condition
+which must be matched on the devicecore.  If unspecified,
+an iterator over all devices will be returned.</li>
+<li><strong>page_size</strong> (<em>int</em>) &#8211; The number of results to fetch in a
+single page.  In general, the default will suffice.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Iterator over each <a class="reference internal" href="#devicecloud.devicecore.Device" title="devicecloud.devicecore.Device"><tt class="xref py py-class docutils literal"><span class="pre">Device</span></tt></a> in this device cloud
+account in the form of a generator object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.DeviceCoreAPI.get_group_tree_root">
+<tt class="descname">get_group_tree_root</tt><big>(</big><em>page_size=1000</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.get_group_tree_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the root group for this accounts&#8217; group tree</p>
+<p>This will return the root group for this tree but with all links
+between nodes (i.e. children starting from root) populated.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># print the group hierarchy to stdout</span>
+<span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_group_tree_root</span><span class="p">()</span><span class="o">.</span><span class="n">print_subtree</span><span class="p">()</span>
+
+<span class="c"># gather statistics about devices in each group including</span>
+<span class="c"># the count from its subgroups (recursively)</span>
+<span class="c">#</span>
+<span class="c"># This also shows how you can go from a group reference to devices</span>
+<span class="c"># for that particular group.</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># group -&gt; devices count including children</span>
+<span class="k">def</span> <span class="nf">count_nodes</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+    <span class="n">count_for_this_node</span> <span class="o">=</span> \
+        <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">group_path</span> <span class="o">==</span> <span class="n">group</span><span class="o">.</span><span class="n">get_path</span><span class="p">())))</span>
+    <span class="n">subnode_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">get_children</span><span class="p">():</span>
+        <span class="n">subnode_count</span> <span class="o">+=</span> <span class="n">count_nodes</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">count_for_this_node</span> <span class="o">+</span> <span class="n">subnode_count</span>
+    <span class="n">stats</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span>
+    <span class="k">return</span> <span class="n">total</span>
+<span class="n">count_nodes</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_group_tree_root</span><span class="p">())</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>page_size</strong> (<em>int</em>) &#8211; The number of results to fetch in a
+single page.  In general, the default will suffice.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The root group for this device cloud accounts group
+hierarchy.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.DeviceCoreAPI.get_groups">
+<tt class="descname">get_groups</tt><big>(</big><em>condition=None</em>, <em>page_size=1000</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.get_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an iterator over all groups in this device cloud account</p>
+<p>Optionally, a condition can be specified to limit the number of
+groups returned.</p>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get all groups and print information about them</span>
+<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_groups</span><span class="p">():</span>
+    <span class="k">print</span> <span class="n">group</span>
+
+<span class="c"># Iterate over all devices which are in a group with a specific</span>
+<span class="c"># ID.</span>
+<span class="n">group</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicore</span><span class="o">.</span><span class="n">get_groups</span><span class="p">(</span><span class="n">group_id</span> <span class="o">==</span> <span class="mi">123</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">(</span><span class="n">group_path</span> <span class="o">==</span> <span class="n">group</span><span class="o">.</span><span class="n">get_path</span><span class="p">()):</span>
+    <span class="k">print</span> <span class="n">device</span><span class="o">.</span><span class="n">get_mac</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>condition</strong> &#8211; A condition to use when filtering the results set.  If
+unspecified, all groups will be returned.</li>
+<li><strong>page_size</strong> (<em>int</em>) &#8211; The number of results to fetch in a
+single page.  In general, the default will suffice.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Generator over the groups in this device cloud account.  No
+guarantees about the order of results is provided and child links
+between nodes will not be populated.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.DeviceCoreAPI.provision_device">
+<tt class="descname">provision_device</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.provision_device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provision a single device with the specified information</p>
+<p>This API call provisions a new device on this cloud account.  In order for this
+to work, a <cite>mac_address</cite>, <cite>device_id</cite>, or <cite>imei</cite> must be provided.  All
+other parameters are optional and can be specified in addition to the primary
+identifier for the device.</p>
+<p>This request will always return a dictionary unless the request fails altogether.  The
+dictionary returned will have the following form:</p>
+<div class="highlight-python"><div class="highlight"><pre>{
+    &quot;error&quot;: &lt;bool&gt;,
+    &quot;error_msg&quot;: &lt;string|None&gt;,
+    &quot;location&quot;: &lt;string|None&gt;,
+}
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mac_address</strong> (<em>str</em>) &#8211; The MAC address of the device being added as a string in
+the form &#8220;00:00:00:00:00:00&#8221;.  This is one of the options for the required
+primary id.</li>
+<li><strong>device_id</strong> (<em>str</em>) &#8211; The ID of the device to add.  This is the &#8216;devConnectwareId&#8217;
+referenced in the API docs and should look like &#8220;00000000-00000000-000000FF-FF000000&#8221;.
+This is one of the options for the required primary id.</li>
+<li><strong>imei</strong> (<em>str</em>) &#8211; The IMEI of the device to be added (if no MAC/ID available).  This is one
+of the options for the required primary id.</li>
+<li><strong>group_path</strong> (<em>str</em>) &#8211; (optional) Path of group that this device should be added to.</li>
+<li><strong>metadata</strong> (<em>str</em>) &#8211; (optional) Arbitrary metadata to associate with this device.</li>
+<li><strong>map_lat</strong> (<em>float</em>) &#8211; (optional) Latitude of this device in degrees</li>
+<li><strong>map_long</strong> (<em>float</em>) &#8211; (optional) Longitude of this device in degrees</li>
+<li><strong>contact</strong> (<em>str</em>) &#8211; (optional) Contact associted with this device (or whatever you want).</li>
+<li><strong>description</strong> (<em>str</em>) &#8211; (optional) Textual description of this device.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>DeviceCloudHttpException</strong> &#8211; If there is an unexpected error reported by the device cloud.</li>
+<li><strong>ValueError</strong> &#8211; If any input fields are known to have a bad form.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dictionary matching the format specified above.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.DeviceCoreAPI.provision_devices">
+<tt class="descname">provision_devices</tt><big>(</big><em>devices</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.DeviceCoreAPI.provision_devices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provision multiple devices with a single API call</p>
+<p>This method takes an iterable of dictionaries where the values in the dictionary are
+expected to match the arguments of a call to <a class="reference internal" href="#devicecloud.devicecore.DeviceCoreAPI.provision_device" title="devicecloud.devicecore.DeviceCoreAPI.provision_device"><tt class="xref py py-meth docutils literal"><span class="pre">provision_device()</span></tt></a>.  The
+contents of each dictionary will be validated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>devices</strong> (<em>list</em>) &#8211; An iterable of dictionaries each containing information about
+a device to be provision.  The form of the dictionary should match the keyword
+arguments taken by <a class="reference internal" href="#devicecloud.devicecore.DeviceCoreAPI.provision_device" title="devicecloud.devicecore.DeviceCoreAPI.provision_device"><tt class="xref py py-meth docutils literal"><span class="pre">provision_device()</span></tt></a>.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>DeviceCloudHttpException</strong> &#8211; If there is an unexpected error reported by the device cloud.</li>
+<li><strong>ValueError</strong> &#8211; If any input fields are known to have a bad form.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of dictionaries in the form described for <a class="reference internal" href="#devicecloud.devicecore.DeviceCoreAPI.provision_device" title="devicecloud.devicecore.DeviceCoreAPI.provision_device"><tt class="xref py py-meth docutils literal"><span class="pre">provision_device()</span></tt></a> in the
+order matching the requested device list.  Note that it is possible for there to
+be mixed success and error when provisioning multiple devices.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.devicecore.Group">
+<em class="property">class </em><tt class="descclassname">devicecloud.devicecore.</tt><tt class="descname">Group</tt><big>(</big><em>group_id</em>, <em>name</em>, <em>description</em>, <em>path</em>, <em>parent_id</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides access to information about a group in the device cloud</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is primarily a container object and does not provide any functions itself at
+this time.  Information from here can be used along with other APIs to, for example,
+get all devices with a given group path.  This may change in the future.</p>
+</div>
+<dl class="classmethod">
+<dt id="devicecloud.devicecore.Group.from_json">
+<em class="property">classmethod </em><tt class="descname">from_json</tt><big>(</big><em>json_data</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.from_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build and return a new Group object from json data (used internally)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.print_subtree">
+<tt class="descname">print_subtree</tt><big>(</big><em>fobj=&lt;open file '&lt;stdout&gt;'</em>, <em>mode 'w' at 0x7fe20c9e3150&gt;</em>, <em>level=0</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.print_subtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print this group node and the subtree rooted at it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.is_root">
+<tt class="descname">is_root</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.is_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the group is the root for this account</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.add_child">
+<tt class="descname">add_child</tt><big>(</big><em>group</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.add_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a child group reference to this one</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.get_children">
+<tt class="descname">get_children</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return each child <a class="reference internal" href="#devicecloud.devicecore.Group" title="devicecloud.devicecore.Group"><tt class="xref py py-class docutils literal"><span class="pre">Group</span></tt></a> of this one in a list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.get_id">
+<tt class="descname">get_id</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.get_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID of this group as as string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.get_name">
+<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of this group as a string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.get_description">
+<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description of this group as a string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.get_path">
+<tt class="descname">get_path</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.get_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the full path of this group as a string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Group.get_parent_id">
+<tt class="descname">get_parent_id</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Group.get_parent_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ID of this groups parent as a string</p>
 </dd></dl>
 
 </dd></dl>
@@ -341,6 +615,26 @@ be unique (obviously) but will often be if you don&#8217;t have too many devices
 <dt id="devicecloud.devicecore.Device.get_current_connect_pw">
 <tt class="descname">get_current_connect_pw</tt><big>(</big><em>use_cached=True</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.get_current_connect_pw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current connection password for this device</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.add_to_group">
+<tt class="descname">add_to_group</tt><big>(</big><em>group_path</em><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.add_to_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a device to a group, if the group doesn&#8217;t exist it is created</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_path</strong> &#8211; Path or &#8220;name&#8221; of the group</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.devicecore.Device.remove_from_group">
+<tt class="descname">remove_from_group</tt><big>(</big><big>)</big><a class="headerlink" href="#devicecloud.devicecore.Device.remove_from_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place a device back into the root group</p>
 </dd></dl>
 
 </dd></dl>
