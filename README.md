@@ -15,13 +15,14 @@ Overview
 --------
 
 Python-devicecloud is a library providing simple, intuitive access to
-the [Device Cloud by Etherios](http://www.etherios.com/products/devicecloud/) for clients written in
-Python.
+the [Device Cloud by Etherios](http://www.etherios.com/products/devicecloud/)
+for clients written in Python.
 
-The library wraps the Device Cloud REST API and hides the details of forming HTTP requests in order to gain access to device information,
+The library wraps the Device Cloud REST API and hides the details of
+forming HTTP requests in order to gain access to device information,
 file data, streams, and other features of the device cloud.  The API
-wrapped can be found [here](http://ftp1.digi.com/support/documentation/90002008_redirect.htm).
-
+wrapped can be found
+[here](http://ftp1.digi.com/support/documentation/90002008_redirect.htm).
 
 The primary target audience for this library is individuals
 interfacing with the device cloud from the server side or developers
@@ -70,9 +71,15 @@ This library can be installed using
 Python 3) are supported by the library.
 
 ```sh
-pip install python-devicecloud
+pip install devicecloud
 ```
 
+If you already have an older version of the library installed, you can
+upgrade to the latest version by doing
+
+```sh
+pip install --upgrade devicecloud
+```
 
 Supported Features
 ------------------
@@ -102,6 +109,8 @@ is not the case.  The current features are supported by the library:
   * Get full metadata and contents of files and directories.
 * Low level support for performing basic SCI commands with limited parsing
   of results and support for only a subset of available services/commands.
+* APIs to make direct web service calls to the device cloud with some details
+  handled by the library (see DeviceCloudConnection and 'ws' documentation)
 
 The following features are *not* supported at this time.  Feedback on
 which features should be highest priority is always welcome.
@@ -115,7 +124,6 @@ which features should be highest priority is always welcome.
 * DeviceMetaData
 * DeviceVendor
 * FileDataHistory
-* Group Operations (CRUD)
 * NetworkInterface support
 * XBee specific support (XBeeCore)
 * Device Provisioning

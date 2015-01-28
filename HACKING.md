@@ -51,7 +51,7 @@ for additional pointers.
 
 ### Running Integration and Unittests
 
-There are some additional integration tests that run against and actual
+There are some additional integration tests that run against an actual
 device cloud account.  These are a bit more fragile and when something
 fails, you may need to go to your device cloud account to clean things
 up.
