@@ -84,11 +84,15 @@ class StreamsAPI(APIBase):
     def __init__(self, *args, **kwargs):
         APIBase.__init__(self, *args, **kwargs)
 
-    def _get_streams(self):
+    def _get_streams(self, uri_suffix=None):
         """Clear and update internal cache of stream objects"""
         # TODO: handle paging, perhaps change this to be a generator
+        if uri_suffix is not None and not uri_suffix.startswith('/'):
+            uri_suffix = '/' + uri_suffix
+        elif uri_suffix is None:
+            uri_suffix = ""
         streams = {}
-        response = self._conn.get_json("/ws/DataStream")
+        response = self._conn.get_json("/ws/DataStream{}".format(uri_suffix))
         for stream_data in response["items"]:
             stream_id = stream_data["streamId"]
             stream = DataStream(self._conn, stream_id, stream_data)
@@ -139,14 +143,16 @@ class StreamsAPI(APIBase):
         stream = DataStream(self._conn, stream_id)
         return stream
 
-    def get_streams(self):
-        """Return the iterator over all streams present on the device cloud
+    def get_streams(self, stream_prefix=None):
+        """Return the iterator over streams preset on device cloud.
+
+        :param stream_prefix: An optional prefix to limit the iterator to; all streams are returned if it is not specified.
 
         :return:  iterator over all :class:`.DataStream` instances on the device cloud
 
         """
         # TODO: deal with paging.  We now return a generator, so the interface should look the same
-        return iter(self._get_streams().values())
+        return iter(self._get_streams(stream_prefix).values())
 
     def get_stream(self, stream_id):
         """Return a reference to a stream with the given ``stream_id``

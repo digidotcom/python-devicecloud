@@ -65,6 +65,46 @@ GET_DATA_STREAMS = """
 }
 """
 
+GET_DATA_STREAMS_0 = """
+{
+    "resultSize": "1",
+    "requestedSize": "1000",
+    "pageCursor": "9d870afb-2-af668f74",
+    "items": [
+        {
+            "cstId": "7603",
+            "streamId": "another/test",
+            "dataType": "INTEGER",
+            "forwardTo": "",
+            "description": "Some Integral Thing",
+            "units": "",
+            "dataTtl": "172800",
+            "rollupTtl": "432000"
+        }
+    ]
+}
+"""
+
+GET_DATA_STREAMS_1 = """
+{
+    "resultSize": "1",
+    "requestedSize": "1000",
+    "pageCursor": "9d870afb-2-af668f74",
+    "items": [
+        {
+            "cstId": "7603",
+            "streamId": "test",
+            "dataType": "FLOAT",
+            "forwardTo": "",
+            "description": "some description",
+            "units": "light years",
+            "dataTtl": "172800",
+            "rollupTtl": "432000"
+        }
+    ]
+}
+"""
+
 GET_DATA_STREAMS_EMPTY = """
 {
     "resultSize": "0",
@@ -303,6 +343,19 @@ class TestStreamsAPI(HttpTestBase):
         self.assertEqual(len(streams), 2)
         self.assertIsInstance(streams[0], DataStream)
         self.assertIsInstance(streams[1], DataStream)
+
+    def test_get_streams_with_id(self):
+        self.prepare_response("GET", "/ws/DataStream/test", GET_DATA_STREAMS_1)
+        streams = list(self.dc.streams.get_streams('test'))
+        self.assertEqual(len(streams), 1)
+        self.assertIsInstance(streams[0], DataStream)
+        self.prepare_response("GET", "/ws/DataStream/another", GET_DATA_STREAMS_0)
+        streams = list(self.dc.streams.get_streams('another'))
+        self.assertEqual(len(streams), 1)
+        self.assertIsInstance(streams[0], DataStream)
+        self.prepare_response("GET", "/ws/DataStream/junk", GET_DATA_STREAMS_EMPTY)
+        streams = self.dc.streams.get_streams('junk')
+        self.assertEqual(list(streams), [])
 
     def test_get_stream(self):
         # Get a stream by ID when there is no cache
