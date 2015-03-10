@@ -9,13 +9,16 @@
 pyversions=(2.7.7
             3.2.5
             3.3.5
-            3.4.1
+            3.4.3
             pypy-2.3.1)
 
 # first make sure that pyenv is installed
 if [ ! -s "$HOME/.pyenv/bin/pyenv" ]; then
     curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 fi
+
+# Update pyenv (required for new python versions to be available)
+(cd $HOME/.pyenv && git pull)
 
 # add pyenv to our path and initialize (if this has not already been done)
 export PATH="$HOME/.pyenv/bin:$PATH"
