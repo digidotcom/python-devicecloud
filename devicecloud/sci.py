@@ -7,6 +7,7 @@
 
 """Server Command Interface functionality"""
 from devicecloud.apibase import APIBase
+from xml.etree import ElementTree as ET
 import six
 
 
@@ -66,6 +67,35 @@ class GroupTarget(TargetABC):
         return '<group path="{}">'.format(self._group)
 
 
+class AsyncRequestProxy(object):
+    """ An object representing an asynychronous SCI request. Can be used for
+    polling the status of the corresponding request.
+
+    It has three properties:
+    - job_id => the ID in device cloud of the job
+    - response => the response to the request if completed
+    - complete => True/False value indicating whether request has completed
+    """
+    def __init__(self, job_id, conn):
+        self.job_id = job_id
+        self._conn = conn
+        self.response = None
+
+    @property
+    def completed(self):
+        """ Return True if the request has completed, False otherwise. """
+        if self.response is not None:
+            return True
+        resp = self._conn.get('/ws/sci/{0}'.format(self.job_id))
+        dom = ET.fromstring(resp.content)
+        status = dom.find('.//status')
+        if status is not None and status.text == 'complete':
+            self.response = resp.content
+            return True
+        else:
+            return False
+
+
 class ServerCommandInterfaceAPI(APIBase):
     """Encapsulate Server Command Interface API"""
 
@@ -75,6 +105,18 @@ class ServerCommandInterfaceAPI(APIBase):
         uri = "/ws/sci/{0}".format(job_id)
         # TODO: do parsing here?
         return self._conn.get(uri)
+
+    def send_sci_async(self, operation, target, payload, **sci_options):
+        """ Sends an asynchronous SCI request, and wraps the job in an object
+        to manage it. """
+        sci_options['synchronous'] = False
+        resp = self.send_sci(operation, target, payload, **sci_options)
+        dom = ET.fromstring(resp.content)
+        job_element = dom.find('.//jobId')
+        if job_element is None:
+            return
+        job_id = int(job_element.text)
+        return AsyncRequestProxy(job_id, self._conn)
 
     def send_sci(self, operation, target, payload, reply=None, synchronous=None, sync_timeout=None,
                  cache=None, allow_offline=None, wait_for_reconnect=None):
