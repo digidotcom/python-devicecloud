@@ -69,6 +69,13 @@ class GroupTarget(TargetABC):
 class ServerCommandInterfaceAPI(APIBase):
     """Encapsulate Server Command Interface API"""
 
+    def get_async_job(self, job_id):
+        """ Query an asynchronous SCI job that was not created with
+        send_sci_async. """
+        uri = "/ws/sci/{0}".format(job_id)
+        # TODO: do parsing here?
+        return self._conn.get(uri)
+
     def send_sci(self, operation, target, payload, reply=None, synchronous=None, sync_timeout=None,
                  cache=None, allow_offline=None, wait_for_reconnect=None):
         """Send SCI request to 1 or more targets
