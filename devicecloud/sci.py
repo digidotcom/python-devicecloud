@@ -74,7 +74,7 @@ class AsyncRequestProxy(object):
     It has three properties:
     - job_id => the ID in device cloud of the job
     - response => the response to the request if completed
-    - complete => True/False value indicating whether request has completed
+    - completed => True/False value indicating whether request has completed
     """
     def __init__(self, job_id, conn):
         self.job_id = job_id
