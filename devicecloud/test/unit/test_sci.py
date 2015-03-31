@@ -84,7 +84,7 @@ class TestGetAsync(HttpTestBase):
         self.prepare_response("GET", "/ws/sci/123", EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED, 200)
         resp = self.dc.get_sci_api().get_async_job(123)
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.content, EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED)
+        self.assertEqual(resp.content, six.b(EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED))
 
 
 class TestAsyncProxy(HttpTestBase):
@@ -107,7 +107,7 @@ class TestAsyncProxy(HttpTestBase):
         self.prepare_response("GET", "/ws/sci/123", EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED, 200)
         t = AsyncRequestProxy(123, self.dc.get_sci_api()._conn)
         self.assertIs(t.completed, True)
-        self.assertEqual(t.response, EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED)
+        self.assertEqual(t.response, six.b(EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED))
 
     def test_completed_already(self):
         self.prepare_response("GET", "/ws/sci/123", EXAMPLE_ASYNC_SCI_DEVICE_NOT_CONNECTED, 200)
