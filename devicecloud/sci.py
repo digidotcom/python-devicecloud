@@ -72,10 +72,9 @@ class AsyncRequestProxy(object):
 
     Can be used for polling the status of the corresponding request.
 
-    It has three properties:
-    - job_id => the ID in device cloud of the job
-    - response => the response to the request if completed
-    - completed => True/False value indicating whether request has completed
+    :ivar job_id: the ID in device cloud of the job
+    :ivar response: the response to the request if completed
+    :ivar completed: True if the request has completed, False otherwise; queries on read
     """
     def __init__(self, job_id, conn):
         self.job_id = job_id
@@ -84,7 +83,6 @@ class AsyncRequestProxy(object):
 
     @property
     def completed(self):
-        """Return True if the request has completed, False otherwise"""
         if self.response is not None:
             return True
         resp = self._conn.get('/ws/sci/{0}'.format(self.job_id))
@@ -115,6 +113,7 @@ class ServerCommandInterfaceAPI(APIBase):
     def send_sci_async(self, operation, target, payload, **sci_options):
         """Send an asynchronous SCI request, and wraps the job in an object
         to manage it
+
         :param str operation: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
             file_system, data_service, and reboot}
         :param target: The device(s) to be targeted with this request
