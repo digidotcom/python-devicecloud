@@ -68,8 +68,9 @@ class GroupTarget(TargetABC):
 
 
 class AsyncRequestProxy(object):
-    """ An object representing an asynychronous SCI request. Can be used for
-    polling the status of the corresponding request.
+    """An object representing an asynychronous SCI request.
+
+    Can be used for polling the status of the corresponding request.
 
     It has three properties:
     - job_id => the ID in device cloud of the job
@@ -83,7 +84,7 @@ class AsyncRequestProxy(object):
 
     @property
     def completed(self):
-        """ Return True if the request has completed, False otherwise. """
+        """Return True if the request has completed, False otherwise"""
         if self.response is not None:
             return True
         resp = self._conn.get('/ws/sci/{0}'.format(self.job_id))
@@ -100,15 +101,28 @@ class ServerCommandInterfaceAPI(APIBase):
     """Encapsulate Server Command Interface API"""
 
     def get_async_job(self, job_id):
-        """ Query an asynchronous SCI job that was not created with
-        send_sci_async. """
+        """Query an asynchronous SCI job by ID
+
+        This is useful if the job was not created with send_sci_async().
+
+        :param int job_id: The job ID to query
+        :returns: The SCI response from GETting the job information
+        """
         uri = "/ws/sci/{0}".format(job_id)
         # TODO: do parsing here?
         return self._conn.get(uri)
 
     def send_sci_async(self, operation, target, payload, **sci_options):
-        """ Sends an asynchronous SCI request, and wraps the job in an object
-        to manage it. """
+        """Send an asynchronous SCI request, and wraps the job in an object
+        to manage it
+        :param str operation: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+            file_system, data_service, and reboot}
+        :param target: The device(s) to be targeted with this request
+        :type target: :class:`~.TargetABC` or list of :class:`~.TargetABC` instances
+
+        TODO: document other params
+
+        """
         sci_options['synchronous'] = False
         resp = self.send_sci(operation, target, payload, **sci_options)
         dom = ET.fromstring(resp.content)
