@@ -54,7 +54,8 @@ class FileDataAPI(APIBase):
         for fd_json in self._conn.iter_json_pages("/ws/FileData", page_size=page_size, **params):
             yield FileDataObject.from_json(self, fd_json)
 
-    def write_file(self, path, name, data, content_type=None, archive=False):
+    def write_file(self, path, name, data, content_type=None, archive=False,
+                   raw=False):
         """Write a file to the file data store at the given path
 
         :param str path: The path (directory) into which the file should be written.
@@ -66,6 +67,7 @@ class FileDataAPI(APIBase):
         :type content_type: str or None
         :param bool archive: If true, history will be retained for various revisions of this
             file.  If this is not required, leave as false.
+        :param bool raw: If true, skip the FileData XML headers (necessary for binary files)
 
         """
         path = validate_type(path, *six.string_types)
@@ -80,19 +82,22 @@ class FileDataAPI(APIBase):
             path += "/"
         name = name.lstrip("/")
 
-        if six.PY3:
-            base64_encoded_data = base64.encodebytes(data).decode('utf-8')
-        else:
-            base64_encoded_data = base64.encodestring(data)
-
         sio = six.moves.StringIO()
-        sio.write("<FileData>")
-        if content_type is not None:
-            sio.write("<fdContentType>{}</fdContentType>".format(content_type))
-        sio.write("<fdType>file</fdType>")
-        sio.write("<fdData>{}</fdData>".format(base64_encoded_data))
-        sio.write("<fdArchive>{}</fdArchive>".format(archive_str))
-        sio.write("</FileData>")
+        if not raw:
+            if six.PY3:
+                base64_encoded_data = base64.encodebytes(data).decode('utf-8')
+            else:
+                base64_encoded_data = base64.encodestring(data)
+
+            sio.write("<FileData>")
+            if content_type is not None:
+                sio.write("<fdContentType>{}</fdContentType>".format(content_type))
+            sio.write("<fdType>file</fdType>")
+            sio.write("<fdData>{}</fdData>".format(base64_encoded_data))
+            sio.write("<fdArchive>{}</fdArchive>".format(archive_str))
+            sio.write("</FileData>")
+        else:
+            sio.write(data)
 
         params = {
             "type": "file",
