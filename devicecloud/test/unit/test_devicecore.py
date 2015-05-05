@@ -15,6 +15,7 @@ from devicecloud.test.unit.test_utilities import HttpTestBase
 import httpretty
 from devicecloud.devicecore import ADD_GROUP_TEMPLATE
 import six
+import mock
 
 
 EXAMPLE_GET_DEVICES = {
@@ -335,6 +336,38 @@ class TestDeviceCoreProvisioning(HttpTestBase):
             'error_msg': 'The device 00000000-00000000-D48564FF-FF9D4FEE is already provisioned.',
             'location': None,
         })
+
+
+class TestDeviceCoreDeleting(HttpTestBase):
+
+    def test_delete_device_good(self):
+        fake_device = mock.MagicMock()
+        fake_device.get_device_id.return_value = '1234'
+        self.prepare_response("DELETE", "/ws/DeviceCore/1234", "<result><message>1 items deleted</message></result>", status=200)
+        self.dc.devicecore.delete_device(fake_device)
+        req = self._get_last_request()
+        self.assertEqual(req.path, "/ws/DeviceCore/1234")
+
+    def test_delete_device_not_exist(self):
+        fake_device = mock.MagicMock()
+        fake_device.get_device_id.return_value = '1234'
+        self.prepare_response("DELETE", "/ws/DeviceCore/1234", "<result><message>0 items deleted</message></result>", status=200)
+        self.dc.devicecore.delete_device(fake_device)
+        req = self._get_last_request()
+        self.assertEqual(req.path, "/ws/DeviceCore/1234")
+
+    def test_delete_device_bad_status(self):
+        fake_device = mock.MagicMock()
+        fake_device.get_device_id.return_value = '1234'
+        self.prepare_response("DELETE", "/ws/DeviceCore/1234", "<result><error>I pity da foo' who don' know about API changes.</error></result>", status=400)
+        try:
+            self.dc.devicecore.delete_device(fake_device)
+        except DeviceCloudHttpException:
+            pass
+        else:
+            assert False, "should have thrown exception"
+        req = self._get_last_request()
+        self.assertEqual(req.path, "/ws/DeviceCore/1234")
 
 
 class TestDeviceCoreDevices(HttpTestBase):

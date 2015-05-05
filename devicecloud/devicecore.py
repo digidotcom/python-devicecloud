@@ -157,6 +157,15 @@ class DeviceCoreAPI(APIBase):
         for group_data in self._conn.iter_json_pages("/ws/Group", page_size=page_size, **query_kwargs):
             yield Group.from_json(group_data)
 
+    def delete_device(self, dev):
+        """ Delete a from the cloud account associated with the handle.
+
+        :raises DeviceCloudHttpException: If there is an unexpected error reported by the device cloud.
+        :param dev: Device object of the device to delete.
+        :return: the Response from the delete request.
+        """
+        return self._conn.delete('/ws/DeviceCore/%s' % dev.get_device_id())
+
     def provision_device(self, **kwargs):
         """Provision a single device with the specified information
 
