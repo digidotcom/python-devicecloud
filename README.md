@@ -88,6 +88,7 @@ between the device cloud API and this library.  For now, however, that
 is not the case.  The current features are supported by the library:
 
 * Getting basic device information via DeviceCore
+* Provision and Delete devices via DeviceCore
 * Listing devices associated with a device cloud account
 * Interacting with Device Cloud Data Streams
   * Create Streams
