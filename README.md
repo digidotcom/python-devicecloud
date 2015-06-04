@@ -1,11 +1,10 @@
 Python Device Cloud Library
 ===========================
 
-[![Build Status](https://travis-ci.org/Etherios/python-devicecloud.svg?branch=master)](https://travis-ci.org/Etherios/python-devicecloud)
-[![Coverage Status](https://img.shields.io/coveralls/Etherios/python-devicecloud.svg)](https://coveralls.io/r/Etherios/python-devicecloud)
-[![Latest Version](https://pypip.in/version/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
-[![Supported Python versions](https://pypip.in/py_versions/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
-[![License](https://pypip.in/license/devicecloud/badge.svg)](https://pypi.python.org/pypi/devicecloud/)
+[![Build Status](https://img.shields.io/travis/digidotcom/python-devicecloud.svg)](https://travis-ci.org/digidotcom/python-devicecloud)
+[![Coverage Status](https://img.shields.io/coveralls/digidotcom/python-devicecloud.svg)](https://coveralls.io/r/digidotcom/python-devicecloud)
+[![Latest Version](https://img.shields.io/pypi/v/devicecloud.svg)](https://pypi.python.org/pypi/devicecloud/)
+[![License](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/digidotcom/python-devicecloud/blob/master/LICENSE)
 
 Be sure to check out the [full documentation](http://etherios.github.io/python-devicecloud).
 A [Changelog](https://github.com/etherios/python-devicecloud/blob/master/CHANGELOG.md)
