@@ -4,6 +4,7 @@
 #
 # Copyright (C) 2015, Digi International, Inc..
 from getpass import getpass
+import pprint
 import random
 import time
 
@@ -35,8 +36,9 @@ if __name__ == '__main__':
         mon.delete()
     mon = dc.monitor.create_monitor(topics)
 
-    def listener(*args, **kwargs):
-        print args, kwargs
+    def listener(data):
+        pprint.pprint(data)
+        return True  # we got it!
 
     mon.add_listener(listener)
 

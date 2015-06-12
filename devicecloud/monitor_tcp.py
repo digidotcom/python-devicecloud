@@ -8,6 +8,7 @@
 # https://github.com/digidotcom/idigi-python-monitor-api
 
 from Queue import Empty, Queue
+import json
 import logging
 import socket
 import struct
@@ -311,12 +312,12 @@ class CallbackWorkerPool(object):
         """
         # Used to queue up PublishMessageReceived events to be sent back to
         # the iDigi server.
-        self.__write_queue = write_queue
+        self._write_queue = write_queue
         # Used to queue up sessions and data to callback with.
-        self.__queue = Queue(size)
+        self._queue = Queue(size)
         # Number of workers to create.
         self.size = size
-        self.log = logging.getLogger('callback_worker_pool')
+        self.log = logging.getLogger('{}.callback_worker_pool'.format(__name__))
 
         for _ in range(size):
             worker = Thread(target=self._consume_queue)
@@ -330,21 +331,25 @@ class CallbackWorkerPool(object):
         if callback returned True.
         """
         while True:
-            session, block_id, data = self.__queue.get()
+            session, block_id, raw_data = self._queue.get()
+            data = json.loads(raw_data)  # decode as JSON
             try:
-                if session.callback(data):
+                result = session.callback(data)
+                if result is None:
+                    self.log.warn("Callback %r returned None, expected boolean.  Messages "
+                                  "are not marked as received unless True is returned", session.callback)
+                elif result:
                     # Send a Successful PublishMessageReceived with the
                     # block id sent in request
-                    if self.__write_queue is not None:
+                    if self._write_queue is not None:
                         response_message = struct.pack('!HHH',
                                                        PUBLISH_MESSAGE_RECEIVED,
                                                        block_id, 200)
-                        self.__write_queue.put((session.socket,
-                                                response_message))
+                        self._write_queue.put((session.socket, response_message))
             except Exception, exception:
                 self.log.exception(exception)
 
-            self.__queue.task_done()
+            self._queue.task_done()
 
     def queue_callback(self, session, block_id, data):
         """
@@ -355,7 +360,7 @@ class CallbackWorkerPool(object):
         :param block_id: the block_id of the message received.
         :param data: the data payload of the message received.
         """
-        self.__queue.put((session, block_id, data))
+        self._queue.put((session, block_id, data))
 
 
 class TCPClientManager(object):
@@ -518,9 +523,8 @@ class TCPClientManager(object):
                             payload = zlib.decompress(payload)
 
                         # Enqueue payload into a callback queue to be
-                        # invoked.
-                        self._callback_pool.queue_callback(session,
-                                                           block_id, payload)
+                        # invoked
+                        self._callback_pool.queue_callback(session, block_id, payload)
                 except select.error, err:
                     # Evaluate sessions if we get a bad file descriptor, if
                     # socket is gone, delete the session.
