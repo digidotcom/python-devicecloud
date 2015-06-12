@@ -6,6 +6,7 @@
 import logging
 import time
 import json
+import urlparse
 
 from devicecloud.util import validate_type
 from requests.auth import HTTPBasicAuth
@@ -125,6 +126,20 @@ class DeviceCloudConnection(object):
         self._throttle_delay_backoff_coefficient = throttle_delay_backoff_coefficient
         self._session = requests.Session()
         self._session.auth = auth
+
+    @property
+    def hostname(self):
+        """Get the hostname that this connection is associated with"""
+        from six.moves.urllib.parse import urlparse
+        return urlparse(self._base_url).netloc.split(':', 1)[0]
+
+    @property
+    def username(self):
+        return self._auth.username
+
+    @property
+    def password(self):
+        return self._auth.password
 
     def _make_url(self, path):
         if not path.startswith("/"):
@@ -354,6 +369,7 @@ class DeviceCloud(object):
         self._filedata_api = None  # filedata property api ref
         self._devicecore_api = None  # devicecore property api ref
         self._sci_api = None  # sci property api ref
+        self._monitor_api = None  # monitor property of api ref
         self._legacy_api = None  # legacy property api ref
 
     def has_valid_credentials(self):
@@ -400,6 +416,12 @@ class DeviceCloud(object):
         if self._sci_api is None:
             self._sci_api = self.get_sci_api()
         return self._sci_api
+
+    @property
+    def monitor(self):
+        if self._monitor_api is None:
+            self._monitor_api = self.get_monitor_api()
+        return self._monitor_api
 
     @property
     def ws(self):
@@ -470,6 +492,20 @@ class DeviceCloud(object):
         from devicecloud.sci import ServerCommandInterfaceAPI
 
         return ServerCommandInterfaceAPI(self._conn)
+
+    def get_monitor_api(self):
+        """Returns a :class:`.MonitorAPI` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.monitor` but will create
+        a new object (with a new cache) each time called.
+
+        :return: Monitor API object bound to this device cloud account
+        :rtype: :class:`.MonitorAPI`
+
+        """
+        from devicecloud.monitor import MonitorAPI
+
+        return MonitorAPI(self._conn)
 
     def get_web_service_stub(self):
         """Returns a :class:`.WebServiceStub` bound to this device cloud instance
