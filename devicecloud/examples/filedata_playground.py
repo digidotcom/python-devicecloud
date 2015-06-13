@@ -3,24 +3,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright (c) 2015 Digi International, Inc.
-from getpass import getpass
 
-from devicecloud import DeviceCloud
-from devicecloud.filedata import fd_name, fd_size, fd_type, fd_path
+from devicecloud.examples.example_helpers import get_authenticated_dc
+from devicecloud.filedata import fd_path
 import six
-from six.moves import input
-
-def get_authenticated_dc():
-    while True:
-        user = input("username: ")
-        password = getpass("password: ")
-        dc = DeviceCloud(user, password, base_url="https://login-etherios-com-2v5p9uat81qu.runscope.net")
-        if dc.has_valid_credentials():
-            print("Credentials accepted!")
-            return dc
-        else:
-            print("Invalid username or password provided, try again")
-
 
 if __name__ == '__main__':
     dc = get_authenticated_dc()
@@ -32,6 +18,5 @@ if __name__ == '__main__':
         for fd_file in files:
             print(fd_file)
 
-
-    for fd in dc.filedata.get_filedata(fd_path=="~/"):
+    for fd in dc.filedata.get_filedata(fd_path == "~/"):
         print (fd)

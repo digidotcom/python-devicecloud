@@ -1,23 +1,12 @@
-from devicecloud.streams import STREAM_TYPE_STRING, DataPoint, STREAM_TYPE_INTEGER
-from devicecloud import DeviceCloud
-from getpass import getpass
 import datetime
 import pprint
 import random
 import time
 import json
 
+from devicecloud.examples.example_helpers import get_authenticated_dc
 
-def get_authenticated_dc():
-    while True:
-        user = raw_input("username: ")
-        password = getpass("password: ")
-        dc = DeviceCloud(user, password)
-        if dc.has_valid_credentials():
-            print ("Credentials accepted!")
-            return dc
-        else:
-            print ("Invalid username or password provided, try again")
+from devicecloud.streams import STREAM_TYPE_STRING, DataPoint, STREAM_TYPE_INTEGER
 
 
 def get_or_create_classroom(datatype):
@@ -76,7 +65,7 @@ def example_1():
     classroom.bulk_write_datapoints(datapoints)
 
     most_recent_dp = classroom.get_current_value()
-    print json.loads(most_recent_dp.get_data())['name']
+    print(json.loads(most_recent_dp.get_data())['name'])
 
 
 def example_2():
@@ -91,4 +80,4 @@ def example_2():
 
 
 example_2()
-print 'done.'
+print('done.')

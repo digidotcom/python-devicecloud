@@ -3,28 +3,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright (C) 2015, Digi International, Inc..
-from getpass import getpass
 import pprint
 import random
 import time
 
-from devicecloud import DeviceCloud
-from devicecloud.filedata import fd_name, fd_size, fd_type, fd_path
+from devicecloud.examples.example_helpers import get_authenticated_dc
+
 from devicecloud.streams import DataPoint
-import six
-from six.moves import input
-
-def get_authenticated_dc():
-    while True:
-        user = input("username: ")
-        password = getpass("password: ")
-        dc = DeviceCloud(user, password, base_url="https://login.etherios.com")
-        if dc.has_valid_credentials():
-            print("Credentials accepted!")
-            return dc
-        else:
-            print("Invalid username or password provided, try again")
-
 
 if __name__ == '__main__':
     dc = get_authenticated_dc()
@@ -35,6 +20,7 @@ if __name__ == '__main__':
     if mon is not None:
         mon.delete()
     mon = dc.monitor.create_monitor(topics)
+    pprint.pprint(mon.get_metadata())
 
     def listener(data):
         pprint.pprint(data)
