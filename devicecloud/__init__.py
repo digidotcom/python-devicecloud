@@ -6,7 +6,6 @@
 import logging
 import time
 import json
-import urlparse
 
 from devicecloud.util import validate_type
 from requests.auth import HTTPBasicAuth

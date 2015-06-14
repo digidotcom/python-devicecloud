@@ -106,14 +106,41 @@ class DeviceCloudMonitor(object):
     :type _conn: devicecloud.DeviceCloudConnection
     """
 
+    # TODO: consider adding getters/setters for each metadata
+
     @classmethod
     def from_json(cls, conn, tcp_client_manager, monitor_data):
-        return cls(conn, tcp_client_manager, monitor_data['monId'])
+        monitor_id = int(monitor_data['monId'])
+        return cls(conn, tcp_client_manager, monitor_id)
 
     def __init__(self, conn, tcp_client_manager, monitor_id):
         self._conn = conn
         self._tcp_client_manager = tcp_client_manager
         self._id = monitor_id
+
+    def get_id(self):
+        """Get the ID of this monitor as an integer"""
+        return self._id
+
+    def get_metadata(self):
+        """Get additional information about this monitor
+
+        This method returns a dictionary where the keys contain information about the
+        monitor.  The returned data will look something like this::
+
+            {
+                'cstId': '7603',
+                'monBatchDuration': '10',
+                'monBatchSize': '1',
+                'monCompression': 'zlib',
+                'monFormatType': 'json',
+                'monId': '178023',
+                'monStatus': 'INACTIVE',
+                'monTopic': 'DeviceCore,FileDataCore,FileData,DataPoint',
+                'monTransportType': 'tcp'
+            }
+        """
+        return self._conn.get_json("/ws/Monitor/{id}".format(id=self._id))["items"][0]
 
     def delete(self):
         """Delete this monitor form the device cloud"""

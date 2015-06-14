@@ -7,7 +7,6 @@
 # This code is originally from another Digi Open Source Library:
 # https://github.com/digidotcom/idigi-python-monitor-api
 
-from Queue import Empty, Queue
 import json
 import logging
 import socket
@@ -19,6 +18,8 @@ import zlib
 import ssl
 
 import pkg_resources
+from six.moves.queue import Queue, Empty
+import six
 
 DEFAULT_CRT_NAME = "devicecloud.crt"
 
@@ -72,7 +73,7 @@ def _read_msg_header(session):
     response_type = struct.unpack('!H', session.data[0:2])[0]
 
     # Clear out session data as header is consumed.
-    session.data = ""
+    session.data = six.b("")
     return response_type
 
 
@@ -103,10 +104,7 @@ def _read_msg(session):
 
 
 class PushException(Exception):
-    """
-    Indicates an issue interacting with iDigi Push Functionality.
-    """
-    pass
+    """Indicates an issue interacting with Push Functionality."""
 
 
 class PushSession(object):
@@ -117,9 +115,7 @@ class PushSession(object):
     """
 
     def __init__(self, callback, monitor_id, client):
-        """
-        Creates a PushSession for use with interacting with iDigi's
-        Push Functionality.
+        """Creates a PushSession for use with the device cloud
 
         :param callback: The callback function to invoke when data received.
             Must have 1 required parameter that will contain the payload.
@@ -130,10 +126,10 @@ class PushSession(object):
         self.monitor_id = monitor_id
         self.client = client
         self.socket = None
-        self.log = logging.getLogger("push_session[%s]" % monitor_id)
+        self.log = logging.getLogger("%s.push_session.%s" % (__name__, monitor_id))
 
         # Received protocol data holders.
-        self.data = ""
+        self.data = six.b("")
         self.message_length = 0
 
     def send_connection_request(self):
@@ -152,11 +148,11 @@ class PushSession(object):
             # Username Length.
             payload += struct.pack('!H', len(self.client.username))
             # Username.
-            payload += self.client.username
+            payload += six.b(self.client.username)
             # Password Length.
             payload += struct.pack('!H', len(self.client.password))
             # Password.
-            payload += self.client.password
+            payload += six.b(self.client.password)
             # Monitor ID.
             payload += struct.pack('!L', int(self.monitor_id))
 
@@ -195,9 +191,9 @@ class PushSession(object):
             self.log.info("Got ConnectionResponse for Monitor %s. Status %s."
                           % (self.monitor_id, status_code))
             if status_code != STATUS_OK:
-                raise PushException("Connection Response Status Code (%d) is \
-not STATUS_OK (%d)." % (status_code, STATUS_OK))
-        except Exception, exception:
+                raise PushException("Connection Response Status Code (%d) is "
+                                    "not STATUS_OK (%d)." % (status_code, STATUS_OK))
+        except Exception as exception:
             # TODO(posborne): This is bad!  It isn't necessarily a socket exception!
             # Likely a socket exception, close it and raise an exception.
             self.socket.close()
@@ -205,12 +201,8 @@ not STATUS_OK (%d)." % (status_code, STATUS_OK))
             raise exception
 
     def start(self):
-        """
-        Creates a TCP connection to the iDigi Server and sends a
-        ConnectionRequest message.
-        """
-        self.log.info("Starting Insecure Session for Monitor %s."
-                      % self.monitor_id)
+        """Creates a TCP connection to the device cloud and sends a ConnectionRequest message"""
+        self.log.info("Starting Insecure Session for Monitor %s" % self.monitor_id)
         if self.socket is not None:
             raise Exception("Socket already established for %s." % self)
 
@@ -218,16 +210,17 @@ not STATUS_OK (%d)." % (status_code, STATUS_OK))
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.client.hostname, PUSH_OPEN_PORT))
             self.socket.setblocking(0)
-        except Exception, exception:
+        except socket.error as exception:
             self.socket.close()
             self.socket = None
-            raise exception
+            raise
 
         self.send_connection_request()
 
     def stop(self):
-        """
-        Closes the socket associated with this session and puts Session
+        """Stop/Close this session
+
+        Close the socket associated with this session and puts Session
         into a state such that it can be re-established later.
         """
         if self.socket is not None:
@@ -287,7 +280,7 @@ class SecurePushSession(PushSession):
 
             self.socket.connect((self.client.hostname, PUSH_SECURE_PORT))
             self.socket.setblocking(0)
-        except Exception, exception:
+        except Exception as exception:
             self.socket.close()
             self.socket = None
             raise exception
@@ -332,7 +325,7 @@ class CallbackWorkerPool(object):
         """
         while True:
             session, block_id, raw_data = self._queue.get()
-            data = json.loads(raw_data)  # decode as JSON
+            data = json.loads(raw_data.decode('utf-8'))  # decode as JSON
             try:
                 result = session.callback(data)
                 if result is None:
@@ -346,7 +339,7 @@ class CallbackWorkerPool(object):
                                                        PUBLISH_MESSAGE_RECEIVED,
                                                        block_id, 200)
                         self._write_queue.put((session.socket, response_message))
-            except Exception, exception:
+            except Exception as exception:
                 self.log.exception(exception)
 
             self._queue.task_done()
@@ -408,10 +401,9 @@ class TCPClientManager(object):
         return self._conn.password
 
     def _restart_session(self, session):
-        """
-        Restarts and re-establishes session.
+        """Restarts and re-establishes session
 
-        :param session: The session to restart.
+        :param session: The session to restart
         """
         # remove old session key, if socket is None, that means the
         # session was closed by user and there is no need to restart.
@@ -435,7 +427,7 @@ class TCPClientManager(object):
                 sock.send(data)
             except Empty:
                 pass  # nothing to write after timeout
-            except socket.error, err:
+            except socket.error as err:
                 if err.errno == errno.EBADF:
                     self._clean_dead_sessions()
 
@@ -445,7 +437,7 @@ class TCPClientManager(object):
         were removed (indicates a stopped session).
         In these cases, remove the session.
         """
-        for sck in self.sessions.keys():
+        for sck in list(self.sessions.keys()):
             session = self.sessions[sck]
             if session.socket is None:
                 del self.sessions[sck]
@@ -460,8 +452,7 @@ class TCPClientManager(object):
         try:
             while not self.closed:
                 try:
-                    inputready = \
-                        select.select(self.sessions.keys(), [], [], 0.1)[0]
+                    inputready =  select.select(self.sessions.keys(), [], [], 0.1)[0]
                     for sock in inputready:
                         session = self.sessions[sock]
                         sck = session.socket
@@ -486,8 +477,7 @@ class TCPClientManager(object):
                                 # More Data to be read.  Continue.
                                 continue
                             elif response_type != PUBLISH_MESSAGE:
-                                self.log.warn("Response Type (%x) does " \
-                                              "not match PublishMessage (%x)" \
+                                self.log.warn("Response Type (%x) does not match PublishMessage (%x)"
                                               % (response_type, PUBLISH_MESSAGE))
                                 continue
 
@@ -495,11 +485,11 @@ class TCPClientManager(object):
                             if not _read_msg(session):
                                 # Data not completely read, continue.
                                 continue
-                        except PushException, err:
+                        except PushException as err:
                             # If Socket is None, it was closed,
                             # otherwise it was closed when it shouldn't
                             # have been restart it.
-                            session.data = ""
+                            session.data = six.b("")
                             session.message_length = 0
 
                             if session.socket is None:
@@ -511,8 +501,8 @@ class TCPClientManager(object):
 
                         # We received full payload,
                         # clear session data and parse it.
-                        data = session.data
-                        session.data = ""
+                        data =  session.data
+                        session.data = six.b("")
                         session.message_length = 0
                         block_id = struct.unpack('!H', data[0:2])[0]
                         compression = struct.unpack('!B', data[4:5])[0]
@@ -525,12 +515,12 @@ class TCPClientManager(object):
                         # Enqueue payload into a callback queue to be
                         # invoked
                         self._callback_pool.queue_callback(session, block_id, payload)
-                except select.error, err:
+                except select.error as err:
                     # Evaluate sessions if we get a bad file descriptor, if
                     # socket is gone, delete the session.
                     if err.args[0] == errno.EBADF:
                         self._clean_dead_sessions()
-                except Exception, err:
+                except Exception as err:
                     self.log.exception(err)
         finally:
             for session in self.sessions.values():
