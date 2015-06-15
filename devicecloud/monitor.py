@@ -17,14 +17,14 @@ logger = logging.getLogger(__name__)
 
 
 class MonitorAPI(APIBase):
-    """Provide access to the device cloud Monitor API for receiving push notifiactions
+    """Provide access to the device cloud Monitor API for receiving push notifications
 
-    The Monitor API in the device cloud allows for the creation and destructions of
+    The Monitor API in the device cloud allows for the creation and destruction of
     multiple "monitors."  Each monitor is registered against one or more "topics"
     which describe the data in which it is interested.
 
     There are, in turn, two main ways to receive data matching the topics for a
-    given monitor
+    given monitor:
 
     1. Stream: The device cloud supports a protocol over TCP (optionally with SSL) over which
        the batches of events will be sent when they are received.
@@ -33,6 +33,47 @@ class MonitorAPI(APIBase):
 
     Currently, this library supports setting up both types of monitors, but there
     is no special support provided for parsing HTTP postback requests.
+
+    More information on the format for topic strings can be found in the `device
+    cloud documentation for monitors <http://goo.gl/6UiOCG>`_.
+
+    Here's a quick example showing a typical pattern used for creating a push monitor
+    and associated listener that triggers a callback.  Deletion of existing monitors
+    matching the same topics is not necessary but sometimes done in order to ensure
+    that changes to the monitor configuration in code always make it to the monitor
+    configuration in the device cloud::
+
+        def monitor_callback(json_data):
+            print(json_data)
+            return True  # message received
+
+        # Listen for DataPoint updates
+        topics = ['DataPoint[U]']
+        monitor = dc.monitor.get_monitor(topics)
+        if monitor:
+            monitor.delete()
+        monitor = dc.monitor.create_monitor(topics)
+        monitor.add_listener(monitor_callback)
+
+        # later...
+        dc.monitor.stop_listeners()
+
+    When updates to any DataPoint in the device cloud occurs, the callback will be called
+    with a data structure like this one::
+
+        {'Document': {'Msg': {'DataPoint': {'cstId': 7603,
+                                            'data': 0.411700824929,
+                                            'description': '',
+                                            'id': '684572e0-12c4-11e5-8507-fa163ed4cf14',
+                                            'quality': 0,
+                                            'serverTimestamp': 1434307047694,
+                                            'streamId': 'test',
+                                            'streamUnits': '',
+                                            'timestamp': 1434307047694},
+                                'group': '*',
+                                'operation': 'INSERTION',
+                                'timestamp': '2015-06-14T18:37:27.815Z',
+                                'topic': '7603/DataPoint/test'}}}
     """
 
     def __init__(self, conn):
@@ -51,8 +92,7 @@ class MonitorAPI(APIBase):
             does not exceed batch_size.
         :param transport_type: Either 'tcp' or 'http'
         :param compression: Compression value (i.e. 'gzip').
-        :param format_type: What format server should send data in (i.e.
-            'xml' or 'json').
+        :param format_type: What format server should send data in (i.e. 'xml' or 'json').
 
         Returns a string of the created Monitor Id (e.g.. 9001)
         """
@@ -83,7 +123,7 @@ class MonitorAPI(APIBase):
     def get_monitor(self, topics):
         """Attempts to find a Monitor in device cloud that matches the provided topics
 
-        :param topics: a string list of topics (e.g. ``['DeviceCore[U]', 'FileDataCore'])``
+        :param topics: a string list of topics (e.g. ``['DeviceCore[U]', 'FileDataCore'])``)
 
         Returns a :class:`DeviceCloudMonitor` if found, otherwise None.
         """

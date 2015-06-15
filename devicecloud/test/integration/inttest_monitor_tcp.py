@@ -46,7 +46,7 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
                         fd_push_seen = True
                 dp = msg.get('DataPoint')
                 if dp:
-                    if (dp['streamId'] == 'inttest/monitor_tcp'):
+                    if dp['streamId'] == 'inttest/monitor_tcp':
                         dp_push_seen = True
 
             self.assertTrue(fd_push_seen)
