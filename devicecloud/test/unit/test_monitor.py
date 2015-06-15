@@ -3,6 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright (c) 2015 Digi International, Inc.
+from devicecloud.monitor import MON_TOPIC_ATTR, MON_TRANSPORT_TYPE_ATTR
 from devicecloud.test.unit.test_utilities import HttpTestBase
 import six
 
@@ -124,6 +125,19 @@ class TestMonitorAPI(HttpTestBase):
                                                  compression='gzip', format_type='json')
         self.assertEqual(self._get_last_request().body, six.b(CREATE_MONITOR_GOOD_REQUEST))
         self.assertEqual(mon.get_id(), 178008)
+
+    def test_get_monitors(self):
+        self.prepare_response("GET", "/ws/Monitor", data=GET_MONITOR_SINGLE_FOUND)
+        mons = list(self.dc.monitor.get_monitors((MON_TOPIC_ATTR == "DeviceCore") &
+                                                 (MON_TRANSPORT_TYPE_ATTR == "tcp")))
+        self.assertEqual(len(mons), 1)
+        mon = mons[0]
+        self.assertEqual(mon.get_id(), 178007)
+        self.assertEqual(self._get_last_request_params(), {
+            'condition': "monTopic='DeviceCore' and monTransportType='tcp'",
+            'start': '0',
+            'size': '1000'
+        })
 
     def test_get_monitor_present(self):
         self.prepare_response("GET", "/ws/Monitor", data=GET_MONITOR_SINGLE_FOUND)

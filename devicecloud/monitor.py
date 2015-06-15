@@ -15,6 +15,97 @@ from devicecloud.monitor_tcp import TCPClientManager
 
 logger = logging.getLogger(__name__)
 
+#: System-generated identifier for the monitor.
+MON_ID_ATTR = Attribute("monId")
+
+#: Device Cloud customer identifier.
+MON_CST_ID_ATTR = Attribute("cstId")
+
+#: One or more topics to monitor separated by comma.  See the device cloud
+#: documentation for more details
+MON_TOPIC_ATTR = Attribute("monTopic")
+
+#: Format for delivered event data: xml, json
+MON_FORMAT_TYPE_ATTR = Attribute("monFormatType")
+
+#: Transport method used to deliver push notifications to the
+#: client application: tcp, http
+MON_TRANSPORT_TYPE_ATTR = Attribute("monTransportType")
+
+#: For HTTP transport type only. URL of the customer web server. For http URLs,
+#: the default listening port is 80; for https URLs, the default listening
+#: port is 443.
+MON_HTTP_TRANSPORT_URL_ATTR = Attribute("monTransportUrl")
+
+#: For HTTP transport type only. Credentials for basic authentication
+#: in the following format: ``username:password``
+MON_HTTP_TRANSPORT_TOKEN_ATTR = Attribute("monTransportToken")
+
+#: For HTTP transport type only. HTTP method to use for sending
+#: data: PUT or POST. The default is PUT.
+MON_HTTP_TRANSPORT_METHOD_ATTR = Attribute("monTransportMethod")
+
+#: For HTTP transport type only. Time in milliseconds Device Cloud waits
+#: when attempting to connect to the destination http server. A value of
+#: 0 means use the system default of 5000 (5 seconds). Most monitors do
+#: not need to configure this setting.
+MON_HTTP_CONNECT_TIMEOUT_ATTR = Attribute("monConnectTimeout")
+
+#: For HTTP transport type only. Time in milliseconds Device Cloud waits
+#: for a response for pushed events from the http server. A value of 0 means
+#: use the system default of 5000 (5 seconds). Most monitors do not need to
+#: configure this setting.
+MON_HTTP_RESPONSE_TIMEOUT_ATTR = Attribute("monResponseTimeout")
+
+#: For TCP transport type only. Indicates whether the client will explicitly
+#: acknowledge TCP push events or allow Device Cloud to automatically acknowledge
+#: events when sent. Options include: explicit or off. The default is off.
+MON_TCP_ACK_OPTION_ATTR = Attribute("monAckOption")
+
+#: Specifies an upper bound on how many messages are aggregated before sending
+#: a batch. The default is 100.
+MON_BATCH_SIZE_ATTR = Attribute("monBatchSize")
+
+#: Specifies an upper bound on the number of seconds messages are aggregated
+#: before sending. The default is 10.
+MON_BATCH_DURATION_ATTR = Attribute("monBatchDuration")
+
+#: Keyword that specifies the method used to compress messages. Options include:
+#: zlib or none. The default is none. For zlib, the deflate algorithm is used to
+#: compress the data; use inflate to decompress the data.
+#:
+#: Note: For backwards compatibility, gzip is accepted as a valid keyword.
+#: Compression has always been done using the deflate algorithm.
+MON_COMPRESSION_ATTR = Attribute("monCompression")
+
+#: Boolean value that specifies whether Device Cloud replays any missed
+#: published events before any new published events are forwarded. True
+#: indicates missed published events are replayed. False indicates missed
+#: published events are not replayed. The default is false.
+MON_AUTO_REPLAY_ON_CONNECT = Attribute("monAutoReplayOnConnect")
+
+#: Optional text field used to label or describe the monitor.
+MON_DESCRIPTION_ATTR = Attribute("monDescription")
+
+#: Specifies last connection time to the client application.
+MON_LAST_CONNECT_ATTR = Attribute("monLastConnect")
+
+#: Specifies the last message pushed to the client application
+MON_LAST_SENT_ATTR = Attribute("monLastSent")
+
+#: Specifies the current connection status to the client application:
+#:
+#: - CONNECTING: For HTTP monitors only. Device Cloud is attempting
+#:     to connect to the configured HTTP server. Once connected, the state changes to ACTIVE.
+#: - ACTIVE: Monitor is connected and publishing events.
+#: - INACTIVE: Monitor is not connected and events are not published or recorded.
+#: - SUSPENDED: For monitors with monAutoReplayOnConnect = True.  Monitor has disconnected,
+#:     but publish events are recorded for later replay.
+#: - DISABLED: For HTTP monitors only. If a monitor has not connected for 24 hours,
+#:     the state is set to DISABLED, and publish events are not recorded for replay.
+#:     A disabled monitor must be reconfigured via the Monitor web service.
+MON_STATUS_ATTR = Attribute("monStatus")
+
 
 class MonitorAPI(APIBase):
     """Provide access to the device cloud Monitor API for receiving push notifications
@@ -118,6 +209,37 @@ class MonitorAPI(APIBase):
         monitor_id = int(location.split('/')[-1])
         return DeviceCloudMonitor(self._conn, self._tcp_client_manager, monitor_id)
 
+    def get_monitors(self, condition=None, page_size=1000):
+        """Return an iterator over all monitors matching the provided condition
+
+        Get all inactive monitors and print id::
+
+            for mon in dc.monitor.get_monitors(MON_STATUS_ATTR == "DISABLED"):
+                print(mon.get_id())
+
+        Get all the HTTP monitors and print id::
+
+            for mon in dc.monitor.get_monitors(MON_TRANSPORT_TYPE_ATTR == "http"):
+                print(mon.get_id())
+
+        Many other possibilities exist.  See the :mod:`devicecloud.condition` documention
+        for additional details on building compound expressions.
+
+        :param condition: An :class:`.Expression` which defines the condition
+            which must be matched on the monitor that will be retrieved from
+            the device cloud. If a condition is unspecified, an iterator over
+            all monitors for this account will be returned.
+        :type condition: :class:`.Expression` or None
+        :param int page_size: The number of results to fetch in a single page.
+        :return: Generator yielding :class:`.DeviceCloudMonitor` instances matching the
+            provided conditions.
+        """
+        req_kwargs = {}
+        if condition:
+            req_kwargs['condition'] = condition.compile()
+        for monitor_data in self._conn.iter_json_pages("/ws/Monitor", **req_kwargs):
+            yield DeviceCloudMonitor.from_json(self._conn, self._tcp_client_manager, monitor_data)
+
     def get_monitor(self, topics):
         """Attempts to find a Monitor in device cloud that matches the provided topics
 
@@ -125,11 +247,8 @@ class MonitorAPI(APIBase):
 
         Returns a :class:`DeviceCloudMonitor` if found, otherwise None.
         """
-        condition = (Attribute("monTopic") == ",".join(topics))
-        for monitor_data in self._conn.iter_json_pages("/ws/Monitor",
-                                                       condition=condition.compile()):
-            # just return the first one
-            return DeviceCloudMonitor.from_json(self._conn, self._tcp_client_manager, monitor_data)
+        for monitor in self.get_monitors(MON_TOPIC_ATTR == ",".join(topics)):
+            return monitor  # return the first one, even if there are multiple
         return None
 
     def stop_listeners(self):

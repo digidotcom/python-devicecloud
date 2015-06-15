@@ -106,8 +106,8 @@ class Comparison(Expression):
 class Attribute(object):
     """An attribute is a piece of data on which we may perform comparisons
 
-    Comparisons performed to attributes generated :class:`~Condition`s.
-
+    Comparisons performed to attributes will in turn generate new
+    :class:`.Comparison` instances.
     """
 
     def __init__(self, name):
