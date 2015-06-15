@@ -1,7 +1,32 @@
 ## Python Devicecloud Library Changelog
 
+### 0.3 / 2015-06-15
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.2...0.3)
+
+Enhancements:
+
+* monitor: Support for the Monitor API was added allowing for
+  querying, adding, and removing of monitors (limiited to TCP right
+  now).
+* monitor: Support for listening for changes and receiving callbacks
+  when monitors are triggered has been added.  Support is limited to
+  SSL/TCP for now.
+* streams: get_stream() now optionally accepts a ``stream_prefix``
+  that allow for restricting which streams are returned based on path.
+* sci: support added for ``get_job_async``
+* devicecore: provisioning: support added for removing devices from an
+  account.
+* core: HTTP sessions are now used in order to allow for HTTP
+  connection reuse and credential reuse (via cookies)
+
+Bug Fixes:
+
+* Unit tests for fixed for Python 3.4
+* filedata: ``raw`` option added to work around some issues when
+  retrieving binary data as base64
+
 ### 0.2 / 2015-01-23
-[Full Changelog](https://github.com/etherios/python-devicecloud/compare/0.1.1...0.2)
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.1.1...0.2)
 
 Enhancements:
 
@@ -36,7 +61,7 @@ Thanks to Dan Harrison, Steve Stack, Tom Manley, and Paul Osborne for contributi
 going into this release.
 
 ### 0.1.1 / 2014-09-14
-[Full Changelog](https://github.com/etherios/python-devicecloud/compare/0.1...0.1.1)
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.1...0.1.1)
 
 Enhancements:
 

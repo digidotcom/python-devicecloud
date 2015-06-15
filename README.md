@@ -113,14 +113,14 @@ is not the case.  The current features are supported by the library:
 * APIs to make direct web service calls to the device cloud with some details
   handled by the library (see DeviceCloudConnection and 'ws' documentation)
 * Device Provisioning via Mac Address, IMEI or Device ID
+* Monitors
+* Creating a TCP or HTTP monitor
 
 The following features are *not* supported at this time.  Feedback on
 which features should be highest priority is always welcome.
 
 * Alarms
-* Monitors
 * Scheduled Operations
-* Creating a TCP or HTTP monitor
 * Asynchronous SCI requests
 * High level access to many SCI/RCI operations
 * DeviceMetaData
