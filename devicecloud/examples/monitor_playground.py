@@ -19,7 +19,7 @@ if __name__ == '__main__':
     mon = dc.monitor.get_monitor(topics)
     if mon is not None:
         mon.delete()
-    mon = dc.monitor.create_monitor(topics)
+    mon = dc.monitor.create_tcp_monitor(topics)
     pprint.pprint(mon.get_metadata())
 
     def listener(data):

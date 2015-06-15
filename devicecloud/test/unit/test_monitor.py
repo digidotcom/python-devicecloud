@@ -118,10 +118,10 @@ GET_MONITOR_NONE_FOUND = """\
 
 class TestMonitorAPI(HttpTestBase):
 
-    def test_create_monitor(self):
+    def test_create_tcp_monitor(self):
         self.prepare_response("POST", "/ws/Monitor", data=CREATE_MONITOR_GOOD_RESPONSE)
-        mon = self.dc.monitor.create_monitor(['topA', 'topB'], batch_size=10, batch_duration=0,
-                                       transport_type='tcp', compression='gzip', format_type='json')
+        mon = self.dc.monitor.create_tcp_monitor(['topA', 'topB'], batch_size=10, batch_duration=0,
+                                                 compression='gzip', format_type='json')
         self.assertEqual(self._get_last_request().body, six.b(CREATE_MONITOR_GOOD_REQUEST))
         self.assertEqual(mon.get_id(), 178008)
 

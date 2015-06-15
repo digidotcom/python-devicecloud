@@ -52,7 +52,7 @@ class MonitorAPI(APIBase):
         monitor = dc.monitor.get_monitor(topics)
         if monitor:
             monitor.delete()
-        monitor = dc.monitor.create_monitor(topics)
+        monitor = dc.monitor.create_tcp_monitor(topics)
         monitor.add_listener(monitor_callback)
 
         # later...
@@ -81,16 +81,15 @@ class MonitorAPI(APIBase):
         # TODO: determine best way to expose additional options
         self._tcp_client_manager = TCPClientManager(self._conn, secure=True)
 
-    def create_monitor(self, topics, batch_size=1, batch_duration=0, transport_type='tcp',
-                       compression='gzip', format_type='json'):
-        """Creates a Monitor instance in the device cloud for a given list of topics
+    def create_tcp_monitor(self, topics, batch_size=1, batch_duration=0,
+                           compression='gzip', format_type='json'):
+        """Creates a TCP Monitor instance in the device cloud for a given list of topics
 
         :param topics: a string list of topics (e.g. ['DeviceCore[U]',
                   'FileDataCore']).
         :param batch_size: How many Msgs received before sending data.
         :param batch_duration: How long to wait before sending batch if it
             does not exceed batch_size.
-        :param transport_type: Either 'tcp' or 'http'
         :param compression: Compression value (i.e. 'gzip').
         :param format_type: What format server should send data in (i.e. 'xml' or 'json').
 
@@ -102,7 +101,7 @@ class MonitorAPI(APIBase):
             <monTopic>{topics}</monTopic>
             <monBatchSize>{batch_size}</monBatchSize>
             <monFormatType>{format_type}</monFormatType>
-            <monTransportType>{transport_type}</monTransportType>
+            <monTransportType>tcp</monTransportType>
             <monCompression>{compression}</monCompression>
         </Monitor>
         """.format(
@@ -110,7 +109,6 @@ class MonitorAPI(APIBase):
             batch_size=batch_size,
             batch_duration=batch_duration,
             format_type=format_type,
-            transport_type=transport_type,
             compression=compression,
         )
         monitor_xml = textwrap.dedent(monitor_xml)
