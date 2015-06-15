@@ -5,5 +5,9 @@
 # Copyright (c) 2015 Digi International, Inc.
 
 class APIBase(object):
+    """Base class for all API Classes
+
+    :type _conn: devicecloud.DeviceCloudConnection
+    """
     def __init__(self, conn):
         self._conn = conn

@@ -3,25 +3,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 # Copyright (c) 2015 Digi International, Inc.
-from getpass import getpass
 from math import pi
 import pprint
 import time
 
-from devicecloud import DeviceCloud
+from devicecloud.examples.example_helpers import get_authenticated_dc
+
 from devicecloud.streams import DataPoint, NoSuchStreamException, STREAM_TYPE_INTEGER
-
-
-def get_authenticated_dc():
-    while True:
-        user = raw_input("username: ")
-        password = getpass("password: ")
-        dc = DeviceCloud(user, password, base_url="https://login-etherios-com-2v5p9uat81qu.runscope.net")
-        if dc.has_valid_credentials():
-            print ("Credentials accepted!")
-            return dc
-        else:
-            print ("Invalid username or password provided, try again")
 
 
 def create_stream_and_delete(dc):

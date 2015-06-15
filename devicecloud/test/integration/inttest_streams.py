@@ -59,7 +59,7 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
         # This test verifies that we can write in bulk a bunch of datapoints to several
         # datastreams and read them back.
         #
-        SID_FMT="pythondc-inttest/test_bulk_write_datapoints_multiple_streams-{}"
+        SID_FMT = "pythondc-inttest/test_bulk_write_datapoints_multiple_streams-{}"
         datapoints = []
         dt = datetime.datetime.now()
         for i in range(300):
@@ -70,6 +70,13 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
                 timestamp=dt - datetime.timedelta(seconds=300 - i),
                 data=i,
             ))
+
+        # remove any existing data before starting out
+        for i in range(3):
+            s = self._dc.streams.get_stream_if_exists(SID_FMT.format(i % 3))
+            if s:
+                s.delete()
+
         self._dc.streams.bulk_write_datapoints(datapoints)
 
         for i in range(3):
@@ -92,6 +99,10 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
                 timestamp=dt - datetime.timedelta(seconds=300 - i),
                 data=i,
             ))
+
+        stream = self._dc.streams.get_stream_if_exists("pythondc-inttest/test_bulk_write_datapoints_single_stream")
+        if stream:
+            stream.delete()
 
         stream = self._dc.streams.get_stream("pythondc-inttest/test_bulk_write_datapoints_single_stream")
         stream.bulk_write_datapoints(datapoints)

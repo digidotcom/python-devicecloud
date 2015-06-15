@@ -12,6 +12,7 @@ Documention Map
    streams
    filedata
    sci
+   monitor
    ws
    cookbook
 
