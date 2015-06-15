@@ -7,15 +7,15 @@ Python Device Cloud Library
 [![Latest Version](https://img.shields.io/pypi/v/devicecloud.svg)](https://pypi.python.org/pypi/devicecloud/)
 [![License](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/digidotcom/python-devicecloud/blob/master/LICENSE)
 
-Be sure to check out the [full documentation](http://etherios.github.io/python-devicecloud).
-A [Changelog](https://github.com/etherios/python-devicecloud/blob/master/CHANGELOG.md)
+Be sure to check out the [full documentation](http://digidotcom.github.io/python-devicecloud).
+A [Changelog](https://github.com/digidotcom/python-devicecloud/blob/master/CHANGELOG.md)
 is also available.
 
 Overview
 --------
 
 Python-devicecloud is a library providing simple, intuitive access to
-the [Device Cloud by Etherios](http://www.etherios.com/products/devicecloud/)
+the [Digi Device Cloud](http://www.digi.com/cloud/digi-device-cloud)
 for clients written in Python.
 
 The library wraps the Device Cloud REST API and hides the details of
@@ -61,7 +61,7 @@ for stream in dc.streams.get_streams():
 ```
 
 For more examples and detailed documentation, be sure to checkout out
-the [Full API Documentation](https://etherios.github.io/python-devicecloud).
+the [Full API Documentation](https://digidotcom.github.io/python-devicecloud).
 
 Installation
 ------------
@@ -141,20 +141,19 @@ Contributions to the library are very welcome in whatever form can be
 provided.  This could include issue reports, bug fixes, or features
 additions.  For issue reports, please [create an issue against the
 Github
-project](https://github.com/Etherios/python-devicecloud/issues).
+project](https://github.com/digidotcom/python-devicecloud/issues).
 
 For code changes, feel free to fork the project on Github and submit a
 pull request with your changes.  Additional instructions for
 developers contributing to the project can be found in the [Developer's
-Guide](https://github.com/Etherios/python-devicecloud/blob/master/HACKING.md).
+Guide](https://github.com/digidotcom/python-devicecloud/blob/master/HACKING.md).
 
 License
 -------
 
 This software is open-source software.
 
-Copyright (c) 2014, Etherios, Inc. All rights reserved.
-Etherios, Inc. is a Division of Digi International.
+Copyright (c) 2015 Digi International, Inc.
 
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this file,
