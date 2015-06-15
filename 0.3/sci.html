@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SCI (Server Command Interface) API &mdash; python-devicecloud 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Monitor API" href="monitor.html"/>
+        <link rel="prev" title="FileData API" href="filedata.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> python-devicecloud
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#devicecloud-core-api">DeviceCloud Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-devicecloud.conditions">Conditions API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#listing-streams">Listing Streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#creating-a-stream">Creating a Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#getting-information-about-a-stream">Getting Information About A Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#deleting-a-stream">Deleting a Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#updating-stream-metadata">Updating Stream Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#datapoint-objects">DataPoint objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#module-devicecloud.streams">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#filedata-overview">FileData Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#navigating-the-filedata-store">Navigating the FileData Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#reading-files-and-file-metadata">Reading Files and File Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#creating-a-directory">Creating a Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#writing-a-file">Writing a File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#viewing-file-history">Viewing File History</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">SCI (Server Command Interface) API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sci-overview">SCI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-devicecloud.sci">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">Monitor API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html#monitor-overview">Monitor Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html#module-devicecloud.monitor">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookbook.html#device-core-groups">Device Core - Groups</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>SCI (Server Command Interface) API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/sci.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="sci-server-command-interface-api">
+<h1>SCI (Server Command Interface) API<a class="headerlink" href="#sci-server-command-interface-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="sci-overview">
+<h2>SCI Overview<a class="headerlink" href="#sci-overview" title="Permalink to this headline">¶</a></h2>
+<p>Provide access to the device cloud Server Command Interface used for
+sending messages to devices connected to the device cloud.</p>
+</div>
+<div class="section" id="module-devicecloud.sci">
+<span id="sci-api-documentation"></span><h2>SCI API Documentation<a class="headerlink" href="#module-devicecloud.sci" title="Permalink to this headline">¶</a></h2>
+<p>Server Command Interface functionality</p>
+<dl class="class">
+<dt id="devicecloud.sci.TargetABC">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">TargetABC</code><a class="headerlink" href="#devicecloud.sci.TargetABC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base class for all target types</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.sci.DeviceTarget">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">DeviceTarget</code><span class="sig-paren">(</span><em>device_id</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.DeviceTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Target a specific device</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.sci.AllTarget">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">AllTarget</code><a class="headerlink" href="#devicecloud.sci.AllTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Target all devices</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.sci.TagTarget">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">TagTarget</code><span class="sig-paren">(</span><em>tag</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.TagTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Target devices having a specific tag</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.sci.GroupTarget">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">GroupTarget</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.GroupTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Target devices in a specific group</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.sci.AsyncRequestProxy">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">AsyncRequestProxy</code><span class="sig-paren">(</span><em>job_id</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.AsyncRequestProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object representing an asynychronous SCI request.</p>
+<p>Can be used for polling the status of the corresponding request.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>job_id</strong> &#8211; the ID in device cloud of the job</li>
+<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException.response" title="devicecloud.DeviceCloudHttpException.response"><strong>response</strong></a> &#8211; the response to the request if completed</li>
+<li><strong>completed</strong> &#8211; True if the request has completed, False otherwise; queries on read</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="devicecloud.sci.ServerCommandInterfaceAPI">
+<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">ServerCommandInterfaceAPI</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encapsulate Server Command Interface API</p>
+<dl class="method">
+<dt id="devicecloud.sci.ServerCommandInterfaceAPI.get_async_job">
+<code class="descname">get_async_job</code><span class="sig-paren">(</span><em>job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.get_async_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query an asynchronous SCI job by ID</p>
+<p>This is useful if the job was not created with send_sci_async().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job_id</strong> (<em>int</em>) &#8211; The job ID to query</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The SCI response from GETting the job information</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.sci.ServerCommandInterfaceAPI.send_sci_async">
+<code class="descname">send_sci_async</code><span class="sig-paren">(</span><em>operation</em>, <em>target</em>, <em>payload</em>, <em>**sci_options</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.send_sci_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an asynchronous SCI request, and wraps the job in an object
+to manage it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>operation</strong> (<em>str</em>) &#8211; The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+file_system, data_service, and reboot}</li>
+<li><strong>target</strong> (<a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal"><span class="pre">TargetABC</span></code></a> or list of <a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal"><span class="pre">TargetABC</span></code></a> instances) &#8211; The device(s) to be targeted with this request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: document other params</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="devicecloud.sci.ServerCommandInterfaceAPI.send_sci">
+<code class="descname">send_sci</code><span class="sig-paren">(</span><em>operation</em>, <em>target</em>, <em>payload</em>, <em>reply=None</em>, <em>synchronous=None</em>, <em>sync_timeout=None</em>, <em>cache=None</em>, <em>allow_offline=None</em>, <em>wait_for_reconnect=None</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.send_sci" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send SCI request to 1 or more targets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>operation</strong> (<em>str</em>) &#8211; The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+file_system, data_service, and reboot}</li>
+<li><strong>target</strong> (<a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal"><span class="pre">TargetABC</span></code></a> or list of <a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal"><span class="pre">TargetABC</span></code></a> instances) &#8211; The device(s) to be targeted with this request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: document other params</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="monitor.html" class="btn btn-neutral float-right" title="Monitor API" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="filedata.html" class="btn btn-neutral" title="FileData API" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

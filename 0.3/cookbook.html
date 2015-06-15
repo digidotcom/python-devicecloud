@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Cookbook &mdash; python-devicecloud 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.1 documentation" href="index.html"/>
+        <link rel="prev" title="Direct Web Services API" href="ws.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> python-devicecloud
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#devicecore-overview">DeviceCore Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="devicecore.html#module-devicecloud.devicecore">DeviceCore API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#streams-overview">Streams Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#listing-streams">Listing Streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#creating-a-stream">Creating a Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#getting-information-about-a-stream">Getting Information About A Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#deleting-a-stream">Deleting a Stream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#updating-stream-metadata">Updating Stream Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html#datapoint-objects">DataPoint objects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html#module-devicecloud.streams">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#filedata-overview">FileData Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#navigating-the-filedata-store">Navigating the FileData Store</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#reading-files-and-file-metadata">Reading Files and File Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#creating-a-directory">Creating a Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#writing-a-file">Writing a File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="filedata.html#viewing-file-history">Viewing File History</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="filedata.html#api-documentation">API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#sci-overview">SCI Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sci.html#module-devicecloud.sci">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">Monitor API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html#monitor-overview">Monitor Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor.html#module-devicecloud.monitor">SCI API Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ws.html">Direct Web Services API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Cookbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#streams-creating-streams-and-data-points">Streams - Creating Streams and Data Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#streams-deleting">Streams - Deleting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#streams-roll-up-data">Streams - Roll-up Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#device-core-groups">Device Core - Groups</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Cookbook</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/cookbook.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="cookbook">
+<h1>Cookbook<a class="headerlink" href="#cookbook" title="Permalink to this headline">¶</a></h1>
+<p>This page is meant to show complete examples for common uses of the library.
+For more granular or specific examples of API usage check out the individual API pages.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are also examples checked into source control under /devicecloud/examples/*_playground.py
+which will provide additional example uses of the library.</p>
+</div>
+<p>Each example will assume an instance of <a class="reference internal" href="core.html#devicecloud.DeviceCloud" title="devicecloud.DeviceCloud"><code class="xref py py-class docutils literal"><span class="pre">devicecloud.DeviceCloud</span></code></a> has been
+created with something like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>dc = DeviceCloud(&lt;username&gt;, &lt;password&gt;)
+</pre></div>
+</div>
+<div class="section" id="streams-creating-streams-and-data-points">
+<h2>Streams - Creating Streams and Data Points<a class="headerlink" href="#streams-creating-streams-and-data-points" title="Permalink to this headline">¶</a></h2>
+<p>For this example, let&#8217;s create a DataStream that represents a class room.  As students
+enter the classroom there is a DataPoint representing them written to the stream.</p>
+<p>First let&#8217;s get or create the stream:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classroom</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_stream_if_exists</span><span class="p">(</span><span class="s">&#39;classroom&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">classroom</span><span class="p">:</span>
+    <span class="n">classroom</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">create_stream</span><span class="p">(</span>
+        <span class="n">stream_id</span><span class="o">=</span><span class="s">&#39;classroom&#39;</span><span class="p">,</span>
+        <span class="n">data_type</span><span class="o">=</span><span class="n">STREAM_TYPE_STRING</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">&#39;Stream representing a classroom of students&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>A student named Bob enters the classroom so we write a DataPoint representing Bob
+to the stream.  To represent Bob let&#8217;s use a JSON object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">student</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Bob&#39;</span><span class="p">,</span>
+    <span class="s">&#39;student_id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">datapoint</span> <span class="o">=</span> <span class="n">DataPoint</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">student</span><span class="p">))</span>
+<span class="n">classroom</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">datapoint</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, two students enter at the same time.  For this we can write both data points
+as a batch which only uses one HTTP request (up to 250 data points):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">students</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;James&#39;</span><span class="p">,</span>
+        <span class="s">&#39;student_id&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+        <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Henry&#39;</span><span class="p">,</span>
+        <span class="s">&#39;student_id&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+        <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+<span class="n">datapoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">DataPoint</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">students</span><span class="p">]</span>
+<span class="n">classroom</span><span class="o">.</span><span class="n">bulk_write_datapoints</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, let&#8217;s print the name of the student who most recently entered the classroom:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">most_recent_student</span> <span class="o">=</span> <span class="n">classroom</span><span class="o">.</span><span class="n">get_current_value</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">most_recent_student</span><span class="o">.</span><span class="n">get_data</span><span class="p">())[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>  <span class="c"># Prints &#39;Henry&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="streams-deleting">
+<h2>Streams - Deleting<a class="headerlink" href="#streams-deleting" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s delete the classroom stream from the above example so we can start fresh in the
+next example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">classroom</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="streams-roll-up-data">
+<h2>Streams - Roll-up Data<a class="headerlink" href="#streams-roll-up-data" title="Permalink to this headline">¶</a></h2>
+<p>Roll-up data is a way to group data points based on time intervals in which they
+were written to the cloud.  From our previous example lets figure out which students
+entered the classroom throughout the day and which hour they entered.</p>
+<p>First let&#8217;s write some test data to the cloud.  Since roll-ups only work on numerical
+data types we will student id&#8217;s instead of JSON.</p>
+<p>Create a new data stream that is of type int:</p>
+<div class="highlight-python"><div class="highlight"><pre>classroom = dc.streams.create_stream(
+        stream_id=&#39;classroom&#39;,
+        data_type=STREAM_TYPE_INTEGER,
+        description=&#39;Stream representing a classroom of students (as id&#39;s)&#39;,
+    )
+</pre></div>
+</div>
+<p>Next is a function that fills the classroom with data points that have randomly
+generated timestamp values within the next 24 hours:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">one_day_in_seconds</span> <span class="o">=</span> <span class="mi">86400</span>
+
+<span class="n">datapoints</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">student_id</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">deviation</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">one_day_in_seconds</span><span class="p">)</span>
+    <span class="n">random_time</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="n">deviation</span>
+    <span class="n">datapoint</span> <span class="o">=</span> <span class="n">DataPoint</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">student_id</span><span class="p">,</span>
+                          <span class="n">timestamp</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">random_time</span><span class="p">))</span>
+    <span class="n">datapoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datapoint</span><span class="p">)</span>
+
+<span class="n">classroom</span><span class="o">.</span><span class="n">bulk_write_datapoints</span><span class="p">(</span><span class="n">datapoints</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, let&#8217;s figure out which students entered the classroom which hours of the day:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rollup_data</span> <span class="o">=</span> <span class="n">classroom</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rollup_interval</span><span class="o">=</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="n">rollup_method</span><span class="o">=</span><span class="s">&#39;count&#39;</span><span class="p">)</span>
+<span class="n">hourly_data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">dp</span> <span class="ow">in</span> <span class="n">rollup_data</span><span class="p">:</span>
+    <span class="n">hourly_data</span><span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">get_timestamp</span><span class="p">()</span><span class="o">.</span><span class="n">hour</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">hourly_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a dictionary where the key&#8217;s are the hour in the day and the values are the
+number of students who entered the classroom that hour:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="mi">1</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="mi">2</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="mi">3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="mi">4</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="mi">6</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="mi">7</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+ <span class="mi">8</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="mi">10</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="mi">11</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="mi">12</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="mi">13</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="mi">14</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+ <span class="mi">15</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="mi">16</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+ <span class="mi">17</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="mi">18</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="mi">19</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+ <span class="mi">20</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span>
+ <span class="mi">21</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="mi">22</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="mi">23</span><span class="p">:</span> <span class="mi">11</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="device-core-groups">
+<h2>Device Core - Groups<a class="headerlink" href="#device-core-groups" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This assumes your device is provisioned.</p>
+</div>
+<p>First, get a reference to the device which you would like to add a specific group:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">device</span> <span class="o">=</span> <span class="n">devicecore</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s">&#39;00:40:9D:50:B0:EA&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then you can add it to a group and fetch it to make sure it works:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">device</span><span class="o">.</span><span class="n">add_to_group</span><span class="p">(</span><span class="s">&#39;mygroup&#39;</span><span class="p">)</span>
+<span class="n">device</span><span class="o">.</span><span class="n">get_group_path</span><span class="p">()</span>  <span class="c"># prints &#39;mygroup&#39; (the DC sometimes needs a second to catch up)</span>
+</pre></div>
+</div>
+<p>Or remove it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">device</span><span class="o">.</span><span class="n">remove_from_group</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="ws.html" class="btn btn-neutral" title="Direct Web Services API" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
