@@ -123,6 +123,8 @@ class DeviceCloudConnection(object):
         self._throttle_delay_init = throttle_delay_init
         self._throttle_delay_max = throttle_delay_max
         self._throttle_delay_backoff_coefficient = throttle_delay_backoff_coefficient
+        self._session = requests.Session()
+        self._session.auth = auth
 
     def _make_url(self, path):
         if not path.startswith("/"):
@@ -142,7 +144,7 @@ class DeviceCloudConnection(object):
         remaining_attempts = throttle_retries + 1
         retry_delay = throttle_delay_init
         while remaining_attempts > 0:
-            response = requests.request(method, url, auth=self._auth, **kwargs)
+            response = self._session.request(method, url, **kwargs)
             if response.status_code in SUCCESSFUL_STATUS_CODES:
                 return response
             elif response.status_code in HTTP_THROTTLED_CODES:
