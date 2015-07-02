@@ -5,6 +5,7 @@
 # Copyright (c) 2015 Digi International, Inc.
 from getpass import getpass
 import os
+from six.moves import input
 from devicecloud import DeviceCloud
 
 
