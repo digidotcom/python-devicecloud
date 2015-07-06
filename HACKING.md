@@ -20,7 +20,7 @@ Running the Unit Tests
 
 ### Running Tests with Nose
 
-Running the tests is easy with nose (including in
+Running the tests is easy with nose (included in
 test-requirements.txt).  From the project root:
 
     $ nosetests .
