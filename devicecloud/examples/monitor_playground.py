@@ -11,9 +11,7 @@ from devicecloud.examples.example_helpers import get_authenticated_dc
 
 from devicecloud.streams import DataPoint
 
-if __name__ == '__main__':
-    dc = get_authenticated_dc()
-
+def test_tcp_monitor(dc):
     # Create a fresh monitor over a pretty broad set of topics
     topics = ['DeviceCore', 'FileDataCore', 'FileData', 'DataPoint']
     mon = dc.monitor.get_monitor(topics)
@@ -26,7 +24,7 @@ if __name__ == '__main__':
         pprint.pprint(data)
         return True  # we got it!
 
-    mon.add_listener(listener)
+    mon.add_callback(listener)
 
     test_stream = dc.streams.get_stream("test")
     try:
@@ -37,3 +35,31 @@ if __name__ == '__main__':
         print("Shutting down threads...")
 
     dc.monitor.stop_listeners()
+
+def test_http_monitor(dc):
+    # Create a fresh monitor over a pretty broad set of topics
+    topics = ['DeviceCore', 'FileDataCore', 'FileData', 'DataPoint']
+    mon = dc.monitor.get_monitor(topics)
+    if mon is not None:
+        mon.delete()
+    mon = dc.monitor.create_http_monitor(topics, 'http://digi.com',  transport_token=None, transport_method='PUT',
+                                         connect_timeout=0, response_timeout=0, batch_size=1, batch_duration=0,
+                                         compression='none', format_type='json')
+    pprint.pprint(mon.get_metadata())
+
+    def listener(data):
+        pprint.pprint(data)
+        return True  # we got it!
+
+    test_stream = dc.streams.get_stream("test")
+    try:
+        while True:
+            test_stream.write(DataPoint(random.random()))
+            time.sleep(3.14)
+    except KeyboardInterrupt:
+        print("Shutting down threads...")
+
+if __name__ == '__main__':
+    dc = get_authenticated_dc()
+    test_http_monitor(dc)
+
