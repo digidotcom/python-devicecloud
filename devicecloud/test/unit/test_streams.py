@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 
 from dateutil.tz import tzutc
 from devicecloud.streams import DataStream, STREAM_TYPE_FLOAT, DataPoint, NoSuchStreamException, ROLLUP_INTERVAL_HALF, \
-    ROLLUP_METHOD_COUNT, STREAM_TYPE_INTEGER, DSTREAM_TYPE_MAP
+    ROLLUP_METHOD_COUNT, STREAM_TYPE_INTEGER, DSTREAM_TYPE_MAP, STREAM_TYPE_JSON
 from devicecloud.test.unit.test_utilities import HttpTestBase
 from devicecloud import DeviceCloudHttpException
 
@@ -18,6 +18,7 @@ from devicecloud import DeviceCloudHttpException
 # Example HTTP Responses
 import httpretty
 import mock
+import re
 import six
 
 CREATE_DATA_STREAM = {
@@ -132,6 +133,36 @@ GET_TEST_DATA_STREAM = """\
         "serverTimestamp": "1404683207981",
         "serverTimestampISO": "2014-07-06T21:46:47.981Z",
         "data": "123.1",
+        "description": "Test",
+        "quality": "20",
+        "location": "1.0,2.0,3.0"
+    },
+    "description": "some description",
+    "units": "light years",
+    "dataTtl": "172800",
+    "rollupTtl": "432000"}
+]
+}
+"""
+
+GET_TEST_DATA_STREAM_JSON = """\
+{
+"resultSize": "1",
+"requestedSize": "1000",
+"pageCursor": "88afa98e-1-7efbf125",
+"items": [
+{
+    "cstId": "7603",
+    "streamId": "test",
+    "dataType": "JSON",
+    "forwardTo": "",
+    "currentValue": {
+        "id": "07d77854-0557-11e4-ab44-fa163e7ebc6b",
+        "timestamp": "1404683207981",
+        "timestampISO": "2014-07-06T21:46:47.981Z",
+        "serverTimestamp": "1404683207981",
+        "serverTimestampISO": "2014-07-06T21:46:47.981Z",
+        "data": "{\\"key3\\": [1, 2, 3], \\"key1\\": \\"value1\\", \\"2\\": 2}",
         "description": "Test",
         "quality": "20",
         "location": "1.0,2.0,3.0"
@@ -564,7 +595,6 @@ class TestDataStream(HttpTestBase):
         self.assertEqual(parse_for_stream_id(requests[1].body), {'test'})
 
 
-
 class TestDataStreamDeleteDataPoints(HttpTestBase):
 
     def test_delete_datapoint(self):
@@ -770,6 +800,27 @@ class TestDataPoint(HttpTestBase):
         self.assertEqual(dp.get_units(), "light years")
         self.assertEqual(dp.get_stream_id(), "test")
         self.assertEqual(dp.get_data_type(), "FLOAT")
+
+    def test_get_json_data(self):
+        stream = self._get_stream("test", with_cached_data=True)
+        self.prepare_response("GET", "/ws/DataStream/test", GET_TEST_DATA_STREAM_JSON)
+
+        dp = stream.get_current_value()
+        expected_dict = {'key1': 'value1', '2': 2, 'key3': [1, 2, 3]}
+        self.assertDictEqual(expected_dict, dp.get_data())
+
+    def test_json_encode_to_xml(self):
+        my_dict = {'key1': 'value1', '2': 2, 'key3': [1, 2, 3]}
+        dp = DataPoint(
+            data_type=STREAM_TYPE_JSON,
+            data=my_dict,
+            )
+        xml = dp.to_xml()
+
+        self.assertIsNotNone(re.search('<data>\{[ ",a-zA-Z0-9:[\]]+\}</data>', xml))
+        self.assertIsNotNone(re.search('"key1": "value1"', xml))
+        self.assertIsNotNone(re.search('"2": 2', xml))
+        self.assertIsNotNone(re.search('"key3": \[1, 2, 3\]', xml))
 
     def test_from_json_conversion(self):
         stream = self._get_stream("test", with_cached_data=False)

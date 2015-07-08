@@ -5,7 +5,7 @@
 # Copyright (c) 2015 Digi International, Inc.
 
 r"""Module providing classes for interacting with device cloud data streams"""
-
+import json
 import logging
 import datetime
 
@@ -25,6 +25,7 @@ STREAM_TYPE_FLOAT = "FLOAT"
 STREAM_TYPE_DOUBLE = "DOUBLE"
 STREAM_TYPE_STRING = "STRING"
 STREAM_TYPE_BINARY = "BINARY"
+STREAM_TYPE_JSON = "JSON"
 STREAM_TYPE_UNKNOWN = "UNKNOWN"
 
 ROLLUP_INTERVAL_HALF = "half"
@@ -53,6 +54,7 @@ DSTREAM_TYPE_MAP = {
     STREAM_TYPE_STRING: (str, str),
     STREAM_TYPE_BINARY: (str, str),
     STREAM_TYPE_UNKNOWN: (str, str),
+    STREAM_TYPE_JSON: (json.loads, json.dumps)
 }
 
 
