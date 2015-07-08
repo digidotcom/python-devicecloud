@@ -9,7 +9,7 @@ import time
 
 from devicecloud.examples.example_helpers import get_authenticated_dc
 
-from devicecloud.streams import DataPoint, NoSuchStreamException, STREAM_TYPE_INTEGER
+from devicecloud.streams import DataPoint, NoSuchStreamException, STREAM_TYPE_INTEGER, STREAM_TYPE_JSON
 
 
 def create_stream_and_delete(dc):
@@ -143,8 +143,39 @@ def bulk_write_datapoints_multiple_streams(dc):
         stream.delete()
 
 
+def create_and_use_json_stream(dc):
+    # get a test stream reference
+    test_stream = dc.streams.get_stream_if_exists("test-json")
+
+    # we want a clean stream to work with.  If the stream exists, nuke it
+    if test_stream is not None:
+        test_stream.delete()
+
+    test_stream = dc.streams.create_stream(
+        stream_id="test-json",
+        data_type=STREAM_TYPE_JSON,
+        description='a stream used for testing json',
+        units='international json standard unit (IJSU)',
+    )
+
+    test_stream.write(DataPoint(
+            data_type=STREAM_TYPE_JSON,
+            data = {'key1': 'value1',
+                    2: 2,
+                    'key3': [1, 2, 3]},
+            description="Some JSON data in IJSUs",
+        )
+    )
+
+    time.sleep(5)
+
+    print(test_stream.get_current_value())
+
+    test_stream.delete()
+
 if __name__ == '__main__':
     dc = get_authenticated_dc()
+    create_and_use_json_stream(dc)
     create_stream_and_delete(dc)
     attempt_to_delete_non_existant(dc)
     write_points_and_delete_some(dc)
