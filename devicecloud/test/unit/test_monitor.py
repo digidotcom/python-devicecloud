@@ -7,13 +7,28 @@ from devicecloud.monitor import MON_TOPIC_ATTR, MON_TRANSPORT_TYPE_ATTR
 from devicecloud.test.unit.test_utilities import HttpTestBase
 import six
 
-CREATE_MONITOR_GOOD_REQUEST = """\
+CREATE_TCP_MONITOR_GOOD_REQUEST = """\
 <Monitor>
     <monTopic>topA,topB</monTopic>
     <monBatchSize>10</monBatchSize>
     <monFormatType>json</monFormatType>
     <monTransportType>tcp</monTransportType>
     <monCompression>gzip</monCompression>
+</Monitor>
+"""
+
+CREATE_HTTP_MONITOR_GOOD_REQUEST = """\
+<Monitor>
+    <monTopic>topA,topB</monTopic>
+    <monBatchSize>1</monBatchSize>
+    <monFormatType>json</monFormatType>
+    <monTransportType>http</monTransportType>
+    <monTransportUrl>http://digi.com</monTransportUrl>
+    <monTransportToken>None</monTransportToken>
+    <monTransportMethod>PUT</monTransportMethod>
+    <monConnectTimeout>0</monConnectTimeout>
+    <monResponseTimeout>0</monResponseTimeout>
+    <monCompression>none</monCompression>
 </Monitor>
 """
 
@@ -24,7 +39,7 @@ CREATE_MONITOR_GOOD_RESPONSE = """\
 </result>
 """
 
-GET_MONITOR_SINGLE_FOUND = """\
+GET_TCP_MONITOR_SINGLE_FOUND = """\
 {
     "resultTotalRows": "1",
     "requestedStartRow": "0",
@@ -47,7 +62,30 @@ GET_MONITOR_SINGLE_FOUND = """\
 }
 """
 
-GET_MONITOR_METADTATA = """\
+GET_HTTP_MONITOR_SINGLE_FOUND = """\
+{
+    "resultTotalRows": "1",
+    "requestedStartRow": "0",
+    "resultSize": "1",
+    "requestedSize": "1000",
+    "remainingSize": "0",
+    "items": [
+        {
+            "monId": "178007",
+            "cstId": "7603",
+            "monTopic": "DeviceCore,FileDataCore,FileData,DataPoint",
+            "monTransportType": "http",
+            "monFormatType": "json",
+            "monBatchSize": "1",
+            "monCompression": "none",
+            "monStatus": "INACTIVE",
+            "monBatchDuration": "0"
+        }
+   ]
+}
+"""
+
+GET_TCP_MONITOR_METADTATA = """\
 {
     "resultTotalRows": "1",
     "requestedStartRow": "0",
@@ -65,6 +103,29 @@ GET_MONITOR_METADTATA = """\
             "monCompression": "zlib",
             "monStatus": "INACTIVE",
             "monBatchDuration": "10"
+        }
+    ]
+}
+"""
+
+GET_HTTP_MONITOR_METADTATA = """\
+{
+    "resultTotalRows": "1",
+    "requestedStartRow": "0",
+    "resultSize": "1",
+    "requestedSize": "1000",
+    "remainingSize": "0",
+    "items": [
+        {
+            "monId": "178007",
+            "cstId": "7603",
+            "monTopic": "DeviceCore,FileDataCore,FileData,DataPoint",
+            "monTransportType": "http",
+            "monFormatType": "json",
+            "monBatchSize": "1",
+            "monCompression": "none",
+            "monStatus": "INACTIVE",
+            "monBatchDuration": "0"
         }
     ]
 }
@@ -90,15 +151,26 @@ GET_MONITOR_MULTIPLE_FOUND = """\
             "monBatchDuration": "10"
         },
         {
-            "monId": "198765",
+            "monId": "178007",
             "cstId": "7603",
             "monTopic": "DeviceCore,FileDataCore,FileData,DataPoint",
             "monTransportType": "tcp",
             "monFormatType": "json",
             "monBatchSize": "1",
-            "monCompression": "",
+            "monCompression": "zlib",
             "monStatus": "INACTIVE",
             "monBatchDuration": "10"
+        },
+        {
+            "monId": "178007",
+            "cstId": "7603",
+            "monTopic": "DeviceCore,FileDataCore,FileData,DataPoint",
+            "monTransportType": "http",
+            "monFormatType": "json",
+            "monBatchSize": "1",
+            "monCompression": "none",
+            "monStatus": "INACTIVE",
+            "monBatchDuration": "0"
         }
    ]
 }
@@ -123,11 +195,20 @@ class TestMonitorAPI(HttpTestBase):
         self.prepare_response("POST", "/ws/Monitor", data=CREATE_MONITOR_GOOD_RESPONSE)
         mon = self.dc.monitor.create_tcp_monitor(['topA', 'topB'], batch_size=10, batch_duration=0,
                                                  compression='gzip', format_type='json')
-        self.assertEqual(self._get_last_request().body, six.b(CREATE_MONITOR_GOOD_REQUEST))
+        self.assertEqual(self._get_last_request().body, six.b(CREATE_TCP_MONITOR_GOOD_REQUEST))
         self.assertEqual(mon.get_id(), 178008)
 
-    def test_get_monitors(self):
-        self.prepare_response("GET", "/ws/Monitor", data=GET_MONITOR_SINGLE_FOUND)
+    def test_create_http_monitor(self):
+        self.prepare_response("POST", "/ws/Monitor", data=CREATE_MONITOR_GOOD_RESPONSE)
+        mon = self.dc.monitor.create_http_monitor(['topA', 'topB'], 'http://digi.com', transport_token=None,
+                                                  transport_method='PUT', connect_timeout=0, response_timeout=0,
+                                                  batch_size=1, batch_duration=0, compression='none',
+                                                  format_type='json')
+        self.assertEqual(self._get_last_request().body, six.b(CREATE_HTTP_MONITOR_GOOD_REQUEST))
+        self.assertEqual(mon.get_id(), 178008)
+
+    def test_get_tcp_monitors(self):
+        self.prepare_response("GET", "/ws/Monitor", data=GET_TCP_MONITOR_SINGLE_FOUND)
         mons = list(self.dc.monitor.get_monitors((MON_TOPIC_ATTR == "DeviceCore") &
                                                  (MON_TRANSPORT_TYPE_ATTR == "tcp")))
         self.assertEqual(len(mons), 1)
@@ -139,8 +220,31 @@ class TestMonitorAPI(HttpTestBase):
             'size': '1000'
         })
 
-    def test_get_monitor_present(self):
-        self.prepare_response("GET", "/ws/Monitor", data=GET_MONITOR_SINGLE_FOUND)
+    def test_get_http_monitors(self):
+        self.prepare_response("GET", "/ws/Monitor", data=GET_TCP_MONITOR_SINGLE_FOUND)
+        mons = list(self.dc.monitor.get_monitors((MON_TOPIC_ATTR == "DeviceCore") &
+                                                 (MON_TRANSPORT_TYPE_ATTR == "http")))
+        self.assertEqual(len(mons), 1)
+        mon = mons[0]
+        self.assertEqual(mon.get_id(), 178007)
+        self.assertEqual(self._get_last_request_params(), {
+            'condition': "monTopic='DeviceCore' and monTransportType='http'",
+            'start': '0',
+            'size': '1000'
+        })
+
+    def test_tcp_get_monitor_present(self):
+        self.prepare_response("GET", "/ws/Monitor", data=GET_TCP_MONITOR_SINGLE_FOUND)
+        mon = self.dc.monitor.get_monitor(['DeviceCore', 'FileDataCore', 'FileData', 'DataPoint'])
+        self.assertEqual(mon.get_id(), 178007)
+        self.assertEqual(self._get_last_request_params(), {
+            'condition': "monTopic='DeviceCore,FileDataCore,FileData,DataPoint'",
+            'start': '0',
+            'size': '1000'
+        })
+
+    def test_http_get_monitor_present(self):
+        self.prepare_response("GET", "/ws/Monitor", data=GET_HTTP_MONITOR_SINGLE_FOUND)
         mon = self.dc.monitor.get_monitor(['DeviceCore', 'FileDataCore', 'FileData', 'DataPoint'])
         self.assertEqual(mon.get_id(), 178007)
         self.assertEqual(self._get_last_request_params(), {
@@ -171,12 +275,12 @@ class TestDeviceCloudMonitor(HttpTestBase):
 
     def setUp(self):
         HttpTestBase.setUp(self)
-        self.prepare_response("GET", "/ws/Monitor", data=GET_MONITOR_SINGLE_FOUND)
+        self.prepare_response("GET", "/ws/Monitor", data=GET_TCP_MONITOR_SINGLE_FOUND)
         mon = self.dc.monitor.get_monitor(['DeviceCore', 'FileDataCore', 'FileData', 'DataPoint'])
         self.mon = mon
 
-    def test_get_metadata(self):
-        self.prepare_response("GET", "/ws/Monitor/178007", data=GET_MONITOR_METADTATA)
+    def test_get_tcp_metadata(self):
+        self.prepare_response("GET", "/ws/Monitor/178007", data=GET_TCP_MONITOR_METADTATA)
         self.assertEqual(self.mon.get_metadata(), {
             "monId": "178007",
             "cstId": "7603",

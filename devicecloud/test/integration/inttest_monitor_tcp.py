@@ -25,7 +25,7 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
         if monitor:
             monitor.delete()
         monitor = self._dc.monitor.create_tcp_monitor(topics)
-        monitor.add_listener(receive_notification)
+        monitor.add_callback(receive_notification)
 
         self._dc.filedata.write_file("/~/inttest/monitor_tcp/", "test_file.txt", six.b("Hello, world!"), "text/plain")
         self._dc.streams.get_stream("inttest/monitor_tcp").write(DataPoint(10))
