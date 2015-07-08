@@ -61,6 +61,34 @@ ONE_DAY = 86400  # in seconds
 logger = logging.getLogger("devicecloud.streams")
 
 
+def _get_encoder_method(stream_type):
+    """A function to get the python type to device cloud type converter function.
+
+    :param stream_type: The streams data type
+    :return: A function that when called with the python object will return the serializable
+    type for sending to the cloud. If there is no function for the given type, or the `stream_type`
+    is `None` the returned function will simply return the object unchanged.
+    """
+    if stream_type is not None:
+        return DSTREAM_TYPE_MAP.get(stream_type.upper(), (lambda x: x, lambda x: x))[1]
+    else:
+        return lambda x: x
+
+
+def _get_decoder_method(stream_type):
+    """ A function to get the device cloud type to python type converter function.
+
+    :param stream_type: The streams data type
+    :return: A function that when called with the device cloud object will return the python
+    native type. If there is no function for the given type, or the `stream_type` is `None`
+    the returned function will simply return the object unchanged.
+    """
+    if stream_type is not None:
+        return DSTREAM_TYPE_MAP.get(stream_type.upper(), (lambda x: x, lambda x: x))[0]
+    else:
+        return lambda x: x
+
+
 class StreamException(DeviceCloudException):
     """Base class for stream related exceptions"""
 
@@ -272,6 +300,8 @@ class DataPoint(object):
         :return: (:class:`~DataPoint`) newly created :class:`~DataPoint`
 
         """
+        type_converter = _get_decoder_method(stream.get_data_type())
+        data = type_converter(json_data.get("data"))
         return cls(
             # these are actually properties of the stream, not the data point
             stream_id=stream.get_stream_id(),
@@ -279,7 +309,7 @@ class DataPoint(object):
             units=stream.get_units(),
 
             # and these are part of the data point itself
-            data=json_data.get("data"),
+            data=data,
             description=json_data.get("description"),
             timestamp=json_data.get("timestampISO"),
             server_timestamp=json_data.get("serverTimestampISO"),
@@ -303,8 +333,8 @@ class DataPoint(object):
         timestamp = isoformat(dc_utc_timestamp_to_dt(int(json_data.get("timestamp"))))
 
         # Special handling for data, all rollup data is float type
-        type_converter = DSTREAM_TYPE_MAP[dp.get_data_type()]
-        data = type_converter[0](float(json_data.get("data")))
+        type_converter = _get_decoder_method(stream.get_data_type())
+        data = type_converter(float(json_data.get("data")))
 
         # Update the special fields
         dp.set_timestamp(timestamp)
@@ -379,12 +409,7 @@ class DataPoint(object):
 
     def get_data(self):
         """Get the actual data value associated with this data point"""
-        data = self._data
-        if self._data_type is not None:
-            type_converters = DSTREAM_TYPE_MAP.get(self._data_type.upper())
-            if type_converters:
-                data = type_converters[0](self._data)
-        return data
+        return self._data
 
     def set_data(self, data):
         """Set the data for this data point
@@ -550,10 +575,14 @@ class DataPoint(object):
         set on this datapoint.  Values not set (e.g. quality) will be ommitted.
 
         """
+        type_converter = _get_encoder_method(self._data_type)
+        # Convert from python native to device cloud
+        encoded_data = type_converter(self._data)
+
         out = StringIO()
         out.write("<DataPoint>")
         out.write("<streamId>{}</streamId>".format(self.get_stream_id()))
-        out.write("<data>{}</data>".format(self.get_data()))
+        out.write("<data>{}</data>".format(encoded_data))
         conditional_write(out, "<description>{}</description>", self.get_description())
         if self.get_timestamp() is not None:
             out.write("<timestamp>{}</timestamp>".format(isoformat(self.get_timestamp())))
