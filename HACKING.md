@@ -76,8 +76,8 @@ activated):
 The docs that are built will be located at
 docs/_build/html/index.html.
 
-The documentation for the project is published on github using a (Github
-Pages)[https://pages.github.com/] Project Site.  The process for
+The documentation for the project is published on github using a [Github
+Pages](https://pages.github.com/) Project Site.  The process for
 releasing a new set of documentation is the following:
 
 1. Create a fresh clone of the project and checkout the `gh-pages`
