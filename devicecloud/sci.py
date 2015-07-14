@@ -142,8 +142,8 @@ class ServerCommandInterfaceAPI(APIBase):
         TODO: document other params
 
         """
-        if not isinstance(payload, six.string_types):
-            raise TypeError("payload is required to be string")
+        if not isinstance(payload, six.string_types) and not isinstance(payload, six.binary_type):
+            raise TypeError("payload is required to be a string or bytes")
 
         # validate targets and bulid targets xml section
         try:

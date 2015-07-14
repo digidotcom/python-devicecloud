@@ -417,6 +417,13 @@ class DeviceCloud(object):
         return self._sci_api
 
     @property
+    def file_system_service(self):
+        """Property providing access to the :class:`.FileSystemServiceAPI`"""
+        if self._fss_api is None:
+            self._fss_api = self.get_fss_api()
+        return self._fss_api
+
+    @property
     def monitor(self):
         """Property providing access to the :class:`.MonitorAPI`"""
         if self._monitor_api is None:
@@ -492,6 +499,20 @@ class DeviceCloud(object):
         from devicecloud.sci import ServerCommandInterfaceAPI
 
         return ServerCommandInterfaceAPI(self._conn)
+
+    def get_fss_api(self):
+        """Returns a :class:`.FileSystemServiceAPI` bound to this device cloud instance
+
+        This provides access to the same API as :attr:`.DeviceCloud.file_system_service` but will create
+        a new object (with a new cache) each time called.
+
+        :return: FSS API object bound to this device cloud account
+        :rtype: :class:`.FileSystemServiceAPI`
+
+        """
+        from devicecloud.file_system_service import FileSystemServiceAPI
+
+        return FileSystemServiceAPI(self.sci)
 
     def get_monitor_api(self):
         """Returns a :class:`.MonitorAPI` bound to this device cloud instance

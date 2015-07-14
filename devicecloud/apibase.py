@@ -11,3 +11,12 @@ class APIBase(object):
     """
     def __init__(self, conn):
         self._conn = conn
+
+
+class SCIAPIBase(object):
+    """Base class for API classes using SCI to communicate
+
+    :type _sci_api: devicecloud.sci.ServerCommandInterfaceAPI
+    """
+    def __init__(self, sci_api):
+        self._sci_api = sci_api
