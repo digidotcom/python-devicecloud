@@ -540,6 +540,71 @@ class TestFileSystemServiceAPI(HttpTestBase):
 
             self.assertDictEqual(expected_out_dict, out_dict)
 
+    def test_exists_file(self):
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[], files=[self.file1])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: LsInfo([], [])}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.exists(self.target, self.file1.path)
+
+            expected_out_dict = {
+                self.dev1_id: True,
+                self.dev2_id: False
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_exists_dir(self):
+
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[self.dir1], files=[])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: LsInfo([], [])}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.exists(self.target, self.dir1.path)
+
+            expected_out_dict = {
+                self.dev1_id: True,
+                self.dev2_id: False
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_exists_dir_trailing_slash(self):
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[self.dir1], files=[])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: LsInfo([], [])}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.exists(self.target, self.dir1.path + '/')
+
+            expected_out_dict = {
+                self.dev1_id: True,
+                self.dev2_id: False
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_exists_errinfo(self):
+
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[], files=[self.file1])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: self.errinfo}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.exists(self.target, self.file1.path)
+
+            expected_out_dict = {
+                self.dev1_id: True,
+                self.dev2_id: self.errinfo
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
 
 if __name__ == '__main__':
     unittest.main()
