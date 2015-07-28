@@ -4,7 +4,8 @@ from xml.etree import ElementTree as ET
 
 from devicecloud.file_system_service import FileInfo, DirectoryInfo, FileSystemServiceException, \
     _parse_command_response, ResponseParseError, \
-    ErrorInfo, LsInfo, _parse_error_tree
+    ErrorInfo, LsInfo, _parse_error_tree, LsCommand, GetCommand, PutCommand, DeleteCommand, \
+    FileSystemServiceCommandBlock
 from devicecloud.sci import AllTarget
 from devicecloud.test.unit.test_utilities import HttpTestBase
 import mock
@@ -169,6 +170,180 @@ class TestDirectoryInfo(unittest.TestCase):
         call_name, call_args, call_kwargs = self.fss_api.list_files.mock_calls[0]
         self.assertEqual(call_args[0]._device_id, self.dev_id)
         self.assertEqual(call_args[1], '/a/path/dir1')
+
+
+class TestLsCommand(unittest.TestCase):
+    def test_init(self):
+        lscommand = LsCommand(path='/a/path/here')
+        et = lscommand.get_etree()
+        self.assertEqual(et.tag, 'ls')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual('any', et.get('hash'))
+        self.assertEqual(0, len(list(et)))
+        self.assertEqual(None, et.text)
+
+    def test_parse(self):
+        fss_api = mock.Mock()
+        dev_id = 'my_dev_id'
+        file1 = FileInfo(fss_api, dev_id, '/a/path/file1.txt', 1436276773, 7989,
+                         "967FDA522517B9CE0C3E056EDEB485BB", 'md5')
+        file2 = FileInfo(fss_api, dev_id, '/a/path/file2.py', 1434377919, 181,
+                         "DEA17715739E46079C1A6DDCB38344DF", 'md5')
+        dir1 = DirectoryInfo(fss_api, dev_id, '/a/path/dir', 1436203917)
+        linfo = LsCommand.parse_response(ET.fromstring(LS_BLOCK), device_id=dev_id, fssapi=fss_api)
+        self.assertEqual(linfo, LsInfo(directories=[dir1], files=[file1, file2]))
+
+    def test_parse_error(self):
+        fss_api = mock.Mock()
+        dev_id = 'my_dev_id'
+        errinfo = LsCommand.parse_response(
+            ET.fromstring(ERROR_BLOCK.format(command='ls', errno=1, errtext="error text")),
+            device_id=dev_id, fssapi=fss_api)
+
+        self.assertEqual(errinfo.errno, 1)
+        self.assertEqual(errinfo.message, "error text")
+
+    def test_parse_wrong_response(self):
+        self.assertRaises(ResponseParseError, LsCommand.parse_response, ET.fromstring('<rm />'))
+
+
+class TestGetCommand(unittest.TestCase):
+    def test_init_defaults(self):
+        getcommand = GetCommand(path='/a/path/here')
+        et = getcommand.get_etree()
+        self.assertEqual(et.tag, 'get_file')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual(None, et.get('offset', None))
+        self.assertEqual(None, et.get('length', None))
+        self.assertEqual(0, len(list(et)))
+        self.assertEqual(None, et.text)
+
+    def test_init_values(self):
+        getcommand = GetCommand(path='/a/path/here', offset=5, length=10)
+        et = getcommand.get_etree()
+        self.assertEqual(et.tag, 'get_file')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual('5', et.get('offset', None))
+        self.assertEqual('10', et.get('length', None))
+        self.assertEqual(0, len(list(et)))
+        self.assertEqual(None, et.text)
+
+    def test_parse(self):
+        data_str = base64.b64encode(six.b("File Data")).decode('ascii')
+        data = GetCommand.parse_response(ET.fromstring(GET_FILE_BLOCK.format(data=data_str)))
+        self.assertEqual(six.b("File Data"), data)
+
+    def test_parse_error(self):
+        errinfo = GetCommand.parse_response(
+            ET.fromstring(ERROR_BLOCK.format(command='get_file', errno=1, errtext="error text")))
+
+        self.assertEqual(errinfo.errno, 1)
+        self.assertEqual(errinfo.message, "error text")
+
+    def test_parse_wrong_response(self):
+        self.assertRaises(ResponseParseError, GetCommand.parse_response, ET.fromstring('<rm />'))
+
+
+class TestPutCommand(unittest.TestCase):
+    def test_init_defaults(self):
+        putcommand = PutCommand(path='/a/path/here', file_data=six.b("some file data"))
+        et = putcommand.get_etree()
+        self.assertEqual(et.tag, 'put_file')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual(None, et.get('offset', None))
+        self.assertEqual('false', et.get('truncate'))
+        self.assertEqual(1, len(list(et)))
+        data = et.find('./data')
+        self.assertEqual(base64.b64encode(six.b("some file data")), six.b(data.text))
+
+    def test_init_server_file(self):
+        putcommand = PutCommand(path='/a/path/here', server_file='/a/file/on/server')
+        et = putcommand.get_etree()
+        self.assertEqual(et.tag, 'put_file')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual(None, et.get('offset', None))
+        self.assertEqual('false', et.get('truncate'))
+        self.assertEqual(1, len(list(et)))
+        server_file = et.find('./file')
+        self.assertEqual('/a/file/on/server', server_file.text)
+
+    def test_init_values(self):
+        putcommand = PutCommand(path='/a/path/here', file_data=six.b("some file data"), offset=5, truncate=True)
+        et = putcommand.get_etree()
+        self.assertEqual(et.tag, 'put_file')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual('5', et.get('offset', None))
+        self.assertEqual('true', et.get('truncate'))
+        self.assertEqual(1, len(list(et)))
+        data = et.find('./data')
+        self.assertEqual(base64.b64encode(six.b("some file data")), six.b(data.text))
+
+    def test_put_command_no_data(self):
+        self.assertRaises(FileSystemServiceException, PutCommand, path='/a/path/here')
+
+    def test_put_command_both_data(self):
+        self.assertRaises(FileSystemServiceException, PutCommand, path='/a/path/here',
+                          file_data=six.b("some file data"),  server_file='/a/file/on/server')
+
+    def test_parse(self):
+        self.assertIsNone(PutCommand.parse_response(ET.fromstring('<put_file />')))
+
+    def test_parse_error(self):
+        errinfo = PutCommand.parse_response(
+            ET.fromstring(ERROR_BLOCK.format(command='put_file', errno=1, errtext="error text")))
+
+        self.assertEqual(errinfo.errno, 1)
+        self.assertEqual(errinfo.message, "error text")
+
+    def test_parse_wrong_response(self):
+        self.assertRaises(ResponseParseError, PutCommand.parse_response, ET.fromstring('<rm />'))
+
+
+class TestDeleteCommand(unittest.TestCase):
+    def test_init(self):
+        delcommand = DeleteCommand(path='/a/path/here')
+        et = delcommand.get_etree()
+        self.assertEqual(et.tag, 'rm')
+        self.assertEqual('/a/path/here', et.get('path'))
+        self.assertEqual(0, len(list(et)))
+        self.assertEqual(None, et.text)
+
+    def test_parse(self):
+        self.assertIsNone(DeleteCommand.parse_response(ET.fromstring('<rm />')))
+
+    def test_parse_error(self):
+        errinfo = DeleteCommand.parse_response(
+            ET.fromstring(ERROR_BLOCK.format(command='rm', errno=1, errtext="error text")))
+
+        self.assertEqual(errinfo.errno, 1)
+        self.assertEqual(errinfo.message, "error text")
+
+    def test_parse_wrong_response(self):
+        self.assertRaises(ResponseParseError, DeleteCommand.parse_response, ET.fromstring('<put_file />'))
+
+
+class TestCommandBlock(unittest.TestCase):
+    def test_init(self):
+        command_block = FileSystemServiceCommandBlock()
+        et = command_block.get_etree()
+        self.assertEqual(et.tag, 'commands')
+        self.assertEqual(0, len(list(et)))
+        self.assertEqual(0, len(et.keys()))
+
+    def test_add_command(self):
+        command_block = FileSystemServiceCommandBlock()
+        command_block.add_command(DeleteCommand(path='/a/path'))
+        et = command_block.get_etree()
+        self.assertEqual(et.tag, 'commands')
+        self.assertEqual(1, len(list(et)))
+        self.assertEqual(0, len(et.keys()))
+        self.assertIsNotNone(et.find('./{}'.format(DeleteCommand.command_name)))
+
+    def test_get_command_string(self):
+        command_block = FileSystemServiceCommandBlock()
+        self.assertEqual(six.b('<commands />'), command_block.get_command_string())
+        command_block.add_command(DeleteCommand(path='/a/path'))
+        self.assertEqual(six.b('<commands><rm path="/a/path" /></commands>'), command_block.get_command_string())
 
 
 class TestFileSystemServiceAPI(HttpTestBase):
@@ -605,6 +780,69 @@ class TestFileSystemServiceAPI(HttpTestBase):
             }
 
             self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_send_command_block_all_ok(self):
+        command_block = FileSystemServiceCommandBlock()
+        command_block.add_command(DeleteCommand(path='/a/path/1.txt'))
+        command_block.add_command(DeleteCommand(path='/a/path/2.txt'))
+
+        fsr = FileSystemResponse()
+        fsr.add_device_block(self.dev1_id, (GENERIC_COMMAND_BLOCK.format(command='rm') + GENERIC_COMMAND_BLOCK.format(command='rm')))
+        fsr.add_device_block(self.dev2_id, (GENERIC_COMMAND_BLOCK.format(command='rm') + GENERIC_COMMAND_BLOCK.format(command='rm')))
+        self.prep_sci_response(fsr)
+
+        out_dict = self.fss_api.send_command_block(self.target, command_block)
+
+        # Should just be Nones because they are delete commands with no errors
+        expected_dict = {
+            self.dev1_id: [None, None],
+            self.dev2_id: [None, None],
+        }
+
+        self.assertDictEqual(expected_dict, out_dict)
+
+    def test_send_command_block_mixed_commands(self):
+        command_block = FileSystemServiceCommandBlock()
+        command_block.add_command(DeleteCommand(path='/a/path/1.txt'))
+        command_block.add_command(GetCommand(path='/a/path/2.txt'))
+
+        data_string = base64.b64encode(six.b('testing string')).decode('ascii')
+
+        fsr = FileSystemResponse()
+        fsr.add_device_block(self.dev1_id, (GENERIC_COMMAND_BLOCK.format(command='rm') + GET_FILE_BLOCK.format(data=data_string)))
+        fsr.add_device_block(self.dev2_id, (GENERIC_COMMAND_BLOCK.format(command='rm') + GET_FILE_BLOCK.format(data=data_string)))
+        self.prep_sci_response(fsr)
+
+        out_dict = self.fss_api.send_command_block(self.target, command_block)
+
+        expected_dict = {
+            self.dev1_id: [None, six.b('testing string')],
+            self.dev2_id: [None, six.b('testing string')],
+        }
+
+        self.assertDictEqual(expected_dict, out_dict)
+
+    def test_send_command_block_errors(self):
+        command_block = FileSystemServiceCommandBlock()
+        command_block.add_command(DeleteCommand(path='/a/path/1.txt'))
+        command_block.add_command(GetCommand(path='/a/path/2.txt'))
+
+        fsr = FileSystemResponse()
+        fsr.add_device_block(self.dev1_id, (GENERIC_COMMAND_BLOCK.format(command='rm') + ERROR_BLOCK.format(command='get_file', errno=1, errtext="an error message")))
+        fsr.add_device_block(self.dev2_id, (GENERIC_COMMAND_BLOCK.format(command='rm') + ERROR_BLOCK.format(command='get_file', errno=1, errtext="an error message")))
+        self.prep_sci_response(fsr)
+
+        out_dict = self.fss_api.send_command_block(self.target, command_block)
+
+        # Check empty DeleteCommand responses
+        self.assertIsNone(out_dict[self.dev1_id][0])
+        self.assertIsNone(out_dict[self.dev2_id][0])
+
+        # Check error info values
+        self.assertEqual(1, out_dict[self.dev1_id][1].errno)
+        self.assertEqual(1, out_dict[self.dev2_id][1].errno)
+        self.assertEqual("an error message", out_dict[self.dev1_id][1].message)
+        self.assertEqual("an error message", out_dict[self.dev2_id][1].message)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,8 +1,8 @@
 import time
 import six
 from devicecloud.examples.example_helpers import get_authenticated_dc
+from devicecloud.file_system_service import ErrorInfo, FileSystemServiceCommandBlock, LsCommand, PutCommand
 from devicecloud.sci import DeviceTarget
-from devicecloud.file_system_service import FileSystemServiceAPI, ErrorInfo
 
 
 def put_test_file(fssapi, target, tmp_file_path):
@@ -106,3 +106,9 @@ if __name__ == "__main__":
     time.sleep(5)
     get_modified_files(fssapi, target, base_dir, cutoff_time)
     delete_test_file(fssapi, target, tmp_file_path)
+
+    command_block = FileSystemServiceCommandBlock()
+    command_block.add_command(LsCommand(base_dir))
+    command_block.add_command(LsCommand('/another/directory/on/your/device'))
+
+    print(fssapi.send_command_block(target, command_block))
