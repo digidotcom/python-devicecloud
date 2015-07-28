@@ -181,6 +181,21 @@ class TestFileSystemServiceAPI(HttpTestBase):
         self.dev1_id = '00000000-00000000-18A905FF-FF2F1BBD'
         self.dev2_id = '00000000-00000000-18A905FF-FF2F1BBE'
 
+        # Create some file, directory, and error info objects to use in tests
+        self.file1 = FileInfo(self.fss_api, self.dev1_id, '/a/path/file1.txt', 1436276773, 7989,
+                         "967FDA522517B9CE0C3E056EDEB485BB", 'md5')
+        self.file2 = FileInfo(self.fss_api, self.dev1_id, '/a/path/file2.py', 1434377919, 181,
+                         "DEA17715739E46079C1A6DDCB38344DF", 'md5')
+        self.dir1 = DirectoryInfo(self.fss_api, self.dev1_id, '/a/path/dir', 1436203917)
+        self.errinfo = ErrorInfo(errno=1, message="an error message")
+
+    def clone_file(self, orig_file):
+        return FileInfo(orig_file._fssapi, orig_file.device_id, orig_file.path,
+                        orig_file.last_modified, orig_file.size, orig_file.hash, orig_file.hash_type)
+
+    def clone_dir(self, orig_dir):
+        return DirectoryInfo(orig_dir._fssapi, orig_dir.device_id, orig_dir.path, orig_dir.last_modified)
+
     def prep_sci_response(self, response):
         self.sci_api.send_sci.side_effect = (response,)
 
@@ -216,20 +231,17 @@ class TestFileSystemServiceAPI(HttpTestBase):
         self.prep_sci_response(fsr)
         list_dict = self.fss_api.list_files(self.target, '/a/path/')
 
-        file1 = FileInfo(self.fss_api, self.dev1_id, '/a/path/file1.txt', 1436276773, 7989,
-                         "967FDA522517B9CE0C3E056EDEB485BB", 'md5')
-        file2 = FileInfo(self.fss_api, self.dev1_id, '/a/path/file2.py', 1434377919, 181,
-                         "DEA17715739E46079C1A6DDCB38344DF", 'md5')
-        files_dev1 = [file1, file2]
-        dir1 = DirectoryInfo(self.fss_api, self.dev1_id, '/a/path/dir', 1436203917)
-        dirs_dev1 = [dir1]
+        files_dev1 = [self.file1, self.file2]
+        dirs_dev1 = [self.dir1]
 
-        file1 = FileInfo(self.fss_api, self.dev2_id, '/a/path/file1.txt', 1436276773, 7989,
-                         "967FDA522517B9CE0C3E056EDEB485BB", 'md5')
-        file2 = FileInfo(self.fss_api, self.dev2_id, '/a/path/file2.py', 1434377919, 181,
-                         "DEA17715739E46079C1A6DDCB38344DF", 'md5')
+        file1 = self.clone_file(self.file1)
+        file1.device_id = self.dev2_id
+        file2 = self.clone_file(self.file2)
+        file2.device_id = self.dev2_id
+
         files_dev2 = [file1, file2]
-        dir1 = DirectoryInfo(self.fss_api, self.dev2_id, '/a/path/dir', 1436203917)
+        dir1 = self.clone_dir(self.dir1)
+        dir1.device_id = self.dev2_id
         dirs_dev2 = [dir1]
 
         expected_dict = {self.dev1_id: LsInfo(dirs_dev1, files_dev1),
@@ -439,12 +451,94 @@ class TestFileSystemServiceAPI(HttpTestBase):
         fsr.add_device_block(self.dev2_id, ERROR_BLOCK.format(command='rm', errno='1', errtext='something went wrong'))
         self.prep_sci_response(fsr)
         file_path = '/a/path/file1.txt'
-        server_file = '/a/path/file2.txt'
         out_dict = self.fss_api.delete_file(self.target, file_path)
         self.assertIsNone(out_dict[self.dev1_id])
         error = out_dict[self.dev2_id]
         self.assertEqual(1, error.errno)
         self.assertEqual('something went wrong', error.message)
+
+    def test_get_modified_items(self):
+
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[], files=[self.file1, self.file2])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: LsInfo(directories=[], files=[])}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.get_modified_items(self.target, '/a/path/', self.file1.last_modified - 1)
+
+            expected_out_dict = {
+                self.dev1_id: LsInfo(files=[self.file1], directories=[]),
+                self.dev2_id: LsInfo([], [])
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_get_modified_items_errinfo(self):
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[], files=[self.file1, self.file2])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: self.errinfo}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.get_modified_items(self.target, '/a/path/', self.file1.last_modified - 1)
+
+            expected_out_dict = {
+                self.dev1_id: LsInfo(files=[self.file1], directories=[]),
+                self.dev2_id: self.errinfo
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_get_modified_items_no_results(self):
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[], files=[self.file1, self.file2])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: linfo}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.get_modified_items(self.target, '/a/path/', self.file1.last_modified + self.file2.last_modified)
+
+            expected_out_dict = {
+                self.dev1_id: LsInfo([], []),
+                self.dev2_id: LsInfo([], [])
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_get_modified_items_mult_dev_results(self):
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[], files=[self.file1, self.file2])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: linfo}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.get_modified_items(self.target, '/a/path/', self.file1.last_modified - 1)
+
+            expected_out_dict = {
+                self.dev1_id: LsInfo(files=[self.file1], directories=[]),
+                self.dev2_id: LsInfo(files=[self.file1], directories=[])
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
+
+    def test_get_modified_directory_results(self):
+        dir2 = DirectoryInfo(self.fss_api, self.dev1_id, '/a/path/dir2', self.dir1.last_modified - 2)
+
+        def mock_list_files(*args, **kwargs):
+            linfo = LsInfo(directories=[self.dir1, dir2], files=[])
+            out_dict = {self.dev1_id: linfo, self.dev2_id: LsInfo([], [])}
+            return out_dict
+
+        with mock.patch.object(self.fss_api, 'list_files', side_effect=mock_list_files) as m:
+            out_dict = self.fss_api.get_modified_items(self.target, '/a/path/', self.dir1.last_modified - 1)
+
+            expected_out_dict = {
+                self.dev1_id: LsInfo(files=[], directories=[self.dir1]),
+                self.dev2_id: LsInfo([], [])
+            }
+
+            self.assertDictEqual(expected_out_dict, out_dict)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,49 @@
+import time
 import six
 from devicecloud.examples.example_helpers import get_authenticated_dc
-from devicecloud.file_system_service import FileSystemServiceAPI
 from devicecloud.sci import DeviceTarget
+from devicecloud.file_system_service import FileSystemServiceAPI, ErrorInfo
+
+
+def put_test_file(fssapi, target, tmp_file_path):
+    tmp_str = six.b('testing string')
+
+    print("\nWriting test file {}".format(tmp_file_path))
+    print(fssapi.put_file(target, tmp_file_path, file_data=tmp_str))
+
+
+def list_contents(fssapi, target, dev_dir):
+    print("\nList of files in {}".format(dev_dir))
+    out_dict = fssapi.list_files(target, dev_dir)
+    print("list_files returned: {}".format(str(out_dict)))
+    print_list_contents(out_dict)
+
+
+def print_list_contents(out_dict):
+    print("\nPrint each item from list_files:")
+    for device_id, device_data in six.iteritems(out_dict):
+        print("Items from device {}".format(device_id))
+        if isinstance(device_data, ErrorInfo):
+            print("    ErrorInfo: {}".format(device_data))
+        else:
+            (dirs, files) = device_data
+            if len(dirs) + len(files) == 0:
+                print "    None"
+            for d in dirs:
+                print("    Directory: {}".format(str(d)))
+            for f in files:
+                print("    File: {}".format(str(f)))
+
+
+def delete_test_file(fssapi, target, tmp_file_path):
+    print("\nDeleting test file: {}".format(tmp_file_path))
+    print(fssapi.delete_file(target, tmp_file_path))
+
+
+def get_modified_files(fssapi, target, dev_dir, last_modified_cutoff):
+    print("\nGetting all files modified since {}".format(last_modified_cutoff))
+    out_dict = fssapi.get_modified_items(target, dev_dir, last_modified_cutoff)
+    print_list_contents(out_dict)
 
 
 def use_filesystem(dc, target, base_dir):
@@ -9,10 +51,8 @@ def use_filesystem(dc, target, base_dir):
     fd = dc.get_filedata_api()
 
     tmp_file = '{}/test.txt'.format(base_dir)
-    tmp_str = six.b('testing string')
 
-    print("\nWriting temp file {}".format(tmp_file))
-    print(fssapi.put_file(target, tmp_file, file_data=tmp_str))
+    put_test_file(fssapi, target, tmp_file)
 
     tmp_server_file = 'test_file.txt'
     print("\nWriting temp file to server {}".format(tmp_server_file))
@@ -22,15 +62,7 @@ def use_filesystem(dc, target, base_dir):
     print("\nWriting temp file from server {}".format(tmp_server_device_file))
     fssapi.put_file(target, tmp_server_device_file, server_file='/~/test_dir/{}'.format(tmp_server_file))
 
-    print("\nList of files in {}".format(base_dir))
-    out_dict = fssapi.list_files(target, base_dir)
-    print(out_dict)
-
-    for device, (dirs, files) in out_dict.iteritems():
-        for f in files:
-            if f.path.endswith('test.txt'):
-                print("\nUsing file info object to get data")
-                print(f.get_data())
+    list_contents(fssapi, target, base_dir)
 
     print("\nUsing API to get file data")
     print(fssapi.get_file(target, tmp_file))
@@ -49,9 +81,8 @@ def use_filesystem(dc, target, base_dir):
     fssapi.put_file(target, tmp_file, file_data=six.b("why"), offset=4, truncate=True)
     print(fssapi.get_file(target, tmp_file))
 
-    print("\nDeleting temp file")
-    print(fssapi.delete_file(target, tmp_file))
-    print(fssapi.delete_file(target, tmp_server_device_file))
+    delete_test_file(fssapi, target, tmp_file)
+    delete_test_file(fssapi, target, tmp_server_device_file)
 
     print("\nList of files in {}".format(base_dir))
     out_dict = fssapi.list_files(target, base_dir)
@@ -64,3 +95,14 @@ if __name__ == "__main__":
     target = DeviceTarget(device_id)
     base_dir = '/a/directory/on/your/device'
     use_filesystem(dc, target, base_dir)
+
+    fssapi = dc.get_fss_api()
+    tmp_file_path = "{}/{}".format(base_dir, 'test_file.txt')
+    put_test_file(fssapi, target, tmp_file_path)
+    cutoff_time = time.time()
+    get_modified_files(fssapi, target, base_dir, cutoff_time)
+    print("\nModifying file {}".format(tmp_file_path))
+    fssapi.put_file(target, tmp_file_path, file_data=six.b("data"), offset=4)
+    time.sleep(5)
+    get_modified_files(fssapi, target, base_dir, cutoff_time)
+    delete_test_file(fssapi, target, tmp_file_path)
