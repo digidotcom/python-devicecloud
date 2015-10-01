@@ -177,8 +177,8 @@ class DirectoryInfo(object):
         :return: A LsInfo object that contains directories and files
         :rtype: :class:`~.LsInfo` or :class:`~.ErrorInfo`
 
-        Here is an example usage
-        ::
+        Here is an example usage::
+
             # let dirinfo be a DirectoryInfo object
             ldata = dirinfo.list_contents()
             if isinstance(ldata, ErrorInfo):
@@ -282,8 +282,8 @@ class LsCommand(FileSystemServiceCommandABC):
     def parse_response(cls, response, device_id=None, fssapi=None, **kwargs):
         """Parse the server response for this ls command
 
-        This will parse xml of the following form
-        ::
+        This will parse xml of the following form::
+
             <ls hash="hash_type">
               <file path="file_path" last_modified=last_modified_time ... />
               ...
@@ -291,8 +291,8 @@ class LsCommand(FileSystemServiceCommandABC):
               ...
             </ls>
 
-        or with an error
-        ::
+        or with an error::
+
             <ls>
                 <error ... />
             </ls>
@@ -375,16 +375,16 @@ class GetCommand(FileSystemServiceCommandABC):
     def parse_response(cls, response, **kwargs):
         """Parse the server response for this get file command
 
-        This will parse xml of the following form
-        ::
+        This will parse xml of the following form::
+
             <get_file>
                 <data>
                    asdfasdfasdfasdfasf
                 </data>
             </get_file>
 
-        or with an error
-        ::
+        or with an error::
+
             <get_file>
                 <error ... />
             </get_file>
@@ -456,12 +456,12 @@ class PutCommand(FileSystemServiceCommandABC):
     def parse_response(cls, response, **kwargs):
         """Parse the server response for this put file command
 
-        This will parse xml of the following form
-        ::
+        This will parse xml of the following form::
+
             <put_file />
 
-        or with an error
-        ::
+        or with an error::
+
             <put_file>
                 <error ... />
             </put_file>
@@ -506,15 +506,15 @@ class DeleteCommand(FileSystemServiceCommandABC):
     def parse_response(cls, response, **kwargs):
         """Parse the server response for this put file command
 
-        This will parse xml of the following form
-        ::
+        This will parse xml of the following form::
+
           <rm />
 
-        or with an error
-        ::
-          <rm>
-              <error ... />
-          </rm>
+        or with an error::
+
+            <rm>
+                <error ... />
+            </rm>
 
         :param response: The XML root of the response for a delete file command
         :type response: :class:`xml.etree.ElementTree.Element`
@@ -581,8 +581,8 @@ class FileSystemServiceAPI(SCIAPIBase):
             directories or an :class:`~.ErrorInfo` object if there was an error response
         :raises: :class:`~.ResponseParseError` If the SCI response has unrecognized formatting
 
-        Here is an example usage
-        ::
+        Here is an example usage::
+
             # dc is a DeviceCloud instance
             fssapi = dc.get_fss_api()
 
