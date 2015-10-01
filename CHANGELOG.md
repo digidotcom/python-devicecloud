@@ -1,5 +1,21 @@
 ## Python Devicecloud Library Changelog
 
+### 0.4 / 2015-10-01
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.3...0.4)
+
+Enhancements:
+
+* monitors: basic support for creating HTTP monitors was added
+* streams: support for the JSON data type added
+* sci: support added for filesystem service added.  This allows you to
+  access files and directories on any device supporting this service.
+
+Bug Fixes:
+
+* streams: fix data translations from device cloud <-> python types
+  when reading and writing data points.  See
+  https://github.com/digidotcom/python-devicecloud/commit/5ac6c15cddf010709361c16b69e622aca93d6b28
+
 ### 0.3 / 2015-06-15
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.2...0.3)
 
