@@ -1,7 +1,7 @@
 Python Device Cloud Library
 ===========================
 
-[![Build Status](https://img.shields.io/travis/digidotcom/python-devicecloud.svg)](https://travis-ci.org/digidotcom/python-devicecloud)
+[![Build Status](https://travis-ci.org/digidotcom/python-devicecloud.svg?branch=master)](https://travis-ci.org/digidotcom/python-devicecloud)
 [![Coverage Status](https://img.shields.io/coveralls/digidotcom/python-devicecloud.svg)](https://coveralls.io/r/digidotcom/python-devicecloud)
 [![Code Climate](https://img.shields.io/codeclimate/github/digidotcom/python-devicecloud.svg)](https://codeclimate.com/github/digidotcom/python-devicecloud)
 [![Latest Version](https://img.shields.io/pypi/v/devicecloud.svg)](https://pypi.python.org/pypi/devicecloud/)
