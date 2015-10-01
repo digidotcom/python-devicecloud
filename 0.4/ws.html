@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Direct Web Services API &mdash; python-devicecloud 0.4 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="python-devicecloud 0.4 documentation" href="index.html"/>
+        <link rel="next" title="Cookbook" href="cookbook.html"/>
+        <link rel="prev" title="Monitor API" href="monitor.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> python-devicecloud
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streams.html">Streams API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filedata.html">FileData API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sci.html">SCI (Server Command Interface) API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filesystem.html">File System Service API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitor.html">Monitor API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Direct Web Services API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">python-devicecloud</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Direct Web Services API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/ws.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="direct-web-services-api">
+<h1>Direct Web Services API<a class="headerlink" href="#direct-web-services-api" title="Permalink to this headline">¶</a></h1>
+<p>The Device Cloud exposes a large set of functionality to users and the
+python-devicecloud library seeks to provide convenient and complete
+APIs for a majority of these.  However, there are APIs which the library
+does not cover; some may have coverage in the future and others may never
+have direct support in the library.</p>
+<p>The &#8220;ws&#8221; API provides a mechanism for directly making calls to
+unsupported web services APIs.  An example of the syntax exposed by the library
+is probably best demonstrated with an example.</p>
+<p>An example of an API not currently supported by the library is the <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_R/Default.htm#ProgrammingTopics/Alarms.htm#AlarmAPI%3FTocPath%3DDevice%2520Cloud%2520Programming%2520Guide%7CAlarms%7C_____1">Alarms API</a>.
+This API is a &#8220;legacy&#8221; API (it is not prefixed with a &#8220;v1&#8221;) and its basic interface is GET, POST, PUT, and
+DELETE of the path &#8220;/ws/Alarm&#8221;.  The API returns response and expects payloads to be in XML according
+to a format described in the documentation:</p>
+<div class="highlight-python"><div class="highlight"><pre># List alarms
+#
+# Retrieves results of GET to /ws/Alarms with authentication and will raise
+# the standard exceptions in the case of a failure response.
+#
+&gt;&gt;&gt; dc = devicecloud.DeviceCloud(&#39;user&#39;, &#39;pass&#39;)
+&gt;&gt;&gt; response = dc.ws.Alarm.get()
+&gt;&gt;&gt; print response.content
+... A bunch of XML ...
+&gt;&gt;&gt; print dc.ws.Alarm.get_json()
+... A bunch of JSON ...
+&gt;&gt;&gt; print list(dc.ws.Alarm.iter_json_pages())
+... All Alarms over all pages with result as list of dictionaries ...
+
+#
+# Note that in the syntactic sugar may fall short.  In those cases, you
+# may need to fall back to using the underlying DeviceConnection
+#
+&gt;&gt;&gt; alarm_id = 10
+&gt;&gt;&gt; print dc.get_connection().get_json(&quot;/ws/Alarm/{}&quot;.format(alarm_id))
+... Some JSON ...
+</pre></div>
+</div>
+<p>For more details, refer to the documentation on the methods for <a class="reference internal" href="core.html#devicecloud.DeviceCloudConnection" title="devicecloud.DeviceCloudConnection"><code class="xref py py-class docutils literal"><span class="pre">devicecloud.DeviceCloudConnection</span></code></a>.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cookbook.html" class="btn btn-neutral float-right" title="Cookbook" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="monitor.html" class="btn btn-neutral" title="Monitor API" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Etherios, Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
