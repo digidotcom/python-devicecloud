@@ -11,7 +11,7 @@ import mock
 import six
 
 from devicecloud import DeviceCloud
-from devicecloud.sci import DeviceTarget, AsyncRequestProxy, ServerCommandInterfaceAPI
+from devicecloud.sci import DeviceTarget, GroupTarget, AsyncRequestProxy, ServerCommandInterfaceAPI
 from devicecloud.test.unit.test_utilities import HttpTestBase
 
 
@@ -77,6 +77,21 @@ class TestSCI(HttpTestBase):
                                '</send_message>'
                                '</sci_request>'))
 
+    def test_sci_successful_group_target(self):
+        self._prepare_sci_response(EXAMPLE_SCI_DEVICE_NOT_CONNECTED)
+        self.dc.get_sci_api().send_sci(
+            operation="send_message",
+            target=GroupTarget("TestGroup"),
+            payload="<reset/>")
+        self.assertEqual(httpretty.last_request().body,
+                         six.b('<sci_request version="1.0">'
+                               '<send_message>'
+                               '<targets>'
+                               '<group path="TestGroup"/>'
+                               '</targets>'
+                               '<reset/>'
+                               '</send_message>'
+                               '</sci_request>'))
 
 class TestGetAsync(HttpTestBase):
     def test_sci_get_async(self):
