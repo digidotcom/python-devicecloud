@@ -4,4 +4,4 @@
 #
 # Copyright (c) 2015 Digi International, Inc.
 
-__version__ = "0.4"
+__version__ = "0.4.1"

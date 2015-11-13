@@ -1,5 +1,12 @@
 ## Python Devicecloud Library Changelog
 
+### 0.4.1 / 2015-11-13
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4...0.4.1)
+
+Bug Fixes:
+
+* sci: Targetting groups now works
+
 ### 0.4 / 2015-10-01
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.3...0.4)
 
