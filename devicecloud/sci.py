@@ -63,7 +63,7 @@ class GroupTarget(TargetABC):
         self._group = group
 
     def to_xml(self):
-        return '<group path="{}">'.format(self._group)
+        return '<group path="{}"/>'.format(self._group)
 
 
 class AsyncRequestProxy(object):
