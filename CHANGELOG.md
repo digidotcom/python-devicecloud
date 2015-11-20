@@ -1,5 +1,15 @@
 ## Python Devicecloud Library Changelog
 
+### 0.4.1 / 2015-11-20
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.1...0.4.2)
+
+Bug Fixes:
+
+* core: All Etherios references have been replaced with Digi.  Most
+  importantly, the default URL for the devicecloud is now
+  devicecloud.digi.com.  The old URL may not redirect properly at some
+  point in the future.
+
 ### 0.4.1 / 2015-11-13
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4...0.4.1)
 
