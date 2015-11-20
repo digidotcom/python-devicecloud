@@ -200,9 +200,9 @@ class TestDeviceCoreGroups(HttpTestBase):
         root = self.dc.devicecore.get_group_tree_root()
         root.print_subtree(fobj)  # the order of the traversal can vary, so just assert on the length
         if six.PY2:
-            self.assertEqual(len(fobj.getvalue()), 513)
+            self.assertEqual(len(fobj.getvalue()), 489)
         elif six.PY3:
-            self.assertEqual(len(fobj.getvalue()), 495)  # no u'' on repr for strings
+            self.assertEqual(len(fobj.getvalue()), 471)  # no u'' on repr for strings
 
     def test_get_groups_condition(self):
         self.prepare_response("GET",  "/ws/Group", EXAMPLE_GET_GROUPS)
