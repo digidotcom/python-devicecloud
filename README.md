@@ -15,7 +15,7 @@ Overview
 --------
 
 Python-devicecloud is a library providing simple, intuitive access to
-the [Digi Device Cloud](http://www.digi.com/cloud/digi-device-cloud)
+the [Digi Device Cloud](http://www.digi.com/products/cloud/digi-device-cloud)
 for clients written in Python.
 
 The library wraps the Device Cloud REST API and hides the details of
@@ -28,7 +28,7 @@ The primary target audience for this library is individuals
 interfacing with the device cloud from the server side or developers
 writing tools to aid device development.  For efficient connectivity
 from devices, we suggest that you first look at using the [Device Cloud
-Connector](http://www.etherios.com/products/devicecloud/connector).
+Connector](http://www.digi.com/support/productdetail?pid=5575).
 That being said, this library could also be used on devices if deemed
 suitable.
 
@@ -159,9 +159,7 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this file,
 you can obtain one at http://mozilla.org/MPL/2.0/.
 
-Digi, Digi International, the Digi logo, the Digi website, Etherios,
-the Etherios logo, the Etherios website, Device Cloud by Etherios, and
-Etherios Cloud Connector are trademarks or registered trademarks of
+Digi, Digi International, the Digi logo, the Digi website, Digi Device Cloud, and Digi Cloud Connector are trademarks or registered trademarks of
 Digi International, Inc. in the United States and other countries
 worldwide. All other trademarks are the property of their respective
 owners.

@@ -38,7 +38,7 @@ class HttpTestBase(unittest.TestCase):
         if data is not None:
             kwargs['body'] = data
         httpretty.register_uri(method,
-                               "https://login.etherios.com{}".format(path),
+                               "https://devicecloud.digi.com{}".format(path),
                                match_querystring=match_querystring,
                                status=status,
                                **kwargs)

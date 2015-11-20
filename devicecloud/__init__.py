@@ -355,7 +355,7 @@ class DeviceCloud(object):
                  throttle_delay_max=DEFAULT_THROTTLE_DELAY_MAX,
                  throttle_delay_backoff_coefficient=DEFAULT_THROTTLE_DELAY_BACKOFF_COEFFICIENT):
         if base_url is None:
-            base_url = "https://login.etherios.com"
+            base_url = "https://devicecloud.digi.com"
         self._conn = DeviceCloudConnection(
             auth=HTTPBasicAuth(username, password),
             base_url=base_url,

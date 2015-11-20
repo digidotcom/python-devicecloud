@@ -120,8 +120,8 @@ EXAMPLE_GET_GROUPS = """\
   "requestedSize": "1000",
   "remainingSize": "0",
   "items": [
-    { "grpId": "11817", "grpName": "7603_Etherios", "grpDescription": "7603_Etherios root group", "grpPath": "\/7603_Etherios\/", "grpParentId": "1"},
-    { "grpId": "13542", "grpName": "Demo", "grpPath": "\/7603_Etherios\/Demo\/", "grpParentId": "11817"}
+    { "grpId": "11817", "grpName": "7603_Digi", "grpDescription": "7603_Digi root group", "grpPath": "\/7603_Digi\/", "grpParentId": "1"},
+    { "grpId": "13542", "grpName": "Demo", "grpPath": "\/7603_Digi\/Demo\/", "grpParentId": "11817"}
   ]
 }
 """
@@ -134,10 +134,10 @@ EXAMPLE_GET_GROUPS_EXTENDED = """\
   "requestedSize": "1000",
   "remainingSize": "0",
   "items": [
-    { "grpId": "11817", "grpName": "7603_Etherios", "grpDescription": "7603_Etherios root group", "grpPath": "\/7603_Etherios\/", "grpParentId": "1"},
-    { "grpId": "13542", "grpName": "Demo", "grpPath": "\/7603_Etherios\/Demo\/", "grpParentId": "11817"},
-    { "grpId": "13544", "grpName": "SubDir2", "grpPath": "\/7603_Etherios\/Demo\/SubDir2\/", "grpParentId": "13542"},
-    { "grpId": "13545", "grpName": "Another Second Level", "grpDescription": "Another Second Level", "grpPath": "\/7603_Etherios\/Another Second Level\/", "grpParentId": "11817"}
+    { "grpId": "11817", "grpName": "7603_Digi", "grpDescription": "7603_Digi root group", "grpPath": "\/7603_Digi\/", "grpParentId": "1"},
+    { "grpId": "13542", "grpName": "Demo", "grpPath": "\/7603_Digi\/Demo\/", "grpParentId": "11817"},
+    { "grpId": "13544", "grpName": "SubDir2", "grpPath": "\/7603_Digi\/Demo\/SubDir2\/", "grpParentId": "13542"},
+    { "grpId": "13545", "grpName": "Another Second Level", "grpDescription": "Another Second Level", "grpPath": "\/7603_Digi\/Another Second Level\/", "grpParentId": "11817"}
   ]
 }
 """
@@ -181,9 +181,9 @@ class TestDeviceCoreGroups(HttpTestBase):
         grp = six.next(it)
         self.assertEqual(grp.is_root(), True)
         self.assertEqual(grp.get_id(), "11817")
-        self.assertEqual(grp.get_name(), "7603_Etherios")
-        self.assertEqual(grp.get_description(), "7603_Etherios root group")
-        self.assertEqual(grp.get_path(), "/7603_Etherios/")
+        self.assertEqual(grp.get_name(), "7603_Digi")
+        self.assertEqual(grp.get_description(), "7603_Digi root group")
+        self.assertEqual(grp.get_path(), "/7603_Digi/")
         self.assertEqual(grp.get_parent_id(), "1")
 
         grp = six.next(it)
@@ -191,7 +191,7 @@ class TestDeviceCoreGroups(HttpTestBase):
         self.assertEqual(grp.get_id(), "13542")
         self.assertEqual(grp.get_name(), "Demo")
         self.assertEqual(grp.get_description(), "")
-        self.assertEqual(grp.get_path(), "/7603_Etherios/Demo/")
+        self.assertEqual(grp.get_path(), "/7603_Digi/Demo/")
         self.assertEqual(grp.get_parent_id(), "11817")
 
     def test_repr_and_tree_print(self):

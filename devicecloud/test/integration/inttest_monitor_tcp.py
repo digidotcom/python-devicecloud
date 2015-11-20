@@ -42,7 +42,7 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
                 fd = msg.get('FileData', None)
                 if fd:
                     if (fd['id']['fdName'] == 'test_file.txt' and
-                            fd['id']['fdPath'] == '/db/7603_Etherios/inttest/monitor_tcp/'):
+                            fd['id']['fdPath'] == '/db/7603_Digi/inttest/monitor_tcp/'):
                         fd_push_seen = True
                 dp = msg.get('DataPoint')
                 if dp:

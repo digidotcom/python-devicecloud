@@ -21,8 +21,8 @@ Introduction
 ============
 
 Python-devicecloud is a library providing simple, intuitive access to
-the `Device Cloud by Etherios
-<http://www.etherios.com/products/devicecloud/>`_ for clients written
+the `Digi Device Cloud
+<http://www.digi.com/products/cloud/digi-device-cloud/>`_ for clients written
 in Python.
 
 The library wraps the Device Cloud REST API and hides the details of
@@ -36,7 +36,7 @@ The primary target audience for this library is individuals
 interfacing with the device cloud from the server side or developers
 writing tools to aid device development.  For efficient connectivity
 from devices, we suggest that you first look at using the `Device
-Cloud Connector <http://www.etherios.com/products/devicecloud/connector>`_.
+Cloud Connector <http://www.digi.com/support/productdetail?pid=5575>`_.
 That being said, this library could also be used on devices if deemed
 suitable.
 

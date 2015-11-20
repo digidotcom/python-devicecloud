@@ -20,7 +20,7 @@ class TestTCPClientManager(HttpTestBase):
         self.client_manager = TCPClientManager(self.dc.get_connection())
 
     def test_hostname(self):
-        self.assertEqual(self.client_manager.hostname, "login.etherios.com")
+        self.assertEqual(self.client_manager.hostname, "devicecloud.digi.com")
 
     def test_username(self):
         self.assertEqual(self.client_manager.username, "user")

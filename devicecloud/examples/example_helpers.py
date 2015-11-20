@@ -11,7 +11,7 @@ from devicecloud import DeviceCloud
 
 def get_authenticated_dc():
     while True:
-        base_url = os.environ.get('DC_BASE_URL', 'https://login.etherios.com')
+        base_url = os.environ.get('DC_BASE_URL', 'https://devicecloud.digi.com')
 
         username = os.environ.get('DC_USERNAME', None)
         if not username:

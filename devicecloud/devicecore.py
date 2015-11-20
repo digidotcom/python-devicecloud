@@ -325,8 +325,8 @@ class Group(object):
     def from_json(cls, json_data):
         """Build and return a new Group object from json data (used internally)"""
         # Example Data:
-        # { "grpId": "11817", "grpName": "7603_Etherios", "grpDescription": "7603_Etherios root group",
-        #   "grpPath": "\/7603_Etherios\/", "grpParentId": "1"}
+        # { "grpId": "11817", "grpName": "7603_Digi", "grpDescription": "7603_Digi root group",
+        #   "grpPath": "\/7603_Digi\/", "grpParentId": "1"}
         return cls(
             group_id=json_data["grpId"],
             name=json_data["grpName"],
