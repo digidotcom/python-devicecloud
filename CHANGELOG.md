@@ -1,6 +1,6 @@
 ## Python Devicecloud Library Changelog
 
-### 0.4.1 / 2015-11-20
+### 0.4.2 / 2015-11-20
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.1...0.4.2)
 
 Bug Fixes:
