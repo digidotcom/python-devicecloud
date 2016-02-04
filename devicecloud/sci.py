@@ -173,7 +173,7 @@ class ServerCommandInterfaceAPI(APIBase):
 
         # sync_timeout argument
         # TODO: What units is syncTimeout in?  seconds?
-        if not sync_timeout is None or isinstance(sync_timeout, six.integer_types):
+        if sync_timeout is not None and not isinstance(sync_timeout, six.integer_types):
             raise TypeError("sync_timeout expected to either be None or a number")
         if sync_timeout is not None:
             sync_timeout_xml = ' syncTimeout="{}"'.format(sync_timeout)
