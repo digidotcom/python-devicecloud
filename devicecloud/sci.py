@@ -12,7 +12,7 @@ import six
 
 SCI_TEMPLATE = """\
 <sci_request version="1.0">
-  <{operation}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
+  <{operation}{reply}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
     <targets>
       {targets}
     </targets>
@@ -173,7 +173,7 @@ class ServerCommandInterfaceAPI(APIBase):
 
         # sync_timeout argument
         # TODO: What units is syncTimeout in?  seconds?
-        if not sync_timeout is None or isinstance(sync_timeout, six.integer_types):
+        if sync_timeout is not None and not isinstance(sync_timeout, six.integer_types):
             raise TypeError("sync_timeout expected to either be None or a number")
         if sync_timeout is not None:
             sync_timeout_xml = ' syncTimeout="{}"'.format(sync_timeout)
