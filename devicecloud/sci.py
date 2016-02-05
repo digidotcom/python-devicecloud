@@ -12,7 +12,7 @@ import six
 
 SCI_TEMPLATE = """\
 <sci_request version="1.0">
-  <{operation}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
+  <{operation}{reply}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
     <targets>
       {targets}
     </targets>

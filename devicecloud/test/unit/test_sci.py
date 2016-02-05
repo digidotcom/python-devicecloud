@@ -9,6 +9,8 @@ import unittest
 import httpretty
 import mock
 import six
+import re
+import xml.etree.ElementTree as ET
 
 from devicecloud import DeviceCloud
 from devicecloud.sci import DeviceTarget, GroupTarget, AsyncRequestProxy, ServerCommandInterfaceAPI
@@ -46,6 +48,22 @@ EXAMPLE_SCI_REQUEST_PAYLOAD = """\
     <device_stats/>
   </query_state>
 </rci_request>
+"""
+
+EXAMPLE_SCI_REQUEST_RESPONSE = """\
+<sci_reply version="1.0">
+  <send_message>
+    <device id="00000000-00000000-00409dff-ffaabbcc">
+      <rci_reply version="1.1">
+        <query_state>
+          <device_stats>
+            <firmwarestate>running</firmwarestate>
+          </device_stats>
+        </query_state>
+      </rci_reply>
+    </device>
+  </send_message>
+</sci_reply>
 """
 
 EXAMPLE_ASYNC_SCI_RESPONSE = """\
@@ -92,6 +110,75 @@ class TestSCI(HttpTestBase):
                                '<reset/>'
                                '</send_message>'
                                '</sci_request>'))
+
+    def test_sci_no_parameters(self):
+        self._prepare_sci_response(EXAMPLE_SCI_REQUEST_RESPONSE)
+        self.dc.get_sci_api().send_sci(
+            operation="send_message",
+            target=DeviceTarget('00000000-00000000-00409dff-ffaabbcc'),
+            payload=EXAMPLE_SCI_REQUEST_PAYLOAD)
+        request = httpretty.last_request().body
+        # Strip white space from lines and concatenate request
+        request = ''.join([line.strip() for line in request.splitlines()])
+        self.assertEqual(request,
+                         six.b('<sci_request version="1.0">'
+                               '<send_message>'
+                               '<targets>'
+                               '<device id="00000000-00000000-00409dff-ffaabbcc"/>'
+                               '</targets>'
+                               '<rci_request version="1.1">'
+                               '<query_state>'
+                               '<device_stats/>'
+                               '</query_state>'
+                               '</rci_request>'
+                               '</send_message>'
+                               '</sci_request>'))
+
+    def test_sci_with_parameters(self):
+        self._prepare_sci_response(EXAMPLE_SCI_REQUEST_RESPONSE)
+        self.dc.get_sci_api().send_sci(
+            operation="send_message",
+            target=DeviceTarget('00000000-00000000-00409dff-ffaabbcc'),
+            payload=EXAMPLE_SCI_REQUEST_PAYLOAD,
+            reply="all",
+            synchronous=True,
+            sync_timeout=42,
+            cache=False,
+            allow_offline=True,
+            wait_for_reconnect=True,
+            )
+        request = httpretty.last_request().body
+        # Verify attributes exist in <send_message>
+        expected_attrib = {
+            "reply": "all",
+            "synchronous": "true",
+            "syncTimeout": "42",
+            "cache": "false",
+            "allowOffline": "true",
+            "waitForReconnect": "true",
+        }
+        request_e = ET.fromstring(request)
+        send_message_e = request_e.find('./send_message')
+        self.assertEqual(expected_attrib, send_message_e.attrib)
+        # Strip white space from lines and concatenate request
+        request = ''.join([line.strip() for line in request.splitlines()])
+        # Replace <send_message> from request with one without parameters so the final check can be done
+        match = re.search('<send_message.*?>', request)
+        request = request[:match.start()] + '<send_message>' + request[match.end():]
+        self.assertEqual(request,
+                         six.b('<sci_request version="1.0">'
+                               '<send_message>'
+                               '<targets>'
+                               '<device id="00000000-00000000-00409dff-ffaabbcc"/>'
+                               '</targets>'
+                               '<rci_request version="1.1">'
+                               '<query_state>'
+                               '<device_stats/>'
+                               '</query_state>'
+                               '</rci_request>'
+                               '</send_message>'
+                               '</sci_request>'))
+
 
 class TestGetAsync(HttpTestBase):
     def test_sci_get_async(self):
