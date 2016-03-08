@@ -117,11 +117,11 @@ class TestSCI(HttpTestBase):
             operation="send_message",
             target=DeviceTarget('00000000-00000000-00409dff-ffaabbcc'),
             payload=EXAMPLE_SCI_REQUEST_PAYLOAD)
-        request = httpretty.last_request().body
+        request = httpretty.last_request().body.decode('utf8')
         # Strip white space from lines and concatenate request
         request = ''.join([line.strip() for line in request.splitlines()])
         self.assertEqual(request,
-                         six.b('<sci_request version="1.0">'
+                         six.u('<sci_request version="1.0">'
                                '<send_message>'
                                '<targets>'
                                '<device id="00000000-00000000-00409dff-ffaabbcc"/>'
@@ -147,7 +147,7 @@ class TestSCI(HttpTestBase):
             allow_offline=True,
             wait_for_reconnect=True,
             )
-        request = httpretty.last_request().body
+        request = httpretty.last_request().body.decode('utf8')
         # Verify attributes exist in <send_message>
         expected_attrib = {
             "reply": "all",
@@ -166,7 +166,7 @@ class TestSCI(HttpTestBase):
         match = re.search('<send_message.*?>', request)
         request = request[:match.start()] + '<send_message>' + request[match.end():]
         self.assertEqual(request,
-                         six.b('<sci_request version="1.0">'
+                         six.u('<sci_request version="1.0">'
                                '<send_message>'
                                '<targets>'
                                '<device id="00000000-00000000-00409dff-ffaabbcc"/>'
