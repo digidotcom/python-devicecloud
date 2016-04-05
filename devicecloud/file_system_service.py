@@ -402,8 +402,11 @@ class GetCommand(FileSystemServiceCommandABC):
         if error is not None:
             return _parse_error_tree(error)
 
-        data = six.b(response.find('./data').text)
-        return base64.b64decode(data)
+        text = response.find('./data').text
+        if text:
+            return base64.b64decode(six.b(text))
+        else:
+            return six.b('')
 
 
 class PutCommand(FileSystemServiceCommandABC):

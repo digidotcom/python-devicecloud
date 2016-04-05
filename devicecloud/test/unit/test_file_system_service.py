@@ -228,6 +228,10 @@ class TestGetCommand(unittest.TestCase):
         self.assertEqual(0, len(list(et)))
         self.assertEqual(None, et.text)
 
+    def test_parse_empty(self):
+        data = GetCommand.parse_response(ET.fromstring(GET_FILE_BLOCK.format(data='')))
+        self.assertEqual(six.b(""), data)
+
     def test_parse(self):
         data_str = base64.b64encode(six.b("File Data")).decode('ascii')
         data = GetCommand.parse_response(ET.fromstring(GET_FILE_BLOCK.format(data=data_str)))
