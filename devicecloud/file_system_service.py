@@ -403,7 +403,10 @@ class GetCommand(FileSystemServiceCommandABC):
             return _parse_error_tree(error)
 
         data = six.b(response.find('./data').text)
-        return base64.b64decode(data)
+        if data:
+            return base64.b64decode(data)
+        else:
+            return six.b('')
 
 
 class PutCommand(FileSystemServiceCommandABC):
