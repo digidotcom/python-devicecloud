@@ -55,7 +55,7 @@ setup(
     long_description=get_long_description(),
     url="https://github.com/digidotcom/python-devicecloud",
     author="Digi International, Inc.",
-    author_email="paul.osborne@digi.com",
+    author_email="brandon.moser@digi.com",
     packages=find_packages(),
     install_requires=open('requirements.txt').read().split(),
     classifiers=[
