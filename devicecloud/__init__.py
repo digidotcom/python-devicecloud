@@ -366,6 +366,7 @@ class DeviceCloud(object):
         )
         self._streams_api = None  # streams property api ref
         self._filedata_api = None  # filedata property api ref
+        self._fss_api = None  # fileservice property api ref
         self._devicecore_api = None  # devicecore property api ref
         self._sci_api = None  # sci property api ref
         self._monitor_api = None  # monitor property of api ref
