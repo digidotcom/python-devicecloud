@@ -1,5 +1,13 @@
 ## Python Devicecloud Library Changelog
 
+### 0.4.3 / 2018-06-11
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.2...0.4.3)
+
+Bug Fixes:
+
+* core: updated Device Cloud CRT to latest
+* core: updated requirements to latest
+
 ### 0.4.2 / 2015-11-20
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.1...0.4.2)
 
