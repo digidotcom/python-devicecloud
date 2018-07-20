@@ -399,7 +399,7 @@ class TestDeviceCoreDevices(HttpTestBase):
         self.assertEqual(dev1.get_last_known_ip(), '10.35.1.107')
         self.assertEqual(dev1.get_global_ip(), '204.182.3.237')
         self.assertEqual(dev1.get_last_connected_dt(),
-                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633, tzinfo=tzutc()))
+                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633000, tzinfo=tzutc()))
         self.assertEqual(dev1.get_contact(), '')
         self.assertEqual(dev1.get_description(), '')
         self.assertEqual(dev1.get_location(), '')

@@ -192,9 +192,9 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_type(), "file")
         self.assertEqual(obj.get_content_type(), "application/binary")
         self.assertEqual(obj.get_last_modified_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000, tzinfo=tzutc()))
         self.assertEqual(obj.get_created_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000, tzinfo=tzutc()))
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/test.txt")
         self.assertEqual(obj.get_size(), 1234)
@@ -210,9 +210,9 @@ class TestFileDataObject(HttpTestBase):
         self.assertEqual(obj.get_type(), "directory")
         self.assertEqual(obj.get_content_type(), "application/xml")
         self.assertEqual(obj.get_last_modified_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000, tzinfo=tzutc()))
         self.assertEqual(obj.get_created_date(),
-                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123, tzinfo=tzutc()))
+                         datetime.datetime(2014, 7, 20, 18, 46, 45, 123000, tzinfo=tzutc()))
         self.assertEqual(obj.get_customer_id(), "1234")
         self.assertEqual(obj.get_full_path(), "/db/blah/")
         self.assertEqual(obj.get_size(), 0)
