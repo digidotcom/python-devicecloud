@@ -1,4 +1,13 @@
+#
+# This is the Travis-CI configuration.
+#
+# The actual dependency installation and test execution is done via tox as a
+# way to share the same process between Travis-CI and Buildbot.
+#
 language: python
+# allow travis to use new, faster container based
+# infrastructure to perform the testing
+sudo: false
 
 # this version of python is only used to run tox - the version specified by TOX_ENV
 # is used to install and run tests
@@ -6,11 +15,6 @@ python: 2.7
 env:
   - TOX_ENV=py27
   - TOX_ENV=py34
-  - TOX_ENV=py35
-  - TOX_ENV=py36
-  - TOX_ENV=py37
-  - TOX_ENV=pypy
-  - TOX_ENV=coverage
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
@@ -21,6 +25,3 @@ install:
 script:
   - tox -e $TOX_ENV
 
-# allow travis to use new, faster container based
-# infrastructure to perform the testing
-sudo: false
