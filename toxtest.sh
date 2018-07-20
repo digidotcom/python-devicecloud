@@ -9,6 +9,9 @@
 pyversions=(2.7.7
             3.3.5
             3.4.3
+            3.5.5
+            3.6.6
+            3.7.0
             pypy-2.3.1)
 
 # first make sure that pyenv is installed
