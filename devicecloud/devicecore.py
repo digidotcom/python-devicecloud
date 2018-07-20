@@ -20,10 +20,18 @@ dev_connectware_id = Attribute('devConnectwareId')
 
 
 ADD_GROUP_TEMPLATE = \
-"""
+    """
 <DeviceCore>
     <devConnectwareId>{connectware_id}</devConnectwareId>
     <grpPath>{group_path}</grpPath>
+</DeviceCore>
+"""
+
+TAGS_TEMPLATE = \
+    """
+<DeviceCore>
+    <devConnectwareId>{connectware_id}</devConnectwareId>
+    <dpTags>{tags}</dpTags>
 </DeviceCore>
 """
 
@@ -383,7 +391,6 @@ class Device(object):
     """Interface to a device in the device cloud"""
 
     # TODO: provide ability to set/update available data items
-    # TODO: add/remove tags
 
     def __init__(self, conn, sci, device_json):
         self._conn = conn
@@ -588,3 +595,37 @@ class Device(object):
 
             # Invalidate cache
             self._device_json = None
+
+    def add_tag(self, tag):
+        """Add a tag to existing device tags
+
+        :param tag: the tag to be added
+        """
+
+        tags = self.get_tags()
+        tags.append(tag)
+
+        post_data = TAGS_TEMPLATE.format(connectware_id=self.get_connectware_id(),
+                                         tags=",".join(tags))
+        self._conn.put('/ws/DeviceCore', post_data)
+
+        # Invalidate cache
+        self._device_json = None
+
+    def remove_tag(self, tag):
+        """Remove tag from existing device tags
+
+        :param tag: the tag to be removed from the list
+
+        :raises ValueError: If tag does not exist in list
+        """
+
+        tags = self.get_tags()
+        tags.remove(tag)
+
+        post_data = TAGS_TEMPLATE.format(connectware_id=self.get_connectware_id(),
+                                         tags=",".join(tags))
+        self._conn.put('/ws/DeviceCore', post_data)
+
+        # Invalidate cache
+        self._device_json = None
