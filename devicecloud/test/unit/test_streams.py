@@ -420,6 +420,7 @@ class TestStreamsAPI(HttpTestBase):
     def test_bulk_write_multiple_pages(self):
         # Actual response has a ton of locations for the new data points
         requests = []
+
         def handle_request(request, uri, headers):
             requests.append(request)
             return (200, headers, '<?xml version="1.0" encoding="ISO-8859-1"?><result></result>')
@@ -435,7 +436,6 @@ class TestStreamsAPI(HttpTestBase):
             ))
         self.dc.streams.bulk_write_datapoints(datapoints)
         self.assertEqual(len(requests), 2)
-
 
         def parse_for_data(response):
             root = ET.fromstring(response)
@@ -566,6 +566,7 @@ class TestDataStream(HttpTestBase):
         stream = self._get_stream("test")
 
         requests = []
+
         def handle_request(request, uri, headers):
             requests.append(request)
             return (200, headers, '<?xml version="1.0" encoding="ISO-8859-1"?><result></result>')
@@ -791,8 +792,8 @@ class TestDataPoint(HttpTestBase):
 
         dp = stream.get_current_value()
         self.assertEqual(dp.get_id(), "07d77854-0557-11e4-ab44-fa163e7ebc6b")
-        self.assertEqual(dp.get_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981, tzinfo=tzutc()))
-        self.assertEqual(dp.get_server_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981, tzinfo=tzutc()))
+        self.assertEqual(dp.get_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981000, tzinfo=tzutc()))
+        self.assertEqual(dp.get_server_timestamp(), datetime.datetime(2014, 7, 6, 21, 46, 47, 981000, tzinfo=tzutc()))
         self.assertEqual(dp.get_data(), 123.1)
         self.assertEqual(dp.get_description(), "Test")
         self.assertEqual(dp.get_quality(), 20)
@@ -814,7 +815,7 @@ class TestDataPoint(HttpTestBase):
         dp = DataPoint(
             data_type=STREAM_TYPE_JSON,
             data=my_dict,
-            )
+        )
         xml = dp.to_xml()
 
         self.assertIsNotNone(re.search('<data>\{[ ",a-zA-Z0-9:[\]]+\}</data>', xml))
@@ -852,7 +853,7 @@ class TestDataPoint(HttpTestBase):
             data_type=STREAM_TYPE_FLOAT,
             data=my_float,
             quality=0
-            )
+        )
         self.assertEqual(my_float, dp.get_data())
         self.assertFalse(mfloat.called)
         DSTREAM_TYPE_MAP[STREAM_TYPE_FLOAT] = old_float_conversion

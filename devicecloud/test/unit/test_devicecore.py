@@ -12,7 +12,7 @@ from devicecloud import DeviceCloudHttpException
 from devicecloud.devicecore import dev_mac, group_id
 from devicecloud.test.unit.test_utilities import HttpTestBase
 import httpretty
-from devicecloud.devicecore import ADD_GROUP_TEMPLATE
+from devicecloud.devicecore import ADD_GROUP_TEMPLATE, TAGS_TEMPLATE
 import six
 import mock
 
@@ -172,6 +172,7 @@ PROVISION_MIXED_RESULT_RESPONSE = """\
 </result>
 """
 
+
 class TestDeviceCoreGroups(HttpTestBase):
 
     def test_get_groups(self):
@@ -205,7 +206,7 @@ class TestDeviceCoreGroups(HttpTestBase):
             self.assertEqual(len(fobj.getvalue()), 471)  # no u'' on repr for strings
 
     def test_get_groups_condition(self):
-        self.prepare_response("GET",  "/ws/Group", EXAMPLE_GET_GROUPS)
+        self.prepare_response("GET", "/ws/Group", EXAMPLE_GET_GROUPS)
         list(self.dc.devicecore.get_groups(group_id == "123"))
         params = self._get_last_request_params()
         self.assertEqual(params["condition"], "grpId='123'")
@@ -242,7 +243,7 @@ class TestDeviceCoreProvisioning(HttpTestBase):
         res = self.dc.devicecore.provision_device(imei="990000862471854")
         req = self._get_last_request()
         self.assertEqual(req.body, six.b(
-             "<list>"
+            "<list>"
             "<DeviceCore>"
             "<devCellularModemId>990000862471854</devCellularModemId>"
             "</DeviceCore>"
@@ -283,15 +284,15 @@ class TestDeviceCoreProvisioning(HttpTestBase):
         ])
         req = self._get_last_request()
         self.assertEqual(req.body, six.b(
-                '<list>'
-                '<DeviceCore>'
-                '<devConnectwareId>00000000-00000000-0000DEFF-FFADBEEFF</devConnectwareId>'
-                '</DeviceCore>'
-                ''
-                '<DeviceCore>'
-                '<devMac>DE:AD:BE:EF:00:00</devMac>'
-                '</DeviceCore>'
-                '</list>'))
+            '<list>'
+            '<DeviceCore>'
+            '<devConnectwareId>00000000-00000000-0000DEFF-FFADBEEFF</devConnectwareId>'
+            '</DeviceCore>'
+            ''
+            '<DeviceCore>'
+            '<devMac>DE:AD:BE:EF:00:00</devMac>'
+            '</DeviceCore>'
+            '</list>'))
         self.assertTrue(len(res), 2)
         self.assertDictEqual(res[0], {"error": False, "error_msg": None, "location": "DeviceCore/1397876/0"})
         self.assertDictEqual(res[1], {"error": False, "error_msg": None, "location": "DeviceCore/946246/0"})
@@ -398,7 +399,7 @@ class TestDeviceCoreDevices(HttpTestBase):
         self.assertEqual(dev1.get_last_known_ip(), '10.35.1.107')
         self.assertEqual(dev1.get_global_ip(), '204.182.3.237')
         self.assertEqual(dev1.get_last_connected_dt(),
-                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633, tzinfo=tzutc()))
+                         datetime.datetime(2013, 4, 8, 4, 1, 20, 633000, tzinfo=tzutc()))
         self.assertEqual(dev1.get_contact(), '')
         self.assertEqual(dev1.get_description(), '')
         self.assertEqual(dev1.get_location(), '')
@@ -464,6 +465,30 @@ class TestDeviceCoreDevices(HttpTestBase):
         dev.remove_from_group()
         self.assertIsNone(dev._device_json)
         self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_add_device_tag(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        expected = TAGS_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                        tags='test')
+        dev.add_tag('test')
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_remove_device_tag(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        try:
+            dev.remove_tag('test')
+        except ValueError:
+            pass
+        else:
+            assert False, "should have thrown exception"
+
 
 if __name__ == '__main__':
     unittest.main()
