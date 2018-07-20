@@ -1,5 +1,13 @@
 ## Python Devicecloud Library Changelog
 
+### 0.5.0 / 2018-07-20
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.3...0.5.0)
+
+Enhancements:
+
+* devicecore: add support for adding and removing tags from a device
+
+
 ### 0.4.3 / 2018-06-11
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.2...0.4.3)
 
