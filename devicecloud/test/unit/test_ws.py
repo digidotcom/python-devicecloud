@@ -1,3 +1,9 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2015-2018 Digi International Inc. All rights reserved.
+
 import unittest
 
 from devicecloud import DeviceCloudException
@@ -35,6 +41,7 @@ class LegacyAPIMemberInternalsTests(unittest.TestCase):
         res = self.stub.a.test.path.post("foo", bar="baz")
         self.assertEqual(res[0], ("/ws/a/test/path", "foo"))
         self.assertDictEqual(res[1], {"bar": "baz"})
+
 
 if __name__ == '__main__':
     unittest.main()

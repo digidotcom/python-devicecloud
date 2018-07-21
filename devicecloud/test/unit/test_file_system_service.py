@@ -1,3 +1,9 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2015-2018 Digi International Inc. All rights reserved.
+
 import base64
 import unittest
 from xml.etree import ElementTree as ET
@@ -287,7 +293,7 @@ class TestPutCommand(unittest.TestCase):
 
     def test_put_command_both_data(self):
         self.assertRaises(FileSystemServiceException, PutCommand, path='/a/path/here',
-                          file_data=six.b("some file data"),  server_file='/a/file/on/server')
+                          file_data=six.b("some file data"), server_file='/a/file/on/server')
 
     def test_parse(self):
         self.assertIsNone(PutCommand.parse_response(ET.fromstring('<put_file />')))
@@ -362,9 +368,9 @@ class TestFileSystemServiceAPI(HttpTestBase):
 
         # Create some file, directory, and error info objects to use in tests
         self.file1 = FileInfo(self.fss_api, self.dev1_id, '/a/path/file1.txt', 1436276773, 7989,
-                         "967FDA522517B9CE0C3E056EDEB485BB", 'md5')
+                              "967FDA522517B9CE0C3E056EDEB485BB", 'md5')
         self.file2 = FileInfo(self.fss_api, self.dev1_id, '/a/path/file2.py', 1434377919, 181,
-                         "DEA17715739E46079C1A6DDCB38344DF", 'md5')
+                              "DEA17715739E46079C1A6DDCB38344DF", 'md5')
         self.dir1 = DirectoryInfo(self.fss_api, self.dev1_id, '/a/path/dir', 1436203917)
         self.errinfo = ErrorInfo(errno=1, message="an error message")
 
@@ -847,6 +853,7 @@ class TestFileSystemServiceAPI(HttpTestBase):
         self.assertEqual(1, out_dict[self.dev2_id][1].errno)
         self.assertEqual("an error message", out_dict[self.dev1_id][1].message)
         self.assertEqual("an error message", out_dict[self.dev2_id][1].message)
+
 
 if __name__ == '__main__':
     unittest.main()

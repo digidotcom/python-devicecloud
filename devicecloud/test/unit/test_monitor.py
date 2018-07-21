@@ -2,7 +2,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2015 Digi International, Inc.
+# Copyright (c) 2015-2018 Digi International Inc.
+
 from devicecloud.monitor import MON_TOPIC_ATTR, MON_TRANSPORT_TYPE_ATTR
 from devicecloud.test.unit.test_utilities import HttpTestBase
 import six
@@ -186,7 +187,6 @@ GET_MONITOR_NONE_FOUND = """\
     "items": []
 }
 """
-
 
 
 class TestMonitorAPI(HttpTestBase):

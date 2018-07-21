@@ -54,7 +54,7 @@ setup(
     description="Python API to the Digi Device Cloud",
     long_description=get_long_description(),
     url="https://github.com/digidotcom/python-devicecloud",
-    author="Digi International, Inc.",
+    author="Digi International Inc.",
     author_email="brandon.moser@digi.com",
     packages=find_packages(),
     install_requires=open('requirements.txt').read().split(),

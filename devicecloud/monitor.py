@@ -2,10 +2,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2015 Digi International, Inc. All rights reserved.
+# Copyright (c) 2015-2018 Digi International Inc. All rights reserved.
 #
 # This code is originally from another Digi Open Source Library:
 # https://github.com/digidotcom/idigi-python-monitor-api
+
 import xml.etree.ElementTree as ET
 import logging
 import textwrap
@@ -209,7 +210,7 @@ class MonitorAPI(APIBase):
         monitor_id = int(location.split('/')[-1])
         return TCPDeviceCloudMonitor(self._conn, monitor_id, self._tcp_client_manager)
 
-    def create_http_monitor(self, topics, transport_url, transport_token=None, transport_method='PUT',connect_timeout=0,
+    def create_http_monitor(self, topics, transport_url, transport_token=None, transport_method='PUT', connect_timeout=0,
                             response_timeout=0, batch_size=1, batch_duration=0, compression='none', format_type='json'):
         """Creates a HTTP Monitor instance in the device cloud for a given list of topics
 
@@ -362,6 +363,7 @@ class DeviceCloudMonitor(object):
     def delete(self):
         """Delete this monitor form the device cloud"""
         self._conn.delete("/ws/Monitor/{id}".format(id=self._id))
+
 
 class HTTPDeviceCloudMonitor(DeviceCloudMonitor):
     """Device Cloud Monitor with HTTP transport type"""

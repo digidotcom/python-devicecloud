@@ -1,3 +1,9 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Copyright (c) 2015-2018 Digi International Inc. All rights reserved.
+
 import unittest
 import datetime
 
@@ -43,6 +49,7 @@ class TestConditions(unittest.TestCase):
         a = Attribute("a")
         self.assertEqual(((a > 1) & (a > 2) & (a > 3)).compile(),
                          "a>'1' and a>'2' and a>'3'")
+
 
 if __name__ == '__main__':
     unittest.main()
