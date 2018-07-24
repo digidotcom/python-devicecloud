@@ -4,9 +4,9 @@ Monitor API
 Monitor Overview
 ----------------
 
-Provide access to the device cloud monitor API which can be used to
+Provide access to Device Cloud monitor API which can be used to
 subscribe to topics to receive notifications when data is received
-on the device cloud.
+on Device Cloud.
 
 SCI API Documentation
 ---------------------

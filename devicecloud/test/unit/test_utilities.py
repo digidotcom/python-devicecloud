@@ -15,7 +15,7 @@ import six.moves.urllib.parse as urllib_parse
 class HttpTestBase(unittest.TestCase):
     def setUp(self):
         httpretty.enable()
-        # setup the Device cloud ping response
+        # setup Device Cloud ping response
         self.prepare_response("GET", "/ws/DeviceCore?size=1", "", status=200)
         self.dc = DeviceCloud('user', 'pass')
 

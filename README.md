@@ -7,36 +7,21 @@ Python Device Cloud Library
 [![Latest Version](https://img.shields.io/pypi/v/devicecloud.svg)](https://pypi.python.org/pypi/devicecloud/)
 [![License](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/digidotcom/python-devicecloud/blob/master/LICENSE)
 
-Be sure to check out the [full documentation](http://digidotcom.github.io/python-devicecloud).
-A [Changelog](https://github.com/digidotcom/python-devicecloud/blob/master/CHANGELOG.md)
-is also available.
+Be sure to check out the [full documentation](http://digidotcom.github.io/python-devicecloud). A [Changelog](https://github.com/digidotcom/python-devicecloud/blob/master/CHANGELOG.md) is also available.
 
 Overview
 --------
 
-Python-devicecloud is a library providing simple, intuitive access to
-the [Digi Device Cloud](http://www.digi.com/products/cloud/digi-device-cloud)
-for clients written in Python.
+Python-devicecloud is a library providing simple, intuitive access to [Digi Device Cloud(sm)](http://www.digi.com/products/cloud/digi-device-cloud) for clients written in Python.
 
-The library wraps the Device Cloud REST API and hides the details of
-forming HTTP requests in order to gain access to device information,
-file data, streams, and other features of the device cloud.  The API
-wrapped can be found
-[here](http://ftp1.digi.com/support/documentation/90002008_redirect.htm).
+The library wraps Device Cloud's REST API and hides the details of forming HTTP requests in order to gain access to device information, file data, streams, and other features of Device Cloud. The API can be found [here](http://ftp1.digi.com/support/documentation/90002008_redirect.htm).
 
-The primary target audience for this library is individuals
-interfacing with the device cloud from the server side or developers
-writing tools to aid device development.  For efficient connectivity
-from devices, we suggest that you first look at using the [Device Cloud
-Connector](http://www.digi.com/support/productdetail?pid=5575).
-That being said, this library could also be used on devices if deemed
-suitable.
+The primary target audience for this library is individuals interfacing with Device Cloud from the server side or developers writing tools to aid device development. For efficient connectivity from devices, we suggest that you first look at using the [Device Cloud Connector](http://www.digi.com/support/productdetail?pid=5575). That being said, this library could also be used on devices if deemed suitable.
 
 Example
 -------
 
-The library provides access to a wide array of features, but here is a
-couple quick examples to give you a taste of what the API looks like.
+The library provides access to a wide array of features, but here is a couple quick examples to give you a taste of what the API looks like.
 
 ```python
 from devicecloud import DeviceCloud
@@ -45,7 +30,7 @@ dc = DeviceCloud('user', 'pass')
 
 # show the MAC address of all devices that are currently connected
 #
-# This is done using the device cloud DeviceCore functionality
+# This is done using Device Cloud DeviceCore functionality
 print "== Connected Devices =="
 for device in dc.devicecore.get_devices():
     if device.is_connected():
@@ -54,28 +39,24 @@ for device in dc.devicecore.get_devices():
 # get the name and current value of all data streams having values
 # with a floating point type
 #
-# This is done using the device cloud stream functionality
+# This is done using Device Cloud stream functionality
 for stream in dc.streams.get_streams():
     if stream.get_data_type().lower() in ('float', 'double'):
         print "%s -> %s" % (stream.get_stream_id(), stream.get_current_value())
 ```
 
-For more examples and detailed documentation, be sure to checkout out
-the [Full API Documentation](https://digidotcom.github.io/python-devicecloud).
+For more examples and detailed documentation, be sure to checkout out the [Full API Documentation](https://digidotcom.github.io/python-devicecloud).
 
 Installation
 ------------
 
-This library can be installed using
-[pip](https://github.com/pypa/pip).  Python versions 2.7+ (including
-Python 3) are supported by the library.
+This library can be installed using [pip](https://github.com/pypa/pip). Python versions 2.7+ and 3+ are supported by the library.
 
 ```sh
 pip install devicecloud
 ```
 
-If you already have an older version of the library installed, you can
-upgrade to the latest version by doing
+If you already have an older version of the library installed, you can upgrade to the latest version by doing
 
 ```sh
 pip install --upgrade devicecloud
@@ -84,9 +65,7 @@ pip install --upgrade devicecloud
 Supported Features
 ------------------
 
-Eventually, it is hoped that there will be complete feature parity
-between the device cloud API and this library.  For now, however, that
-is not the case.  The current features are supported by the library:
+Eventually, it is hoped that there will be complete feature parity between Device Cloud API and this library.  For now, however, that is not the case.  The current features are supported by the library:
 
 * Getting basic device information via DeviceCore
 * Provision and Delete devices via DeviceCore
@@ -110,7 +89,7 @@ is not the case.  The current features are supported by the library:
   * Get full metadata and contents of files and directories.
 * Low level support for performing basic SCI commands with limited parsing
   of results and support for only a subset of available services/commands.
-* APIs to make direct web service calls to the device cloud with some details
+* APIs to make direct web service calls to Device Cloud with some details
   handled by the library (see DeviceCloudConnection and 'ws' documentation)
 * Device Provisioning via Mac Address, IMEI or Device ID
 * Monitors
@@ -130,23 +109,15 @@ which features should be highest priority is always welcome.
 * XBee specific support (XBeeCore)
 * Smart Energy APIs
 * SMS Support
-* Satellite/Iridium Support
 * SM/UDP Support
 * Carrier Information Access
 
 Contributing
 ------------
 
-Contributions to the library are very welcome in whatever form can be
-provided.  This could include issue reports, bug fixes, or features
-additions.  For issue reports, please [create an issue against the
-Github
-project](https://github.com/digidotcom/python-devicecloud/issues).
+Contributions to the library are very welcome in whatever form can be provided.  This could include issue reports, bug fixes, or features additions.  For issue reports, please [create an issue against the Github project](https://github.com/digidotcom/python-devicecloud/issues).
 
-For code changes, feel free to fork the project on Github and submit a
-pull request with your changes.  Additional instructions for
-developers contributing to the project can be found in the [Developer's
-Guide](https://github.com/digidotcom/python-devicecloud/blob/master/HACKING.md).
+For code changes, feel free to fork the project on Github and submit a pull request with your changes.  Additional instructions for developers contributing to the project can be found in the [Developer's Guide](https://github.com/digidotcom/python-devicecloud/blob/master/HACKING.md).
 
 License
 -------
@@ -155,14 +126,9 @@ This software is open-source software.
 
 Copyright (c) 2015-2018 Digi International Inc.
 
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this file,
-you can obtain one at http://mozilla.org/MPL/2.0/.
+This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one at http://mozilla.org/MPL/2.0/.
 
-Digi, Digi International, the Digi logo, the Digi website, Digi Device Cloud, and Digi Cloud Connector are trademarks or registered trademarks of
-Digi International, Inc. in the United States and other countries
-worldwide. All other trademarks are the property of their respective
-owners.
+Digi, Digi International, the Digi logo, the Digi website, Digi Device Cloud, Digi Remote Manager, and Digi Cloud Connector are trademarks or registered trademarks of Digi International Inc. in the United States and other countries worldwide. All other trademarks are the property of their respective owners.
 
 THE SOFTWARE AND RELATED TECHNICAL INFORMATION IS PROVIDED "AS IS"
 WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT

@@ -1,7 +1,7 @@
 Direct Web Services API
 =======================
 
-The Device Cloud exposes a large set of functionality to users and the
+Device Cloud exposes a large set of functionality to users and the
 python-devicecloud library seeks to provide convenient and complete
 APIs for a majority of these.  However, there are APIs which the library
 does not cover; some may have coverage in the future and others may never

@@ -4,12 +4,12 @@ Streams API
 Streams Overview
 ----------------
 
-Data Streams on the device cloud provide a mechanism for storing time-series
+Data Streams on Device Cloud provide a mechanism for storing time-series
 values over a long period of time.  Each individual value in the time series
 is known as a Data Point.
 
-There are a few basic operations supported by the device cloud on streams which
-are supported by the device cloud and this library.  Here we give examples of
+There are a few basic operations supported by Device Cloud on streams which
+are supported by Device Cloud and this library.  Here we give examples of
 each.
 
 Listing Streams
@@ -98,7 +98,7 @@ DataPoint objects
 
 The :class:`.DataPoint` class encapsulates all information required for
 both writing data points as well as retrieving information about data
-points stored on the device cloud.
+points stored on Device Cloud.
 
 API Documentation
 -----------------

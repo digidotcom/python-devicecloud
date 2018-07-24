@@ -63,10 +63,10 @@ class DeviceCloudHttpException(DeviceCloudException):
     """Exception raised when we failed a request to the DC over HTTP
 
     This exception will be raised whenever a non-success HTTP status
-    code is received from the device cloud and there is no other logic
+    code is received from Device Cloud and there is no other logic
     in place for gracefully handling the error case.
 
-    Often, if there is an error with a request to the device cloud, the device
+    Often, if there is an error with a request to Device Cloud, the device
     cloud will respond with an error status and include additional information
     about the nature of the error in the response body.  This information
     can be accessed via the :attr:`~response` property.
@@ -102,7 +102,7 @@ class DeviceCloudHttpException(DeviceCloudException):
 
 
 class DeviceCloudConnection(object):
-    """Provide low-level access to the Device Cloud web services
+    """Provide low-level access to Device Cloud web services
 
     This is a convenience object that provides methods that make sending requests to the
     device cloud easier.  This object is used extensively within the library but can
@@ -189,9 +189,9 @@ class DeviceCloudConnection(object):
         :param str path: The base path to the resource being requested (e.g. /ws/Group)
         :param int page_size: The number of items that should be requested for each page.  A larger
             page_size may mean fewer HTTP requests but could also increase the time to get a first
-            result back from the device cloud.
+            result back from Device Cloud.
         :param params: These are additional query parameters that should be sent with each
-            request to the device cloud.
+            request to Device Cloud.
 
         """
         path = validate_type(path, *six.string_types)
@@ -209,7 +209,7 @@ class DeviceCloudConnection(object):
                 yield item_json
 
     def ping(self):
-        """Ping the Device Cloud using the authorization provided
+        """Ping Device Cloud using the authorization provided
 
         :return: The response of getting a single device from DeviceCore on success
         :raises: :class:`.DeviceCloudHttpException` if there is a problem
@@ -218,19 +218,19 @@ class DeviceCloudConnection(object):
         return self.get("/ws/DeviceCore?size=1")
 
     def get(self, path, **kwargs):
-        """Perform an HTTP GET request of the specified path in the device cloud
+        """Perform an HTTP GET request of the specified path in Device Cloud
 
-        Make an HTTP GET request against the device cloud with this accounts
+        Make an HTTP GET request against Device Cloud with this accounts
         credentials and base url.  This method uses the
         `requests <http://docs.python-requests.org/en/latest/>`_ library
         `request method <http://docs.python-requests.org/en/latest/api/#requests.request>`_
         and all keyword arguments will be passed on to that method.
 
-        :param str path: The device cloud path to GET
+        :param str path: Device Cloud path to GET
         :param int retries: The number of times the request should be retried if an
             unsuccessful response is received.  Most likely, you should leave this at 0.
         :raises DeviceCloudHttpException: if a non-success response to the request is received
-            from the device cloud
+            from Device Cloud
         :returns: A requests ``Response`` object
 
         """
@@ -238,24 +238,24 @@ class DeviceCloudConnection(object):
         return self._make_request("GET", url, **kwargs)
 
     def get_json(self, path, **kwargs):
-        """Perform an HTTP GET request with JSON headers of the specified path against the device cloud
+        """Perform an HTTP GET request with JSON headers of the specified path against Device Cloud
 
-        Make an HTTP GET request against the device cloud with this accounts
+        Make an HTTP GET request against Device Cloud with this accounts
         credentials and base url.  This method uses the
         `requests <http://docs.python-requests.org/en/latest/>`_ library
         `request method <http://docs.python-requests.org/en/latest/api/#requests.request>`_
         and all keyword arguments will be passed on to that method.
 
         This method will automatically add the ``Accept: application/json`` and parse the
-        JSON response from the device cloud.
+        JSON response from Device Cloud.
 
-        :param str path: The device cloud path to GET
+        :param str path: Device Cloud path to GET
         :param int retries: The number of times the request should be retried if an
             unsuccessful response is received.  Most likely, you should leave this at 0.
         :raises DeviceCloudHttpException: if a non-success response to the request is received
-            from the device cloud
+            from Device Cloud
         :returns: A python data structure containing the results of calling ``json.loads`` on the
-            body of the response from the device cloud.
+            body of the response from Device Cloud.
 
         """
 
@@ -266,21 +266,21 @@ class DeviceCloudConnection(object):
         return json.loads(response.text)
 
     def post(self, path, data, **kwargs):
-        """Perform an HTTP POST request of the specified path in the device cloud
+        """Perform an HTTP POST request of the specified path in Device Cloud
 
-        Make an HTTP POST request against the device cloud with this accounts
+        Make an HTTP POST request against Device Cloud with this accounts
         credentials and base url.  This method uses the
         `requests <http://docs.python-requests.org/en/latest/>`_ library
         `request method <http://docs.python-requests.org/en/latest/api/#requests.request>`_
         and all keyword arguments will be passed on to that method.
 
-        :param str path: The device cloud path to POST
+        :param str path: Device Cloud path to POST
         :param int retries: The number of times the request should be retried if an
             unsuccessful response is received.  Most likely, you should leave this at 0.
         :param data: The data to be posted in the body of the POST request (see docs for
             ``requests.post``
         :raises DeviceCloudHttpException: if a non-success response to the request is received
-            from the device cloud
+            from Device Cloud
         :returns: A requests ``Response`` object
 
         """
@@ -288,21 +288,21 @@ class DeviceCloudConnection(object):
         return self._make_request("POST", url, data=data, **kwargs)
 
     def put(self, path, data, **kwargs):
-        """Perform an HTTP PUT request of the specified path in the device cloud
+        """Perform an HTTP PUT request of the specified path in Device Cloud
 
-        Make an HTTP PUT request against the device cloud with this accounts
+        Make an HTTP PUT request against Device Cloud with this accounts
         credentials and base url.  This method uses the
         `requests <http://docs.python-requests.org/en/latest/>`_ library
         `request method <http://docs.python-requests.org/en/latest/api/#requests.request>`_
         and all keyword arguments will be passed on to that method.
 
-        :param str path: The device cloud path to PUT
+        :param str path: Device Cloud path to PUT
         :param int retries: The number of times the request should be retried if an
             unsuccessful response is received.  Most likely, you should leave this at 0.
         :param data: The data to be posted in the body of the POST request (see docs for
             ``requests.post``
         :raises DeviceCloudHttpException: if a non-success response to the request is received
-            from the device cloud
+            from Device Cloud
         :returns: A requests ``Response`` object
 
         """
@@ -311,19 +311,19 @@ class DeviceCloudConnection(object):
         return self._make_request("PUT", url, data=data, **kwargs)
 
     def delete(self, path, retries=DEFAULT_THROTTLE_RETRIES, **kwargs):
-        """Perform an HTTP DELETE request of the specified path in the device cloud
+        """Perform an HTTP DELETE request of the specified path in Device Cloud
 
-        Make an HTTP DELETE request against the device cloud with this accounts
+        Make an HTTP DELETE request against Device Cloud with this accounts
         credentials and base url.  This method uses the
         `requests <http://docs.python-requests.org/en/latest/>`_ library
         `request method <http://docs.python-requests.org/en/latest/api/#requests.request>`_
         and all keyword arguments will be passed on to that method.
 
-        :param str path: The device cloud path to DELETE
+        :param str path: Device Cloud path to DELETE
         :param int retries: The number of times the request should be retried if an
             unsuccessful response is received.  Most likely, you should leave this at 0.
         :raises DeviceCloudHttpException: if a non-success response to the request is received
-            from the device cloud
+            from Device Cloud
         :returns: A requests ``Response`` object
 
         """
@@ -334,7 +334,7 @@ class DeviceCloudConnection(object):
 class DeviceCloud(object):
     """Provide access to core device cloud features
 
-    This class is the primary interface to the device cloud through which access to individual
+    This class is the primary interface to Device Cloud through which access to individual
     device cloud services is provided.  Creating a ``DeviceCloud`` object is as easy as doing
     the following::
 
@@ -344,7 +344,7 @@ class DeviceCloud(object):
         if dc.has_valid_credentials():
             print list(dc.devicecore.get_devices())
 
-    From there, access to all of the device clouds features are possible.  In some cases, methods
+    From there, access to all of Device Clouds features are possible.  In some cases, methods
     for quickly performing selected actions may be provided directly via the ``DeviceCloud`` object
     while advanced usage requires using functionality exposed through other interfaces.
 
@@ -374,9 +374,9 @@ class DeviceCloud(object):
         self._legacy_api = None  # legacy property api ref
 
     def has_valid_credentials(self):
-        """Verify that the device cloud url, username, and password are valid
+        """Verify that Device Cloud url, username, and password are valid
 
-        This method will attempt to "ping" the device cloud in order to ensure that all
+        This method will attempt to "ping" Device Cloud in order to ensure that all
         of the provided information is correct.
 
         :return: True if the credentials are valid and false if not
@@ -441,7 +441,7 @@ class DeviceCloud(object):
         """Get the low-level :class:`~DeviceCloudConnection` for this device cloud instance
 
         This object provides a low-level interface for making authenticated requests
-        to the device cloud.
+        to Device Cloud.
 
         """
         return self._conn

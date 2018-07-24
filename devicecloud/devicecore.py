@@ -168,7 +168,7 @@ class DeviceCoreAPI(APIBase):
     def delete_device(self, dev):
         """ Delete a from the cloud account associated with the handle.
 
-        :raises DeviceCloudHttpException: If there is an unexpected error reported by the device cloud.
+        :raises DeviceCloudHttpException: If there is an unexpected error reported by Device Cloud.
         :param dev: Device object of the device to delete.
         :return: the Response from the delete request.
         """
@@ -206,12 +206,12 @@ class DeviceCoreAPI(APIBase):
         :param str contact: (optional) Contact associted with this device (or whatever you want).
         :param str description: (optional) Textual description of this device.
 
-        :raises DeviceCloudHttpException: If there is an unexpected error reported by the device cloud.
+        :raises DeviceCloudHttpException: If there is an unexpected error reported by Device Cloud.
         :raises ValueError: If any input fields are known to have a bad form.
         :return: A dictionary matching the format specified above.
 
         """
-        # This snippet is from the device cloud API Explorer and shows the pieces of
+        # This snippet is from Device Cloud API Explorer and shows the pieces of
         # information that may be specified when adding a device.
         #
         # <DeviceCore>
@@ -243,7 +243,7 @@ class DeviceCoreAPI(APIBase):
         :param list devices: An iterable of dictionaries each containing information about
             a device to be provision.  The form of the dictionary should match the keyword
             arguments taken by :meth:`provision_device`.
-        :raises DeviceCloudHttpException: If there is an unexpected error reported by the device cloud.
+        :raises DeviceCloudHttpException: If there is an unexpected error reported by Device Cloud.
         :raises ValueError: If any input fields are known to have a bad form.
         :return: A list of dictionaries in the form described for :meth:`provision_device` in the
             order matching the requested device list.  Note that it is possible for there to
@@ -312,7 +312,7 @@ class DeviceCoreAPI(APIBase):
 
 
 class Group(object):
-    """Provides access to information about a group in the device cloud
+    """Provides access to information about a group in Device Cloud
 
     .. note::
 
@@ -389,7 +389,7 @@ class Group(object):
 
 
 class Device(object):
-    """Interface to a device in the device cloud"""
+    """Interface to a device in Device Cloud"""
 
     # TODO: provide ability to set/update available data items
 
@@ -461,7 +461,7 @@ class Device(object):
         return mac4.upper()
 
     def get_registration_dt(self, use_cached=True):
-        """Get the datetime of when this device was added to the device cloud"""
+        """Get the datetime of when this device was added to Device Cloud"""
         device_json = self.get_device_json(use_cached)
         start_date_iso8601 = device_json.get("devRecordStartDate")
         if start_date_iso8601:
@@ -523,7 +523,7 @@ class Device(object):
         return self.get_device_json(use_cached).get("dpGlobalIp")
 
     def get_last_connected_dt(self, use_cached=True):
-        """Get the datetime that the device last connected to the device cloud"""
+        """Get the datetime that the device last connected to Device Cloud"""
         return iso8601_to_dt(self.get_device_json(use_cached).get("dpLastConnectTime"))
 
     def get_contact(self, use_cached=True):

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2015-2018 Digi International Inc.
 
-"""Provide access to the device cloud file system service API"""
+"""Provide access to Device Cloud file system service API"""
 import base64
 from collections import namedtuple
 import xml.etree.ElementTree as ET
@@ -308,7 +308,7 @@ class LsCommand(FileSystemServiceCommandABC):
         if response.tag != cls.command_name:
             raise ResponseParseError(
                 "Received response of type {}, LsCommand can only parse responses of type {}".format(response.tag,
-                                                                                                      cls.command_name))
+                                                                                                     cls.command_name))
 
         if fssapi is None:
             raise FileSystemServiceException("fssapi is required to parse an LsCommand response")
@@ -526,7 +526,7 @@ class DeleteCommand(FileSystemServiceCommandABC):
         if response.tag != cls.command_name:
             raise ResponseParseError(
                 "Received response of type {}, DeleteCommand can only parse responses of type {}".format(response.tag,
-                                                                                                      cls.command_name))
+                                                                                                         cls.command_name))
         error = response.find('./error')
         if error is not None:
             return _parse_error_tree(error)
@@ -552,7 +552,7 @@ class FileSystemServiceAPI(SCIAPIBase):
         :return: The response will be a dictionary where the keys are device_ids and the values are
            the parsed responses of each command sent in the order listed in the command response for
            that device.  In practice it seems to be the same order as the commands were sent in, however,
-           the device cloud documentation does not explicitly state anywhere that is the case so I cannot
+           Device Cloud documentation does not explicitly state anywhere that is the case so I cannot
            guarantee it. This does mean that if you send different types of commands the response list
            will be different types.  Please see the commands parse_response functions for what those types
            will be. (:meth:`LsCommand.parse_response`, :class:`GetCommand.parse_response`,

@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python-devicecloud'
-copyright = u'2015, Digi International, Inc.'
+copyright = u'2015-2018, Digi International Inc.'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -193,22 +193,22 @@ htmlhelp_basename = 'python-deviceclouddoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'python-devicecloud.tex', u'python-devicecloud Documentation',
-   u'Paul Osborne, Tom Manley, Stephen Stack', 'manual'),
+    ('index', 'python-devicecloud.tex', u'python-devicecloud Documentation',
+     u'Paul Osborne, Tom Manley, Stephen Stack, Brandon Moser', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -251,10 +251,10 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'python-devicecloud', u'python-devicecloud Documentation',
-   u'Paul Osborne, Tom Manley, Stephen Stack', 'python-devicecloud',
-   'Device Cloud Web Services Client for Python',
-   'Miscellaneous'),
+    ('index', 'python-devicecloud', u'python-devicecloud Documentation',
+     u'Paul Osborne, Tom Manley, Stephen Stack', 'python-devicecloud',
+     'Device Cloud Web Services Client for Python',
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

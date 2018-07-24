@@ -115,7 +115,7 @@ class PushSession(object):
     """
 
     def __init__(self, callback, monitor_id, client):
-        """Creates a PushSession for use with the device cloud
+        """Creates a PushSession for use with Device Cloud
 
         :param callback: The callback function to invoke when data received.
             Must have 1 required parameter that will contain the payload.
@@ -201,7 +201,7 @@ class PushSession(object):
             raise exception
 
     def start(self):
-        """Creates a TCP connection to the device cloud and sends a ConnectionRequest message"""
+        """Creates a TCP connection to Device Cloud and sends a ConnectionRequest message"""
         self.log.info("Starting Insecure Session for Monitor %s" % self.monitor_id)
         if self.socket is not None:
             raise Exception("Socket already established for %s." % self)
@@ -239,7 +239,7 @@ class SecurePushSession(PushSession):
     def __init__(self, callback, monitor_id, client, ca_certs=None):
         """
         Creates a PushSession wrapped in SSL for use with interacting with
-        the device cloud push functionality.
+        Device Cloud push functionality.
 
         :param callback: The callback function to invoke when data is received.
             Must have 1 required parameter that will contain the
@@ -357,7 +357,7 @@ class CallbackWorkerPool(object):
 
 
 class TCPClientManager(object):
-    """A Client for the 'Push' feature in the device cloud"""
+    """A Client for the 'Push' feature in Device Cloud"""
 
     def __init__(self, conn, secure=True, ca_certs=None, workers=1):
         """
@@ -452,7 +452,7 @@ class TCPClientManager(object):
         try:
             while not self.closed:
                 try:
-                    inputready =  select.select(self.sessions.keys(), [], [], 0.1)[0]
+                    inputready = select.select(self.sessions.keys(), [], [], 0.1)[0]
                     for sock in inputready:
                         session = self.sessions[sock]
                         sck = session.socket
@@ -501,7 +501,7 @@ class TCPClientManager(object):
 
                         # We received full payload,
                         # clear session data and parse it.
-                        data =  session.data
+                        data = session.data
                         session.data = six.b("")
                         session.message_length = 0
                         block_id = struct.unpack('!H', data[0:2])[0]

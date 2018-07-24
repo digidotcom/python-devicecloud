@@ -25,15 +25,15 @@ the `Digi Device Cloud
 <http://www.digi.com/products/cloud/digi-device-cloud/>`_ for clients written
 in Python.
 
-The library wraps the Device Cloud REST API and hides the details of
+The library wraps Device Cloud REST API and hides the details of
 forming HTTP requests in order to gain access to device information,
-file data, streams, and other features of the device cloud.  The API
+file data, streams, and other features of Device Cloud.  The API
 wrapped can be found `here
 <http://ftp1.digi.com/support/documentation/90002008_redirect.htm>`_.
 
 
 The primary target audience for this library is individuals
-interfacing with the device cloud from the server side or developers
+interfacing with Device Cloud from the server side or developers
 writing tools to aid device development.  For efficient connectivity
 from devices, we suggest that you first look at using the `Device
 Cloud Connector <http://www.digi.com/support/productdetail?pid=5575>`_.
@@ -49,7 +49,7 @@ quick example of what the API looks like::
 
     # show the MAC address of all devices that are currently connected
     #
-    # This is done using the device cloud DeviceCore functionality
+    # This is done using Device Cloud DeviceCore functionality
     print "== Connected Devices =="
     for device in dc.devicecore.get_devices():
         if device.is_connected():
@@ -58,7 +58,7 @@ quick example of what the API looks like::
     # get the name and current value of all data streams having values
     # with a floating point type
     #
-    # This is done using the device cloud stream functionality
+    # This is done using Device Cloud stream functionality
     for stream in dc.streams.get_streams():
         if stream.get_data_type().lower() in ('float', 'double'):
             print "%s -> %s" % (stream.get_stream_id(), stream.get_current_value())

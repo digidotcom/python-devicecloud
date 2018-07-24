@@ -17,7 +17,7 @@ def conditional_write(strm, fmt, value, *args, **kwargs):
 
 
 def iso8601_to_dt(iso8601):
-    """Given an ISO8601 string as returned by the device cloud, convert to a datetime object"""
+    """Given an ISO8601 string as returned by Device Cloud, convert to a datetime object"""
     # We could just use arrow.get() but that is more permissive than we actually want.
     # Internal (but still public) to arrow is the actual parser where we can be
     # a bit more specific

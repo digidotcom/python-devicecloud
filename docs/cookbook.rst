@@ -158,8 +158,30 @@ First, get a reference to the device which you would like to add a specific grou
 Then you can add it to a group and fetch it to make sure it works::
 
     device.add_to_group('mygroup')
-    device.get_group_path()  # prints 'mygroup' (the DC sometimes needs a second to catch up)
+    device.get_group_path()  # prints 'mygroup' (DC sometimes needs a second to catch up)
 
 Or remove it::
 
     device.remove_from_group()
+
+
+Device Core - Tags
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+    This assumes your device is provisioned.
+
+Similar to Groups, get a reference to the device which you would like to add a specific group::
+
+    device = devicecore.get_device('00:40:9D:50:B0:EA')
+
+Then you can add a tag and then get the new list::
+
+    device.add_tags('mytag')
+    device.get_tags()  # prints ['mytags'] (DC sometimes needs a second to catch up)
+
+Or remove it::
+
+    device.remove_tag('mytag')
+    device.get_tags()  # prints [] (DC sometimes needs a second to catch up)

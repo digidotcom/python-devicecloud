@@ -6,7 +6,7 @@
 
 """Module with functionality for building queries against cloud resources
 
-This functionality is somewhat poorly documented in the device cloud documentation
+This functionality is somewhat poorly documented in Device Cloud documentation
 in the `Compound Queries <http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/ResourceConventions.htm#CompQueries%3FTocPath%3DDevice%20Cloud%20Programming%20Guide%7CResource%20Conventions%7C_____3>`_
 section.
 
@@ -20,7 +20,7 @@ def _quoted(value):
     """Return a single-quoted and escaped (percent-encoded) version of value
 
     This function will also perform transforms of known data types to a representation
-    that will be handled by the device cloud.  For instance, datetime objects will be
+    that will be handled by Device Cloud.  For instance, datetime objects will be
     converted to ISO8601.
 
     """
@@ -30,7 +30,6 @@ def _quoted(value):
         value = str(value)
 
     return "'{}'".format(value)
-
 
 
 class Expression(object):

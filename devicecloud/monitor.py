@@ -22,7 +22,7 @@ MON_ID_ATTR = Attribute("monId")
 #: Device Cloud customer identifier.
 MON_CST_ID_ATTR = Attribute("cstId")
 
-#: One or more topics to monitor separated by comma.  See the device cloud
+#: One or more topics to monitor separated by comma.  See Device Cloud
 #: documentation for more details
 MON_TOPIC_ATTR = Attribute("monTopic")
 
@@ -109,16 +109,16 @@ MON_STATUS_ATTR = Attribute("monStatus")
 
 
 class MonitorAPI(APIBase):
-    """Provide access to the device cloud Monitor API for receiving push notifications
+    """Provide access to Device Cloud Monitor API for receiving push notifications
 
-    The Monitor API in the device cloud allows for the creation and destruction of
+    The Monitor API in Device Cloud allows for the creation and destruction of
     multiple "monitors."  Each monitor is registered against one or more "topics"
     which describe the data in which it is interested.
 
     There are, in turn, two main ways to receive data matching the topics for a
     given monitor:
 
-    1. Stream: The device cloud supports a protocol over TCP (optionally with SSL) over which
+    1. Stream: Device Cloud supports a protocol over TCP (optionally with SSL) over which
        the batches of events will be sent when they are received.
     2. HTTP: When batches of events are received, a configured web
        service endpoint will received a POST request with the new data.
@@ -133,7 +133,7 @@ class MonitorAPI(APIBase):
     and associated listener that triggers a callback.  Deletion of existing monitors
     matching the same topics is not necessary but sometimes done in order to ensure
     that changes to the monitor configuration in code always make it to the monitor
-    configuration in the device cloud::
+    configuration in Device Cloud::
 
         def monitor_callback(json_data):
             print(json_data)
@@ -150,7 +150,7 @@ class MonitorAPI(APIBase):
         # later...
         dc.monitor.stop_listeners()
 
-    When updates to any DataPoint in the device cloud occurs, the callback will be called
+    When updates to any DataPoint in Device Cloud occurs, the callback will be called
     with a data structure like this one::
 
         {'Document': {'Msg': {'DataPoint': {'cstId': 7603,
@@ -175,7 +175,7 @@ class MonitorAPI(APIBase):
 
     def create_tcp_monitor(self, topics, batch_size=1, batch_duration=0,
                            compression='gzip', format_type='json'):
-        """Creates a TCP Monitor instance in the device cloud for a given list of topics
+        """Creates a TCP Monitor instance in Device Cloud for a given list of topics
 
         :param topics: a string list of topics (e.g. ['DeviceCore[U]',
                   'FileDataCore']).
@@ -212,7 +212,7 @@ class MonitorAPI(APIBase):
 
     def create_http_monitor(self, topics, transport_url, transport_token=None, transport_method='PUT', connect_timeout=0,
                             response_timeout=0, batch_size=1, batch_duration=0, compression='none', format_type='json'):
-        """Creates a HTTP Monitor instance in the device cloud for a given list of topics
+        """Creates a HTTP Monitor instance in Device Cloud for a given list of topics
 
         :param topics: a string list of topics (e.g. ['DeviceCore[U]',
                   'FileDataCore']).
@@ -280,7 +280,7 @@ class MonitorAPI(APIBase):
 
         :param condition: An :class:`.Expression` which defines the condition
             which must be matched on the monitor that will be retrieved from
-            the device cloud. If a condition is unspecified, an iterator over
+            Device Cloud. If a condition is unspecified, an iterator over
             all monitors for this account will be returned.
         :type condition: :class:`.Expression` or None
         :param int page_size: The number of results to fetch in a single page.
@@ -310,7 +310,7 @@ class MonitorAPI(APIBase):
 
 
 class DeviceCloudMonitor(object):
-    """Provides access to a single monitor instance on the device cloud
+    """Provides access to a single monitor instance on Device Cloud
 
     This is a base class that should not be instantiated directly.
 
@@ -361,7 +361,7 @@ class DeviceCloudMonitor(object):
         return self._conn.get_json("/ws/Monitor/{id}".format(id=self._id))["items"][0]
 
     def delete(self):
-        """Delete this monitor form the device cloud"""
+        """Delete this monitor form Device Cloud"""
         self._conn.delete("/ws/Monitor/{id}".format(id=self._id))
 
 
@@ -377,5 +377,5 @@ class TCPDeviceCloudMonitor(DeviceCloudMonitor):
         self._tcp_client_manager = tcp_client_manager
 
     def add_callback(self, callback):
-        """Create a secure SSL/TCP listen session to the device cloud"""
+        """Create a secure SSL/TCP listen session to Device Cloud"""
         self._tcp_client_manager.create_session(callback, self._id)

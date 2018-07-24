@@ -499,7 +499,7 @@ class TestDataStream(HttpTestBase):
             data=123.4,
         ))
 
-        # verify that the body sent to the device cloud is sufficiently minimal
+        # verify that the body sent to Device Cloud is sufficiently minimal
         self.assertEqual(
             httpretty.last_request().body,
             six.b('<DataPoint>'
@@ -519,7 +519,7 @@ class TestDataStream(HttpTestBase):
             units="scolvilles",
         ))
 
-        # verify that the body sent to the device cloud is sufficiently minimal
+        # verify that the body sent to Device Cloud is sufficiently minimal
         self.assertEqual(
             httpretty.last_request().body,
             six.b('<DataPoint>'

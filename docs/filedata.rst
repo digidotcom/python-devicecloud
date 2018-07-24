@@ -4,7 +4,7 @@ FileData API
 FileData Overview
 -----------------
 
-The FileData store on the device cloud provides a hierarchical mechanism for temporarily
+The FileData store on Device Cloud provides a hierarchical mechanism for temporarily
 storing information in files sent from devices.  With the APIs provided by the device
 cloud, it is possible to use the FileData store in a number of different ways to implement
 various use cases.
@@ -20,7 +20,7 @@ basis.  If using the FileData store as a queue, one will likely want to setup mo
 on FileData paths matching certain criterion.  The set of files matching some condition
 can then be thought of as a channel.
 
-This library seeks to make using the device cloud for both of these use cases simple
+This library seeks to make using Device Cloud for both of these use cases simple
 and robust.
 
 Navigating the FileData Store
@@ -129,7 +129,7 @@ API Documentation
 -----------------
 
 The filedata module provides function for reading, writing, and
-deleting "files" from the device cloud FileData store.
+deleting "files" from Device Cloud FileData store.
 
 .. automodule:: devicecloud.filedata
    :members:

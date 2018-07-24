@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2015-2018 Digi International Inc.
 
-"""Provide access to the device cloud filedata API"""
+"""Provide access to Device Cloud filedata API"""
 
 import base64
 
@@ -25,7 +25,7 @@ fd_size = Attribute("fdSize")
 
 
 class FileDataAPI(APIBase):
-    """Encapsulate data and logic required to interact with the device cloud file data store"""
+    """Encapsulate data and logic required to interact with Device Cloud file data store"""
 
     def get_filedata(self, condition=None, page_size=1000):
         """Return a generator over all results matching the provided condition
@@ -123,9 +123,8 @@ class FileDataAPI(APIBase):
 
         self._conn.delete("/ws/FileData{path}".format(path=path))
 
-
     def walk(self, root="~/"):
-        """Emulation of os.walk behavior against the device cloud filedata store
+        """Emulation of os.walk behavior against Device Cloud filedata store
 
         This method will yield tuples in the form ``(dirpath, FileDataDirectory's, FileData's)``
         recursively in pre-order (depth first from top down).
