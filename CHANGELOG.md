@@ -1,5 +1,21 @@
 ## Python Devicecloud Library Changelog
 
+### 0.5.3 / 2018-07-24
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.1...0.5.3)
+
+Enhancements:
+
+* devicecore: add support for adding multiple tags
+
+
+### 0.5.1 / 2018-07-20
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.0...0.5.1)
+
+Changes:
+
+* pypi: upgrade Development Status to "4 - Beta"
+
+
 ### 0.5.0 / 2018-07-20
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.4.3...0.5.0)
 
