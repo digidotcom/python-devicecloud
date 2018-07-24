@@ -19,10 +19,12 @@ env:
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
-  - pip install tox
+  - pip install tox-travis coveralls
   - pip install -r test-requirements.txt
 
 # command to run tests, e.g. python setup.py test
 script:
-  - tox -e $TOX_ENV
+  - tox
 
+after_success:
+    - coveralls
