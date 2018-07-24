@@ -606,11 +606,11 @@ class Device(object):
 
         tags = self.get_tags()
         orig_tag_cnt = len(tags)
-        print("self.get_tags() {}".format(tags))
+        # print("self.get_tags() {}".format(tags))
 
         if isinstance(new_tags, six.string_types):
             new_tags = new_tags.split(',')
-            print("spliting tags :: {}".format(new_tags))
+            # print("spliting tags :: {}".format(new_tags))
 
         for tag in new_tags:
             if not tag in tags:
@@ -623,9 +623,9 @@ class Device(object):
             self._conn.put('/ws/DeviceCore', post_data)
 
             # Invalidate cache
-            # self._device_json = None
-        else:
-            print("skipping tag update")
+            self._device_json = None
+        # else:
+        #     print("skipping tag update")
 
     def remove_tag(self, tag):
         """Remove tag from existing device tags
@@ -643,4 +643,4 @@ class Device(object):
         self._conn.put('/ws/DeviceCore', post_data)
 
         # Invalidate cache
-        # self._device_json = None
+        self._device_json = None
