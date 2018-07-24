@@ -59,7 +59,7 @@ setup(
     packages=find_packages(),
     install_requires=open('requirements.txt').read().split(),
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
         "Programming Language :: Python :: 2.7",
