@@ -420,7 +420,7 @@ class Device(object):
         device_json = self.get_device_json(use_cached)
         potential_tags = device_json.get("dpTags")
         if potential_tags:
-            return potential_tags.split(",")
+            return list(filter(None, potential_tags.split(",")))
         else:
             return []
 
@@ -598,20 +598,21 @@ class Device(object):
             self._device_json = None
 
     def add_tag(self, tag):
-        """Add a tag to existing device tags
+        """Add a tag to existing device tags. This method will not add a duplicate, if already in the list.
 
         :param tag: the tag to be added
         """
 
         tags = self.get_tags()
-        tags.append(tag)
+        if not tag in tags:
+            tags.append(tag)
 
-        post_data = TAGS_TEMPLATE.format(connectware_id=self.get_connectware_id(),
-                                         tags=",".join(tags))
-        self._conn.put('/ws/DeviceCore', post_data)
+            post_data = TAGS_TEMPLATE.format(connectware_id=self.get_connectware_id(),
+                                             tags=",".join(tags))
+            self._conn.put('/ws/DeviceCore', post_data)
 
-        # Invalidate cache
-        self._device_json = None
+            # Invalidate cache
+            self._device_json = None
 
     def remove_tag(self, tag):
         """Remove tag from existing device tags
