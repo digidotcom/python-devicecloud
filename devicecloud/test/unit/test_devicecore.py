@@ -16,6 +16,7 @@ import httpretty
 from devicecloud.devicecore import ADD_GROUP_TEMPLATE, TAGS_TEMPLATE
 import six
 import mock
+from xml.sax.saxutils import escape
 
 
 EXAMPLE_GET_DEVICES = {
@@ -475,6 +476,55 @@ class TestDeviceCoreDevices(HttpTestBase):
         expected = TAGS_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
                                         tags='test')
         dev.add_tag('test')
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_add_multiple_tags(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        expected = TAGS_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                        tags='test,test2,test3')
+        dev.add_tag('test,test2,test3')
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_add_tag_list(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        tags = ['test', 'test2', 'test3']
+        expected = TAGS_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                        tags="{}".format(",".join(tags)))
+        dev.add_tag(tags)
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_add_tags_with_spaces(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        tags = 'test, test2, test3, compound tag'
+        clean_tags = [t.strip() for t in tags.split(',')]
+        expected = TAGS_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                        tags="{}".format(",".join(clean_tags)))
+        dev.add_tag(tags)
+        self.assertIsNone(dev._device_json)
+        self.assertEqual(six.b(expected), httpretty.last_request().body)
+
+    def test_add_tags_with_special_chars(self):
+        self.prepare_json_response("GET", "/ws/DeviceCore", EXAMPLE_GET_DEVICES)
+        self.prepare_response("PUT", "/ws/DeviceCore", '')
+        gen = self.dc.devicecore.get_devices(page_size=1)
+        dev = six.next(gen)
+        tags = 'test, test2, test3, this & that, < more >'
+        clean_tags = [t.strip() for t in tags.split(',')]
+        expected = TAGS_TEMPLATE.format(connectware_id=dev.get_connectware_id(),
+                                        tags=escape("{}".format(",".join(clean_tags))))
+        dev.add_tag(tags)
         self.assertIsNone(dev._device_json)
         self.assertEqual(six.b(expected), httpretty.last_request().body)
 
