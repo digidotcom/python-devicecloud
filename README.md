@@ -117,7 +117,7 @@ Contributing
 
 Contributions to the library are very welcome in whatever form can be provided.  This could include issue reports, bug fixes, or features additions.  For issue reports, please [create an issue against the Github project](https://github.com/digidotcom/python-devicecloud/issues).
 
-For code changes, feel free to fork the project on Github and submit a pull request with your changes.  Additional instructions for developers contributing to the project can be found in the [Developer's Guide](https://github.com/digidotcom/python-devicecloud/blob/master/HACKING.md).
+For code changes, feel free to fork the project on Github and submit a pull request with your changes.  Additional instructions for developers contributing to the project can be found in the [Developer's Guide](https://github.com/digidotcom/python-devicecloud/blob/master/CONTRIBUTING.md).
 
 License
 -------
