@@ -74,6 +74,16 @@ EXAMPLE_ASYNC_SCI_RESPONSE = """\
 </sci_reply>
 """
 
+EXAMPLE_UPDATE_FIRMWARE_INVALID_ATTRIBUTE_REQUEST_PAYLOAD = """
+<data>aHNxcAbAADUct1cAAACAHEBAAAEABEAwAIBAAQAAACOFFzU</data>
+"""
+
+EXAMPLE_UPDATE_FIRMWARE_INVALID_ATTRIBUTE_RESPONSE = """\
+<sci_reply version="1.0"><update_firmware><device id="00000000-00000000-00409dff-ffaabbcc"/>
+<error><desc>Default target not availabe, specify a target number of filename</desc></error>
+</device></update_firmware>
+</sci_reply>
+"""
 
 class TestSCI(HttpTestBase):
     def _prepare_sci_response(self, response, status=200):
@@ -177,6 +187,27 @@ class TestSCI(HttpTestBase):
                                '</query_state>'
                                '</rci_request>'
                                '</send_message>'
+                               '</sci_request>'))
+
+    def test_sci_update_firmware_attribute(self):
+
+        self._prepare_sci_response(EXAMPLE_UPDATE_FIRMWARE_INVALID_ATTRIBUTE_RESPONSE)
+        self.dc.get_sci_api().send_sci(
+            operation="update_firmware",
+            attribute="filename=\"abcd.bin\"",
+            target=DeviceTarget('00000000-00000000-00409dff-ffaabbcc'),
+            payload=EXAMPLE_UPDATE_FIRMWARE_INVALID_ATTRIBUTE_REQUEST_PAYLOAD)
+
+        request = httpretty.last_request().body.decode('utf8')
+        request = ''.join([line.strip() for line in request.splitlines()])
+        self.assertEqual(request,
+                         six.u('<sci_request version="1.0">'
+                               '<update_firmware filename="abcd.bin">'
+                               '<targets>'
+                               '<device id="00000000-00000000-00409dff-ffaabbcc"/>'
+                               '</targets>'
+                               '<data>aHNxcAbAADUct1cAAACAHEBAAAEABEAwAIBAAQAAACOFFzU</data>'
+                               '</update_firmware>'
                                '</sci_request>'))
 
 
