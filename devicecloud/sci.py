@@ -12,7 +12,7 @@ import six
 
 SCI_TEMPLATE = """\
 <sci_request version="1.0">
-  <{operation}{reply}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
+  <{operation}{attribute}{reply}{synchronous}{cache}{sync_timeout}{allow_offline}{wait_for_reconnect}>
     <targets>
       {targets}
     </targets>
@@ -131,7 +131,7 @@ class ServerCommandInterfaceAPI(APIBase):
         return AsyncRequestProxy(job_id, self._conn)
 
     def send_sci(self, operation, target, payload, reply=None, synchronous=None, sync_timeout=None,
-                 cache=None, allow_offline=None, wait_for_reconnect=None):
+                 cache=None, allow_offline=None, wait_for_reconnect=None, attribute=None):
         """Send SCI request to 1 or more targets
 
         :param str operation: The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
@@ -204,6 +204,11 @@ class ServerCommandInterfaceAPI(APIBase):
         else:
             wait_for_reconnect_xml = ''
 
+        if attribute is not None:
+            operation_attribute = ' ' + attribute
+        else:
+            operation_attribute = ''
+
         full_request = SCI_TEMPLATE.format(
             operation=operation,
             targets=targets_xml,
@@ -213,7 +218,8 @@ class ServerCommandInterfaceAPI(APIBase):
             cache=cache_xml,
             allow_offline=allow_offline_xml,
             wait_for_reconnect=wait_for_reconnect_xml,
-            payload=payload
+            payload=payload,
+            attribute=operation_attribute
         )
 
         # TODO: do parsing here?
