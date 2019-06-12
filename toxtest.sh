@@ -6,11 +6,11 @@
 # testing using each of those interpreters.
 #
 
-pyversions=(2.7.7
-            3.4.3
-            3.5.5
-            3.6.6
-            3.7.0
+pyversions=(2.7.16
+            3.4.10
+            3.5.7
+            3.6.8
+            3.7.3
             pypy2.7-6.0.0
             pypy3.5-6.0.0)
 
