@@ -40,15 +40,19 @@ class StreamsIntegrationTestCase(DeviceCloudIntegrationTestCase):
             for rec in rx:
                 msg = rec['Document']['Msg']
                 fd = msg.get('FileData', None)
-                if fd:
+                if fd and 'id' in fd:
                     if (fd['id']['fdName'] == 'test_file.txt' and
                             fd['id']['fdPath'] == '/db/7603_Digi/inttest/monitor_tcp/'):
                         fd_push_seen = True
+                # else:
+                #     print('id not in test_event_reception/fd: {}'.format(rx))
                 dp = msg.get('DataPoint')
-                if dp:
+                if dp and 'streamId' in dp:
+                    print('test_event_reception/dp: {}'.format(dp))
                     if dp['streamId'] == 'inttest/monitor_tcp':
                         dp_push_seen = True
-
+                # else:
+                #     print('streamId not in test_event_reception/dp: {}'.format(rx))
             self.assertTrue(fd_push_seen)
             self.assertTrue(dp_push_seen)
         except:
