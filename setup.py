@@ -28,28 +28,15 @@ def get_long_description():
     try:
         import subprocess
         import pandoc
-
-        process = subprocess.Popen(
-            ['which pandoc'],
-            shell=True,
-            stdout=subprocess.PIPE,
-            universal_newlines=True)
-
-        pandoc_path = process.communicate()[0]
-        pandoc_path = pandoc_path.strip('\n')
-
-        pandoc.core.PANDOC_PATH = pandoc_path
-
+        print(pandoc.core.PANDOC_PATH)
         doc = pandoc.Document()
-        doc.markdown = long_description
-        long_description = doc.rst
-        open("README.rst", "w").write(doc.rst)
+        doc.markdown = long_description.encode('utf-8')
+        long_description = doc.rst.decode()
+        open("README.rst", "wb").write(doc.rst)
+
     except:
-        if os.path.exists("README.rst"):
-            long_description = open("README.rst").read()
-        else:
-            print("Could not find pandoc or convert properly")
-            print("  make sure you have pandoc (system) and pyandoc (python module) installed")
+        print("Could not find pandoc or convert properly")
+        print("  make sure you have pandoc (system) and pyandoc (python module) installed")
 
     return long_description
 
