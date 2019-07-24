@@ -8,6 +8,7 @@ import re
 import os
 from setuptools import setup, find_packages
 
+content_type = 'txt/markdown'
 
 def get_version():
     # In order to get the version safely, we read the version.py file
@@ -28,23 +29,22 @@ def get_long_description():
     try:
         import subprocess
         import pandoc
-        print(pandoc.core.PANDOC_PATH)
         doc = pandoc.Document()
         doc.markdown = long_description.encode('utf-8')
         long_description = doc.rst.decode()
         open("README.rst", "wb").write(doc.rst)
-
+        content_type = 'txt/x-rst'
     except:
         print("Could not find pandoc or convert properly")
         print("  make sure you have pandoc (system) and pyandoc (python module) installed")
 
     return long_description
 
-
 setup(
     name="devicecloud",
     version=get_version(),
     description="Python API to the Digi Device Cloud",
+    long_description_content_type=content_type,
     long_description=get_long_description(),
     url="https://github.com/digidotcom/python-devicecloud",
     author="Digi International Inc.",
