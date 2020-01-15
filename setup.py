@@ -8,13 +8,14 @@ import re
 import os
 from setuptools import setup, find_packages
 
+VERSIONFILE = "devicecloud/version.py"
 
 def get_version():
     # In order to get the version safely, we read the version.py file
     # as text.  This is necessary as devicecloud/__init__.py uses
     # things that won't yet be present when the package is being
     # installed.
-    verstrline = open("devicecloud/version.py", "r").read()
+    verstrline = open(VERSIONFILE, "r").read()
     version_string_re = re.compile(r"^__version__ = ['\"]([^'\"]*)['\"]", re.MULTILINE)
     match = version_string_re.search(verstrline)
     if match:
