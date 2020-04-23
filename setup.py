@@ -29,36 +29,20 @@ def get_long_description():
     try:
         import subprocess
         import pandoc
-
-        process = subprocess.Popen(
-            ['which pandoc'],
-            shell=True,
-            stdout=subprocess.PIPE,
-            universal_newlines=True)
-
-        pandoc_path = process.communicate()[0]
-        pandoc_path = pandoc_path.strip('\n')
-
-        pandoc.core.PANDOC_PATH = pandoc_path
-
         doc = pandoc.Document()
-        doc.markdown = long_description
-        long_description = doc.rst
-        open("README.rst", "w").write(doc.rst)
+        doc.markdown = long_description.encode('utf-8')
+        open("README.rst", "wb").write(doc.rst)
     except:
-        if os.path.exists("README.rst"):
-            long_description = open("README.rst").read()
-        else:
-            print("Could not find pandoc or convert properly")
-            print("  make sure you have pandoc (system) and pyandoc (python module) installed")
+        print("Could not find pandoc or convert properly")
+        print("  make sure you have pandoc (system) and pyandoc (python module) installed")
 
     return long_description
-
 
 setup(
     name="devicecloud",
     version=get_version(),
     description="Python API to the Digi Device Cloud",
+    long_description_content_type='text/markdown',
     long_description=get_long_description(),
     url="https://github.com/digidotcom/python-devicecloud",
     author="Digi International Inc.",
