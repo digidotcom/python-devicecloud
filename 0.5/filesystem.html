@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>File System Service API &mdash; python-devicecloud 0.5.4 documentation</title>
+  <title>File System Service API &mdash; python-devicecloud 0.5.7 documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Monitor API" href="monitor.html" />
     <link rel="prev" title="SCI (Server Command Interface) API" href="sci.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.7
               </div>
             
           
@@ -170,158 +172,142 @@ get the data from your devices connected to the cloud.</p>
 <div class="section" id="module-devicecloud.file_system_service">
 <span id="file-system-service-api-documentation"></span><h2>File System Service API Documentation<a class="headerlink" href="#module-devicecloud.file_system_service" title="Permalink to this headline">¶</a></h2>
 <p>Provide access to Device Cloud file system service API</p>
-<dl class="exception">
+<dl class="py exception">
 <dt id="devicecloud.file_system_service.FileSystemServiceException">
-<em class="property">exception </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">FileSystemServiceException</code><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceException" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">FileSystemServiceException</code><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceException" title="Permalink to this definition">¶</a></dt>
 <dd><p>A file system service exception</p>
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="devicecloud.file_system_service.ResponseParseError">
-<em class="property">exception </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">ResponseParseError</code><a class="headerlink" href="#devicecloud.file_system_service.ResponseParseError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">ResponseParseError</code><a class="headerlink" href="#devicecloud.file_system_service.ResponseParseError" title="Permalink to this definition">¶</a></dt>
 <dd><p>An Exception when receiving an unexpected SCI response format</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.ErrorInfo">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">ErrorInfo</code><span class="sig-paren">(</span><em>errno</em>, <em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.ErrorInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">ErrorInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">errno</span></em>, <em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.ErrorInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents an error response from the device or the devicecloud</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference external" href="https://docs.python.org/3/library/errno.html#module-errno" title="(in Python v3.7)"><strong>errno</strong></a> – The error number reported in the response</li>
-<li><strong>message</strong> – The error message reported in the response</li>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/errno.html#module-errno" title="(in Python v3.8)"><strong>errno</strong></a> – The error number reported in the response</p></li>
+<li><p><strong>message</strong> – The error message reported in the response</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.LsInfo">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">LsInfo</code><span class="sig-paren">(</span><em>directories</em>, <em>files</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsInfo" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">LsInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directories</span></em>, <em class="sig-param"><span class="n">files</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsInfo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py attribute">
 <dt id="devicecloud.file_system_service.LsInfo.directories">
-<code class="descname">directories</code><a class="headerlink" href="#devicecloud.file_system_service.LsInfo.directories" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">directories</code><a class="headerlink" href="#devicecloud.file_system_service.LsInfo.directories" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="devicecloud.file_system_service.LsInfo.files">
-<code class="descname">files</code><a class="headerlink" href="#devicecloud.file_system_service.LsInfo.files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">files</code><a class="headerlink" href="#devicecloud.file_system_service.LsInfo.files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.FileInfo">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">FileInfo</code><span class="sig-paren">(</span><em>fssapi</em>, <em>device_id</em>, <em>path</em>, <em>last_modified</em>, <em>size</em>, <em>hash</em>, <em>hash_type</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">FileInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fssapi</span></em>, <em class="sig-param"><span class="n">device_id</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">last_modified</span></em>, <em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">hash</span></em>, <em class="sig-param"><span class="n">hash_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a file from a device</p>
 <p>This stores the information about a file on the device returned from an ls command.
 It also provides functionality to get the contents of the represented file and delete
 it.  However, writing to the file is not supported as it would invalidate the other
 information stored in this object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fssapi</strong> (<a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a>) – A <a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> object to perform device file operations with</li>
-<li><strong>device_id</strong> – The Device ID of the device this file is on</li>
-<li><strong>path</strong> – The path to this file on the device</li>
-<li><strong>last_modified</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The last time the file was modified</li>
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The size of the file</li>
-<li><strong>hash</strong> – The files hash</li>
-<li><strong>hash_type</strong> – The method used to produce the hash</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fssapi</strong> (<a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a>) – A <a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> object to perform device file operations with</p></li>
+<li><p><strong>device_id</strong> – The Device ID of the device this file is on</p></li>
+<li><p><strong>path</strong> – The path to this file on the device</p></li>
+<li><p><strong>last_modified</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The last time the file was modified</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The size of the file</p></li>
+<li><p><strong>hash</strong> – The files hash</p></li>
+<li><p><strong>hash_type</strong> – The method used to produce the hash</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>device_id</strong> – The Device ID of the device this file is on</li>
-<li><strong>path</strong> – The path to this file on the device</li>
-<li><strong>last_modified</strong> – The last time the file was modified</li>
-<li><strong>size</strong> – The size of the file</li>
-<li><a class="reference external" href="https://docs.python.org/3/library/functions.html#hash" title="(in Python v3.7)"><strong>hash</strong></a> – The files hash</li>
-<li><strong>hash_type</strong> – The method used to produce the hash</li>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>device_id</strong> – The Device ID of the device this file is on</p></li>
+<li><p><strong>path</strong> – The path to this file on the device</p></li>
+<li><p><strong>last_modified</strong> – The last time the file was modified</p></li>
+<li><p><strong>size</strong> – The size of the file</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#hash" title="(in Python v3.8)"><strong>hash</strong></a> – The files hash</p></li>
+<li><p><strong>hash_type</strong> – The method used to produce the hash</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileInfo.get_data">
-<code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileInfo.get_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileInfo.get_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the contents of this file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The contents of this file</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">six.binary_type</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The contents of this file</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>six.binary_type</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileInfo.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileInfo.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileInfo.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this file from the device</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">After deleting the file, this object will no longer contain valid information
+<p class="admonition-title">Note</p>
+<p>After deleting the file, this object will no longer contain valid information
 and further calls to delete or get_data will return <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> objects</p>
 </div>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.DirectoryInfo">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">DirectoryInfo</code><span class="sig-paren">(</span><em>fssapi</em>, <em>device_id</em>, <em>path</em>, <em>last_modified</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DirectoryInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">DirectoryInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fssapi</span></em>, <em class="sig-param"><span class="n">device_id</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">last_modified</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DirectoryInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents a directory from a device</p>
 <p>This stores the information about a directory on the device returned from an ls command.
 It also provides functionality to list the contents of the directory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fssapi</strong> (<a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a>) – A <a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> object to perform device directory operations with</li>
-<li><strong>device_id</strong> – The Device ID of the device this file is on</li>
-<li><strong>path</strong> – The path to this file on the device</li>
-<li><strong>last_modified</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The last time the file was modified</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fssapi</strong> (<a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a>) – A <a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> object to perform device directory operations with</p></li>
+<li><p><strong>device_id</strong> – The Device ID of the device this file is on</p></li>
+<li><p><strong>path</strong> – The path to this file on the device</p></li>
+<li><p><strong>last_modified</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The last time the file was modified</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>device_id</strong> – The Device ID of the device this file is on</li>
-<li><strong>path</strong> – The path to this file on the device</li>
-<li><strong>last_modified</strong> – the last time the file was modified</li>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>device_id</strong> – The Device ID of the device this file is on</p></li>
+<li><p><strong>path</strong> – The path to this file on the device</p></li>
+<li><p><strong>last_modified</strong> – the last time the file was modified</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.DirectoryInfo.list_contents">
-<code class="descname">list_contents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DirectoryInfo.list_contents" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_contents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DirectoryInfo.list_contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>List the contents of this directory</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A LsInfo object that contains directories and files</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> or <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A LsInfo object that contains directories and files</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> or <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a></p>
+</dd>
+</dl>
 <p>Here is an example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># let dirinfo be a DirectoryInfo object</span>
 <span class="n">ldata</span> <span class="o">=</span> <span class="n">dirinfo</span><span class="o">.</span><span class="n">list_contents</span><span class="p">()</span>
@@ -342,68 +328,58 @@ It also provides functionality to list the contents of the directory.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.FileSystemServiceCommandABC">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">FileSystemServiceCommandABC</code><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceCommandABC" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">FileSystemServiceCommandABC</code><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceCommandABC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract base class for FileSystemServiceCommands</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>command_name</strong> – The file_system command name of this command</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>command_name</strong> – The file_system command name of this command</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceCommandABC.get_etree">
-<code class="descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceCommandABC.get_etree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the command XML for this command</p>
+<code class="sig-name descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceCommandABC.get_etree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the command XML for this command</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceCommandABC.parse_response">
-<em class="property">classmethod </em><code class="descname">parse_response</code><span class="sig-paren">(</span><em>response</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceCommandABC.parse_response" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">parse_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceCommandABC.parse_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the server response for this command type</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.LsCommand">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">LsCommand</code><span class="sig-paren">(</span><em>path</em>, <em>hash='any'</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsCommand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">LsCommand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">hash</span><span class="o">=</span><span class="default_value">'any'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class representing the ls command to list files on a device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> – the path to the device directory to list</li>
-<li><strong>hash</strong> – the method to generate the file hashes</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – the path to the device directory to list</p></li>
+<li><p><strong>hash</strong> – the method to generate the file hashes</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><p class="first last"><strong>command_name</strong> – The file_system command name of this command (“ls”)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>command_name</strong> – The file_system command name of this command (“ls”)</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.LsCommand.get_etree">
-<code class="descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsCommand.get_etree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsCommand.get_etree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the XML representation of this command</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the ls command</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the ls command</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.LsCommand.parse_response">
-<em class="property">classmethod </em><code class="descname">parse_response</code><span class="sig-paren">(</span><em>response</em>, <em>device_id=None</em>, <em>fssapi=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsCommand.parse_response" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">parse_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="n">device_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fssapi</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.LsCommand.parse_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the server response for this ls command</p>
 <p>This will parse xml of the following form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ls</span> <span class="nb">hash</span><span class="o">=</span><span class="s2">&quot;hash_type&quot;</span><span class="o">&gt;</span>
@@ -420,65 +396,54 @@ It also provides functionality to list the contents of the directory.</p>
 <span class="o">&lt;/</span><span class="n">ls</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for an ls command</li>
-<li><strong>device_id</strong> – The device id of the device this ls response came from</li>
-<li><strong>fssapi</strong> – A reference to a <a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> for use with the
-<a class="reference internal" href="#devicecloud.file_system_service.FileInfo" title="devicecloud.file_system_service.FileInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileInfo</span></code></a> and <a class="reference internal" href="#devicecloud.file_system_service.DirectoryInfo" title="devicecloud.file_system_service.DirectoryInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">DirectoryInfo</span></code></a> objects for future commands</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for an ls command</p></li>
+<li><p><strong>device_id</strong> – The device id of the device this ls response came from</p></li>
+<li><p><strong>fssapi</strong> – A reference to a <a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> for use with the
+<a class="reference internal" href="#devicecloud.file_system_service.FileInfo" title="devicecloud.file_system_service.FileInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileInfo</span></code></a> and <a class="reference internal" href="#devicecloud.file_system_service.DirectoryInfo" title="devicecloud.file_system_service.DirectoryInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">DirectoryInfo</span></code></a> objects for future commands</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An <a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> object containing the list of directories and files on
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An <a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> object containing the list of directories and files on
 the device or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.GetCommand">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">GetCommand</code><span class="sig-paren">(</span><em>path</em>, <em>offset=None</em>, <em>length=None</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.GetCommand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">GetCommand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">length</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.GetCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class representing the get file command to get the contents of a file on a device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> – the path to the file on the device to get the contents of</li>
-<li><strong>offset</strong> – the point in the file to start reading data from (if None, start at the beginning)</li>
-<li><strong>length</strong> – the length of data to retrieve (if None, read until the end)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – the path to the file on the device to get the contents of</p></li>
+<li><p><strong>offset</strong> – the point in the file to start reading data from (if None, start at the beginning)</p></li>
+<li><p><strong>length</strong> – the length of data to retrieve (if None, read until the end)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><p class="first last"><strong>command_name</strong> – The file_system command name of this command (“get_file”)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>command_name</strong> – The file_system command name of this command (“get_file”)</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.GetCommand.get_etree">
-<code class="descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.GetCommand.get_etree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.GetCommand.get_etree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the XML representation of this get file command</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the get_file command</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the get_file command</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.GetCommand.parse_response">
-<em class="property">classmethod </em><code class="descname">parse_response</code><span class="sig-paren">(</span><em>response</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.GetCommand.parse_response" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">parse_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.GetCommand.parse_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the server response for this get file command</p>
 <p>This will parse xml of the following form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">get_file</span><span class="o">&gt;</span>
@@ -494,61 +459,52 @@ the device or an <a class="reference internal" href="#devicecloud.file_system_se
 <span class="o">&lt;/</span><span class="n">get_file</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for a get file command</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a six.binary_type string of the data of a file or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for a get file command</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a six.binary_type string of the data of a file or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.PutCommand">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">PutCommand</code><span class="sig-paren">(</span><em>path</em>, <em>file_data=None</em>, <em>server_file=None</em>, <em>offset=None</em>, <em>truncate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.PutCommand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">PutCommand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">file_data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">server_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truncate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.PutCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class representing the put file command to write contents to a file on a device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> – The path on the target to the file to write to.  If the file already exists it will be overwritten.</li>
-<li><strong>file_data</strong> – A <cite>six.binary_type</cite> containing the data to put into the file</li>
-<li><strong>server_file</strong> – The path to a file on the devicecloud server containing the data to put into the file on the
-device</li>
-<li><strong>offset</strong> – Start writing bytes to the file at this position, if None start at the beginning</li>
-<li><strong>truncate</strong> – Boolean, if True after bytes are done being written end the file their even if previous data
-exists beyond it.  If False, leave any existing data in place.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – The path on the target to the file to write to.  If the file already exists it will be overwritten.</p></li>
+<li><p><strong>file_data</strong> – A <cite>six.binary_type</cite> containing the data to put into the file</p></li>
+<li><p><strong>server_file</strong> – The path to a file on the devicecloud server containing the data to put into the file on the
+device</p></li>
+<li><p><strong>offset</strong> – Start writing bytes to the file at this position, if None start at the beginning</p></li>
+<li><p><strong>truncate</strong> – Boolean, if True after bytes are done being written end the file their even if previous data
+exists beyond it.  If False, leave any existing data in place.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><p class="first last"><strong>command_name</strong> – The file_system command name of this command (“put_file”)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>command_name</strong> – The file_system command name of this command (“put_file”)</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.PutCommand.get_etree">
-<code class="descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.PutCommand.get_etree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.PutCommand.get_etree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the XML representation of this put file command</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the put file command</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the put file command</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.PutCommand.parse_response">
-<em class="property">classmethod </em><code class="descname">parse_response</code><span class="sig-paren">(</span><em>response</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.PutCommand.parse_response" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">parse_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.PutCommand.parse_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the server response for this put file command</p>
 <p>This will parse xml of the following form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">put_file</span> <span class="o">/&gt;</span>
@@ -560,51 +516,44 @@ exists beyond it.  If False, leave any existing data in place.</li>
 <span class="o">&lt;/</span><span class="n">put_file</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for a put file command</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None if everything was ok or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for a put file command</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None if everything was ok or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.DeleteCommand">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">DeleteCommand</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DeleteCommand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">DeleteCommand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DeleteCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class representing the delete file command on a device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – The path on the target to the file to delete.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Variables:</th><td class="field-body"><strong>command_name</strong> – The file_system command name of this command (“rm”)</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – The path on the target to the file to delete.</p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>command_name</strong> – The file_system command name of this command (“rm”)</p>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="devicecloud.file_system_service.DeleteCommand.get_etree">
-<code class="descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DeleteCommand.get_etree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_etree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DeleteCommand.get_etree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the XML representation of this delete file command</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the delete file command</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the <a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a> that is the root of the XML of the delete file command</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.DeleteCommand.parse_response">
-<em class="property">classmethod </em><code class="descname">parse_response</code><span class="sig-paren">(</span><em>response</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DeleteCommand.parse_response" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">parse_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.DeleteCommand.parse_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the server response for this put file command</p>
 <p>This will parse xml of the following form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">rm</span> <span class="o">/&gt;</span>
@@ -616,41 +565,37 @@ exists beyond it.  If False, leave any existing data in place.</li>
 <span class="o">&lt;/</span><span class="n">rm</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for a delete file command</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None if everything was ok or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.Element" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xml.etree.ElementTree.Element</span></code></a>) – The XML root of the response for a delete file command</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None if everything was ok or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if the xml contained an error</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI">
-<em class="property">class </em><code class="descclassname">devicecloud.file_system_service.</code><code class="descname">FileSystemServiceAPI</code><span class="sig-paren">(</span><em>sci_api</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.file_system_service.</code><code class="sig-name descname">FileSystemServiceAPI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sci_api</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate the File System Service API</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.send_command_block">
-<code class="descname">send_command_block</code><span class="sig-paren">(</span><em>target</em>, <em>command_block</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.send_command_block" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">send_command_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">command_block</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.send_command_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send an arbitrary file system command block</p>
 <p>The primary use for this method is to send multiple file system commands with a single
 web service request.  This can help to avoid throttling.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>command_block</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceCommandBlock</span></code>) – The block of commands to execute on the target</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>command_block</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceCommandBlock</span></code>) – The block of commands to execute on the target</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The response will be a dictionary where the keys are device_ids and the values are
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The response will be a dictionary where the keys are device_ids and the values are
 the parsed responses of each command sent in the order listed in the command response for
 that device.  In practice it seems to be the same order as the commands were sent in, however,
 Device Cloud documentation does not explicitly state anywhere that is the case so I cannot
@@ -658,37 +603,31 @@ guarantee it. This does mean that if you send different types of commands the re
 will be different types.  Please see the commands parse_response functions for what those types
 will be. (<a class="reference internal" href="#devicecloud.file_system_service.LsCommand.parse_response" title="devicecloud.file_system_service.LsCommand.parse_response"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LsCommand.parse_response()</span></code></a>, <a class="reference internal" href="#devicecloud.file_system_service.GetCommand.parse_response" title="devicecloud.file_system_service.GetCommand.parse_response"><code class="xref py py-class docutils literal notranslate"><span class="pre">GetCommand.parse_response</span></code></a>,
 <a class="reference internal" href="#devicecloud.file_system_service.PutCommand.parse_response" title="devicecloud.file_system_service.PutCommand.parse_response"><code class="xref py py-class docutils literal notranslate"><span class="pre">PutCommand.parse_response</span></code></a>, <a class="reference internal" href="#devicecloud.file_system_service.DeleteCommand.parse_response" title="devicecloud.file_system_service.DeleteCommand.parse_response"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeleteCommand.parse_response</span></code></a>)</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.list_files">
-<code class="descname">list_files</code><span class="sig-paren">(</span><em>target</em>, <em>path</em>, <em>hash='any'</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.list_files" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">hash</span><span class="o">=</span><span class="default_value">'any'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.list_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all files and directories in the path on the target</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>path</strong> – The path on the target to list files and directories from</li>
-<li><strong>hash</strong> – an optional attribute which indicates a hash over the file contents should be retrieved. Values
-include none, any, md5, and crc32. any is used to indicate the device should choose its best available hash.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>path</strong> – The path on the target to list files and directories from</p></li>
+<li><p><strong>hash</strong> – an optional attribute which indicates a hash over the file contents should be retrieved. Values
+include none, any, md5, and crc32. any is used to indicate the device should choose its best available hash.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary with keys of device ids and values of <a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> objects containing the files and
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with keys of device ids and values of <a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> objects containing the files and
 directories or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> object if there was an error response</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
+</dd>
+</dl>
 <p>Here is an example usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># dc is a DeviceCloud instance</span>
 <span class="n">fssapi</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">get_fss_api</span><span class="p">()</span>
@@ -720,138 +659,118 @@ directories or an <a class="reference internal" href="#devicecloud.file_system_s
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.get_file">
-<code class="descname">get_file</code><span class="sig-paren">(</span><em>target</em>, <em>path</em>, <em>offset=None</em>, <em>length=None</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.get_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">length</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.get_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the contents of a file on the device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>path</strong> – The path on the target to the file to retrieve</li>
-<li><strong>offset</strong> – Start retrieving data from this byte position in the file, if None start from the beginning</li>
-<li><strong>length</strong> – How many bytes to retrieve, if None retrieve until the end of the file</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>path</strong> – The path on the target to the file to retrieve</p></li>
+<li><p><strong>offset</strong> – Start retrieving data from this byte position in the file, if None start from the beginning</p></li>
+<li><p><strong>length</strong> – How many bytes to retrieve, if None retrieve until the end of the file</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary with keys of device ids and values of the bytes of the file (or partial file if offset
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with keys of device ids and values of the bytes of the file (or partial file if offset
 and/or length are specified) or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> object if there was an error response</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.put_file">
-<code class="descname">put_file</code><span class="sig-paren">(</span><em>target</em>, <em>path</em>, <em>file_data=None</em>, <em>server_file=None</em>, <em>offset=None</em>, <em>truncate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.put_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">put_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">file_data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">server_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truncate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.put_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Put data into a file on the device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>path</strong> – The path on the target to the file to write to.  If the file already exists it will be overwritten.</li>
-<li><strong>file_data</strong> – A <cite>six.binary_type</cite> containing the data to put into the file</li>
-<li><strong>server_file</strong> – The path to a file on the devicecloud server containing the data to put into the file on the
-device</li>
-<li><strong>offset</strong> – Start writing bytes to the file at this position, if None start at the beginning</li>
-<li><strong>truncate</strong> – Boolean, if True after bytes are done being written end the file their even if previous data
-exists beyond it.  If False, leave any existing data in place.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>path</strong> – The path on the target to the file to write to.  If the file already exists it will be overwritten.</p></li>
+<li><p><strong>file_data</strong> – A <cite>six.binary_type</cite> containing the data to put into the file</p></li>
+<li><p><strong>server_file</strong> – The path to a file on the devicecloud server containing the data to put into the file on the
+device</p></li>
+<li><p><strong>offset</strong> – Start writing bytes to the file at this position, if None start at the beginning</p></li>
+<li><p><strong>truncate</strong> – Boolean, if True after bytes are done being written end the file their even if previous data
+exists beyond it.  If False, leave any existing data in place.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary with keys being device ids and value being None if successful or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with keys being device ids and value being None if successful or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a>
 if the operation failed on that device</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceException" title="devicecloud.file_system_service.FileSystemServiceException"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceException</span></code></a> if either both file_data and server_file are specified or
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#devicecloud.file_system_service.FileSystemServiceException" title="devicecloud.file_system_service.FileSystemServiceException"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceException</span></code></a> if either both file_data and server_file are specified or
 neither are specified</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.delete_file">
-<code class="descname">delete_file</code><span class="sig-paren">(</span><em>target</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.delete_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.delete_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a file from a device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>path</strong> – The path on the target to the file to delete.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>path</strong> – The path on the target to the file to delete.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dictionary with keys being device ids and value being None if successful or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with keys being device ids and value being None if successful or an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a>
 if the operation failed on that device</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#devicecloud.file_system_service.ResponseParseError" title="devicecloud.file_system_service.ResponseParseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponseParseError</span></code></a> If the SCI response has unrecognized formatting</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.get_modified_items">
-<code class="descname">get_modified_items</code><span class="sig-paren">(</span><em>target</em>, <em>path</em>, <em>last_modified_cutoff</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.get_modified_items" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_modified_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">last_modified_cutoff</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.get_modified_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all files and directories from a path on the device modified since a given time</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>path</strong> – The path on the target to the directory to check for modified files.</li>
-<li><strong>last_modified_cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The time (as Unix epoch time) to get files modified since</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>path</strong> – The path on the target to the directory to check for modified files.</p></li>
+<li><p><strong>last_modified_cutoff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The time (as Unix epoch time) to get files modified since</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dictionary where the key is a device id and the value is either an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if there
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary where the key is a device id and the value is either an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if there
 was a problem with the operation or a <a class="reference internal" href="#devicecloud.file_system_service.LsInfo" title="devicecloud.file_system_service.LsInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">LsInfo</span></code></a> with the items modified since the
 specified date</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.file_system_service.FileSystemServiceAPI.exists">
-<code class="descname">exists</code><span class="sig-paren">(</span><em>target</em>, <em>path</em>, <em>path_sep='/'</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.exists" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">path_sep</span><span class="o">=</span><span class="default_value">'/'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.file_system_service.FileSystemServiceAPI.exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if path refers to an existing path on the device</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
-<li><strong>path</strong> – The path on the target to check for existence.</li>
-<li><strong>path_sep</strong> – The path separator of the device</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> or list of <a class="reference internal" href="sci.html#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.sci.TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
+<li><p><strong>path</strong> – The path on the target to check for existence.</p></li>
+<li><p><strong>path_sep</strong> – The path separator of the device</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dictionary where the key is a device id and the value is either an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if there
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary where the key is a device id and the value is either an <a class="reference internal" href="#devicecloud.file_system_service.ErrorInfo" title="devicecloud.file_system_service.ErrorInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorInfo</span></code></a> if there
 was a problem with the operation or a boolean with the existence status of the path on that device</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -870,7 +789,7 @@ was a problem with the operation or a boolean with the existence status of the p
         <a href="monitor.html" class="btn btn-neutral float-right" title="Monitor API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="sci.html" class="btn btn-neutral" title="SCI (Server Command Interface) API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="sci.html" class="btn btn-neutral float-left" title="SCI (Server Command Interface) API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -879,7 +798,7 @@ was a problem with the operation or a boolean with the existence status of the p
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015-2018, Digi International Inc..
+        &copy; Copyright 2015-2018, Digi International Inc.
 
     </p>
   </div>
@@ -896,32 +815,16 @@ was a problem with the operation or a boolean with the existence status of the p
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.5.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

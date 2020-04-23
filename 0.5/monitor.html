@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Monitor API &mdash; python-devicecloud 0.5.4 documentation</title>
+  <title>Monitor API &mdash; python-devicecloud 0.5.7 documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Direct Web Services API" href="ws.html" />
     <link rel="prev" title="File System Service API" href="filesystem.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.7
               </div>
             
           
@@ -170,103 +172,103 @@ on Device Cloud.</p>
 </div>
 <div class="section" id="module-devicecloud.monitor">
 <span id="sci-api-documentation"></span><h2>SCI API Documentation<a class="headerlink" href="#module-devicecloud.monitor" title="Permalink to this headline">¶</a></h2>
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_ID_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_ID_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_ID_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_ID_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_ID_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>System-generated identifier for the monitor.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_CST_ID_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_CST_ID_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_CST_ID_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_CST_ID_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_CST_ID_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Device Cloud customer identifier.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_TOPIC_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_TOPIC_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_TOPIC_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_TOPIC_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_TOPIC_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>One or more topics to monitor separated by comma.  See Device Cloud
 documentation for more details</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_FORMAT_TYPE_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_FORMAT_TYPE_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_FORMAT_TYPE_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_FORMAT_TYPE_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_FORMAT_TYPE_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format for delivered event data: xml, json</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_TRANSPORT_TYPE_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_TRANSPORT_TYPE_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_TRANSPORT_TYPE_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_TRANSPORT_TYPE_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_TRANSPORT_TYPE_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transport method used to deliver push notifications to the
 client application: tcp, http</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_HTTP_TRANSPORT_URL_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_HTTP_TRANSPORT_URL_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_TRANSPORT_URL_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_HTTP_TRANSPORT_URL_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_TRANSPORT_URL_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>For HTTP transport type only. URL of the customer web server. For http URLs,
 the default listening port is 80; for https URLs, the default listening
 port is 443.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_HTTP_TRANSPORT_TOKEN_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_HTTP_TRANSPORT_TOKEN_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_TRANSPORT_TOKEN_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_HTTP_TRANSPORT_TOKEN_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_TRANSPORT_TOKEN_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>For HTTP transport type only. Credentials for basic authentication
 in the following format: <code class="docutils literal notranslate"><span class="pre">username:password</span></code></p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_HTTP_TRANSPORT_METHOD_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_HTTP_TRANSPORT_METHOD_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_TRANSPORT_METHOD_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_HTTP_TRANSPORT_METHOD_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_TRANSPORT_METHOD_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>For HTTP transport type only. HTTP method to use for sending
 data: PUT or POST. The default is PUT.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_HTTP_CONNECT_TIMEOUT_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_HTTP_CONNECT_TIMEOUT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_CONNECT_TIMEOUT_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_HTTP_CONNECT_TIMEOUT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_CONNECT_TIMEOUT_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>For HTTP transport type only. Time in milliseconds Device Cloud waits
 when attempting to connect to the destination http server. A value of
 0 means use the system default of 5000 (5 seconds). Most monitors do
 not need to configure this setting.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_HTTP_RESPONSE_TIMEOUT_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_HTTP_RESPONSE_TIMEOUT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_RESPONSE_TIMEOUT_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_HTTP_RESPONSE_TIMEOUT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_HTTP_RESPONSE_TIMEOUT_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>For HTTP transport type only. Time in milliseconds Device Cloud waits
 for a response for pushed events from the http server. A value of 0 means
 use the system default of 5000 (5 seconds). Most monitors do not need to
 configure this setting.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_TCP_ACK_OPTION_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_TCP_ACK_OPTION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_TCP_ACK_OPTION_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_TCP_ACK_OPTION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_TCP_ACK_OPTION_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>For TCP transport type only. Indicates whether the client will explicitly
 acknowledge TCP push events or allow Device Cloud to automatically acknowledge
 events when sent. Options include: explicit or off. The default is off.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_BATCH_SIZE_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_BATCH_SIZE_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_BATCH_SIZE_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_BATCH_SIZE_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_BATCH_SIZE_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an upper bound on how many messages are aggregated before sending
 a batch. The default is 100.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_BATCH_DURATION_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_BATCH_DURATION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_BATCH_DURATION_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_BATCH_DURATION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_BATCH_DURATION_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies an upper bound on the number of seconds messages are aggregated
 before sending. The default is 10.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_COMPRESSION_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_COMPRESSION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_COMPRESSION_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_COMPRESSION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_COMPRESSION_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Keyword that specifies the method used to compress messages. Options include:
 zlib or none. The default is none. For zlib, the deflate algorithm is used to
 compress the data; use inflate to decompress the data.</p>
@@ -274,62 +276,62 @@ compress the data; use inflate to decompress the data.</p>
 Compression has always been done using the deflate algorithm.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_AUTO_REPLAY_ON_CONNECT">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_AUTO_REPLAY_ON_CONNECT</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_AUTO_REPLAY_ON_CONNECT" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_AUTO_REPLAY_ON_CONNECT</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_AUTO_REPLAY_ON_CONNECT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Boolean value that specifies whether Device Cloud replays any missed
 published events before any new published events are forwarded. True
 indicates missed published events are replayed. False indicates missed
 published events are not replayed. The default is false.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_DESCRIPTION_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_DESCRIPTION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_DESCRIPTION_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_DESCRIPTION_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_DESCRIPTION_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional text field used to label or describe the monitor.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_LAST_CONNECT_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_LAST_CONNECT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_LAST_CONNECT_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_LAST_CONNECT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_LAST_CONNECT_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies last connection time to the client application.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_LAST_SENT_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_LAST_SENT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_LAST_SENT_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_LAST_SENT_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_LAST_SENT_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the last message pushed to the client application</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="devicecloud.monitor.MON_STATUS_ATTR">
-<code class="descclassname">devicecloud.monitor.</code><code class="descname">MON_STATUS_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_STATUS_ATTR" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MON_STATUS_ATTR</code><em class="property"> = &lt;devicecloud.conditions.Attribute object&gt;</em><a class="headerlink" href="#devicecloud.monitor.MON_STATUS_ATTR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Specifies the current connection status to the client application:</p>
 <ul class="simple">
-<li><dl class="first docutils">
-<dt>CONNECTING: For HTTP monitors only. Device Cloud is attempting</dt>
-<dd>to connect to the configured HTTP server. Once connected, the state changes to ACTIVE.</dd>
+<li><dl class="simple">
+<dt>CONNECTING: For HTTP monitors only. Device Cloud is attempting</dt><dd><p>to connect to the configured HTTP server. Once connected, the state changes to ACTIVE.</p>
+</dd>
 </dl>
 </li>
-<li>ACTIVE: Monitor is connected and publishing events.</li>
-<li>INACTIVE: Monitor is not connected and events are not published or recorded.</li>
-<li><dl class="first docutils">
-<dt>SUSPENDED: For monitors with monAutoReplayOnConnect = True.  Monitor has disconnected,</dt>
-<dd>but publish events are recorded for later replay.</dd>
+<li><p>ACTIVE: Monitor is connected and publishing events.</p></li>
+<li><p>INACTIVE: Monitor is not connected and events are not published or recorded.</p></li>
+<li><dl class="simple">
+<dt>SUSPENDED: For monitors with monAutoReplayOnConnect = True.  Monitor has disconnected,</dt><dd><p>but publish events are recorded for later replay.</p>
+</dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>DISABLED: For HTTP monitors only. If a monitor has not connected for 24 hours,</dt>
-<dd>the state is set to DISABLED, and publish events are not recorded for replay.
-A disabled monitor must be reconfigured via the Monitor web service.</dd>
+<li><dl class="simple">
+<dt>DISABLED: For HTTP monitors only. If a monitor has not connected for 24 hours,</dt><dd><p>the state is set to DISABLED, and publish events are not recorded for replay.
+A disabled monitor must be reconfigured via the Monitor web service.</p>
+</dd>
 </dl>
 </li>
 </ul>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor.MonitorAPI">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor.</code><code class="descname">MonitorAPI</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">MonitorAPI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide access to Device Cloud Monitor API for receiving push notifications</p>
 <p>The Monitor API in Device Cloud allows for the creation and destruction of
 multiple “monitors.”  Each monitor is registered against one or more “topics”
@@ -337,10 +339,10 @@ which describe the data in which it is interested.</p>
 <p>There are, in turn, two main ways to receive data matching the topics for a
 given monitor:</p>
 <ol class="arabic simple">
-<li>Stream: Device Cloud supports a protocol over TCP (optionally with SSL) over which
-the batches of events will be sent when they are received.</li>
-<li>HTTP: When batches of events are received, a configured web
-service endpoint will received a POST request with the new data.</li>
+<li><p>Stream: Device Cloud supports a protocol over TCP (optionally with SSL) over which
+the batches of events will be sent when they are received.</p></li>
+<li><p>HTTP: When batches of events are received, a configured web
+service endpoint will received a POST request with the new data.</p></li>
 </ol>
 <p>Currently, this library supports setting up both types of monitors, but there
 is no special support provided for parsing HTTP postback requests.</p>
@@ -384,62 +386,54 @@ with a data structure like this one:</p>
                         <span class="s1">&#39;topic&#39;</span><span class="p">:</span> <span class="s1">&#39;7603/DataPoint/test&#39;</span><span class="p">}}}</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.MonitorAPI.create_tcp_monitor">
-<code class="descname">create_tcp_monitor</code><span class="sig-paren">(</span><em>topics</em>, <em>batch_size=1</em>, <em>batch_duration=0</em>, <em>compression='gzip'</em>, <em>format_type='json'</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.create_tcp_monitor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_tcp_monitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topics</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batch_duration</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">compression</span><span class="o">=</span><span class="default_value">'gzip'</span></em>, <em class="sig-param"><span class="n">format_type</span><span class="o">=</span><span class="default_value">'json'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.create_tcp_monitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a TCP Monitor instance in Device Cloud for a given list of topics</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>topics</strong> – a string list of topics (e.g. [‘DeviceCore[U]’,
-‘FileDataCore’]).</li>
-<li><strong>batch_size</strong> – How many Msgs received before sending data.</li>
-<li><strong>batch_duration</strong> – How long to wait before sending batch if it
-does not exceed batch_size.</li>
-<li><strong>compression</strong> – Compression value (i.e. ‘gzip’).</li>
-<li><strong>format_type</strong> – What format server should send data in (i.e. ‘xml’ or ‘json’).</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topics</strong> – a string list of topics (e.g. [‘DeviceCore[U]’,
+‘FileDataCore’]).</p></li>
+<li><p><strong>batch_size</strong> – How many Msgs received before sending data.</p></li>
+<li><p><strong>batch_duration</strong> – How long to wait before sending batch if it
+does not exceed batch_size.</p></li>
+<li><p><strong>compression</strong> – Compression value (i.e. ‘gzip’).</p></li>
+<li><p><strong>format_type</strong> – What format server should send data in (i.e. ‘xml’ or ‘json’).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Returns an object of the created Monitor</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.MonitorAPI.create_http_monitor">
-<code class="descname">create_http_monitor</code><span class="sig-paren">(</span><em>topics</em>, <em>transport_url</em>, <em>transport_token=None</em>, <em>transport_method='PUT'</em>, <em>connect_timeout=0</em>, <em>response_timeout=0</em>, <em>batch_size=1</em>, <em>batch_duration=0</em>, <em>compression='none'</em>, <em>format_type='json'</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.create_http_monitor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_http_monitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topics</span></em>, <em class="sig-param"><span class="n">transport_url</span></em>, <em class="sig-param"><span class="n">transport_token</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">transport_method</span><span class="o">=</span><span class="default_value">'PUT'</span></em>, <em class="sig-param"><span class="n">connect_timeout</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">response_timeout</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">batch_duration</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">compression</span><span class="o">=</span><span class="default_value">'none'</span></em>, <em class="sig-param"><span class="n">format_type</span><span class="o">=</span><span class="default_value">'json'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.create_http_monitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a HTTP Monitor instance in Device Cloud for a given list of topics</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>topics</strong> – a string list of topics (e.g. [‘DeviceCore[U]’,
-‘FileDataCore’]).</li>
-<li><strong>transport_url</strong> – URL of the customer web server.</li>
-<li><strong>transport_token</strong> – Credentials for basic authentication in the following format: username:password</li>
-<li><strong>transport_method</strong> – HTTP method to use for sending data: PUT or POST. The default is PUT.</li>
-<li><strong>connect_timeout</strong> – A value of 0 means use the system default of 5000 (5 seconds).</li>
-<li><strong>response_timeout</strong> – A value of 0 means use the system default of 5000 (5 seconds).</li>
-<li><strong>batch_size</strong> – How many Msgs received before sending data.</li>
-<li><strong>batch_duration</strong> – How long to wait before sending batch if it
-does not exceed batch_size.</li>
-<li><strong>compression</strong> – Compression value (i.e. ‘gzip’).</li>
-<li><strong>format_type</strong> – What format server should send data in (i.e. ‘xml’ or ‘json’).</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topics</strong> – a string list of topics (e.g. [‘DeviceCore[U]’,
+‘FileDataCore’]).</p></li>
+<li><p><strong>transport_url</strong> – URL of the customer web server.</p></li>
+<li><p><strong>transport_token</strong> – Credentials for basic authentication in the following format: username:password</p></li>
+<li><p><strong>transport_method</strong> – HTTP method to use for sending data: PUT or POST. The default is PUT.</p></li>
+<li><p><strong>connect_timeout</strong> – A value of 0 means use the system default of 5000 (5 seconds).</p></li>
+<li><p><strong>response_timeout</strong> – A value of 0 means use the system default of 5000 (5 seconds).</p></li>
+<li><p><strong>batch_size</strong> – How many Msgs received before sending data.</p></li>
+<li><p><strong>batch_duration</strong> – How long to wait before sending batch if it
+does not exceed batch_size.</p></li>
+<li><p><strong>compression</strong> – Compression value (i.e. ‘gzip’).</p></li>
+<li><p><strong>format_type</strong> – What format server should send data in (i.e. ‘xml’ or ‘json’).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Returns an object of the created Monitor</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.MonitorAPI.get_monitors">
-<code class="descname">get_monitors</code><span class="sig-paren">(</span><em>condition=None</em>, <em>page_size=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.get_monitors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_monitors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">condition</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.get_monitors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator over all monitors matching the provided condition</p>
 <p>Get all inactive monitors and print id:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">mon</span> <span class="ow">in</span> <span class="n">dc</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">get_monitors</span><span class="p">(</span><span class="n">MON_STATUS_ATTR</span> <span class="o">==</span> <span class="s2">&quot;DISABLED&quot;</span><span class="p">):</span>
@@ -453,70 +447,59 @@ does not exceed batch_size.</li>
 </div>
 <p>Many other possibilities exist.  See the <code class="xref py py-mod docutils literal notranslate"><span class="pre">devicecloud.condition</span></code> documention
 for additional details on building compound expressions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>condition</strong> (<a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> or None) – An <a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> which defines the condition
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>condition</strong> (<a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> or None) – An <a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> which defines the condition
 which must be matched on the monitor that will be retrieved from
 Device Cloud. If a condition is unspecified, an iterator over
-all monitors for this account will be returned.</li>
-<li><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of results to fetch in a single page.</li>
+all monitors for this account will be returned.</p></li>
+<li><p><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of results to fetch in a single page.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Generator yielding <a class="reference internal" href="#devicecloud.monitor.DeviceCloudMonitor" title="devicecloud.monitor.DeviceCloudMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCloudMonitor</span></code></a> instances matching the
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Generator yielding <a class="reference internal" href="#devicecloud.monitor.DeviceCloudMonitor" title="devicecloud.monitor.DeviceCloudMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCloudMonitor</span></code></a> instances matching the
 provided conditions.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.MonitorAPI.get_monitor">
-<code class="descname">get_monitor</code><span class="sig-paren">(</span><em>topics</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.get_monitor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_monitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topics</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.get_monitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attempts to find a Monitor in device cloud that matches the provided topics</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topics</strong> – a string list of topics (e.g. <code class="docutils literal notranslate"><span class="pre">['DeviceCore[U]',</span> <span class="pre">'FileDataCore'])</span></code>)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>topics</strong> – a string list of topics (e.g. <code class="docutils literal notranslate"><span class="pre">['DeviceCore[U]',</span> <span class="pre">'FileDataCore'])</span></code>)</p>
+</dd>
+</dl>
 <p>Returns a <a class="reference internal" href="#devicecloud.monitor.DeviceCloudMonitor" title="devicecloud.monitor.DeviceCloudMonitor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCloudMonitor</span></code></a> if found, otherwise None.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.MonitorAPI.stop_listeners">
-<code class="descname">stop_listeners</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.stop_listeners" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stop_listeners</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.MonitorAPI.stop_listeners" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop any listener threads that may be running and join on them</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor.DeviceCloudMonitor">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor.</code><code class="descname">DeviceCloudMonitor</code><span class="sig-paren">(</span><em>conn</em>, <em>monitor_id</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">DeviceCloudMonitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">monitor_id</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides access to a single monitor instance on Device Cloud</p>
 <p>This is a base class that should not be instantiated directly.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-</tbody>
-</table>
-<dl class="method">
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
 <dt id="devicecloud.monitor.DeviceCloudMonitor.get_id">
-<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor.get_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor.get_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the ID of this monitor as an integer</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.DeviceCloudMonitor.get_metadata">
-<code class="descname">get_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor.get_metadata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor.get_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get additional information about this monitor</p>
 <p>This method returns a dictionary where the keys contain information about the
 monitor.  The returned data will look something like this:</p>
@@ -535,61 +518,61 @@ monitor.  The returned data will look something like this:</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.DeviceCloudMonitor.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.DeviceCloudMonitor.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this monitor form Device Cloud</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor.HTTPDeviceCloudMonitor">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor.</code><code class="descname">HTTPDeviceCloudMonitor</code><span class="sig-paren">(</span><em>conn</em>, <em>monitor_id</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.HTTPDeviceCloudMonitor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">HTTPDeviceCloudMonitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">monitor_id</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.HTTPDeviceCloudMonitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Device Cloud Monitor with HTTP transport type</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor.TCPDeviceCloudMonitor">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor.</code><code class="descname">TCPDeviceCloudMonitor</code><span class="sig-paren">(</span><em>conn</em>, <em>monitor_id</em>, <em>tcp_client_manager</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.TCPDeviceCloudMonitor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor.</code><code class="sig-name descname">TCPDeviceCloudMonitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">monitor_id</span></em>, <em class="sig-param"><span class="n">tcp_client_manager</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.TCPDeviceCloudMonitor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Device Cloud Monitor with TCP transport type</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor.TCPDeviceCloudMonitor.add_callback">
-<code class="descname">add_callback</code><span class="sig-paren">(</span><em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.TCPDeviceCloudMonitor.add_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor.TCPDeviceCloudMonitor.add_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a secure SSL/TCP listen session to Device Cloud</p>
 </dd></dl>
 
 </dd></dl>
 
-<span class="target" id="module-devicecloud.monitor_tcp"></span><dl class="exception">
+<span class="target" id="module-devicecloud.monitor_tcp"></span><dl class="py exception">
 <dt id="devicecloud.monitor_tcp.PushException">
-<em class="property">exception </em><code class="descclassname">devicecloud.monitor_tcp.</code><code class="descname">PushException</code><a class="headerlink" href="#devicecloud.monitor_tcp.PushException" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.monitor_tcp.</code><code class="sig-name descname">PushException</code><a class="headerlink" href="#devicecloud.monitor_tcp.PushException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicates an issue interacting with Push Functionality.</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor_tcp.PushSession">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor_tcp.</code><code class="descname">PushSession</code><span class="sig-paren">(</span><em>callback</em>, <em>monitor_id</em>, <em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor_tcp.</code><code class="sig-name descname">PushSession</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em>, <em class="sig-param"><span class="n">monitor_id</span></em>, <em class="sig-param"><span class="n">client</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession" title="Permalink to this definition">¶</a></dt>
 <dd><p>A PushSession is responsible for establishing a socket connection
 with iDigi to receive events generated by Devices connected to
 iDigi.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.PushSession.send_connection_request">
-<code class="descname">send_connection_request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession.send_connection_request" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">send_connection_request</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession.send_connection_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sends a ConnectionRequest to the iDigi server using the credentials
 established with the id of the monitor as defined in the monitor
 member.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.PushSession.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession.start" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a TCP connection to Device Cloud and sends a ConnectionRequest message</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.PushSession.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession.stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.PushSession.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop/Close this session</p>
 <p>Close the socket associated with this session and puts Session
 into a state such that it can be re-established later.</p>
@@ -597,80 +580,72 @@ into a state such that it can be re-established later.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor_tcp.SecurePushSession">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor_tcp.</code><code class="descname">SecurePushSession</code><span class="sig-paren">(</span><em>callback</em>, <em>monitor_id</em>, <em>client</em>, <em>ca_certs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.SecurePushSession" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor_tcp.</code><code class="sig-name descname">SecurePushSession</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em>, <em class="sig-param"><span class="n">monitor_id</span></em>, <em class="sig-param"><span class="n">client</span></em>, <em class="sig-param"><span class="n">ca_certs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.SecurePushSession" title="Permalink to this definition">¶</a></dt>
 <dd><p>SecurePushSession extends PushSession by wrapping the socket connection
 in SSL.  It expects the certificate to match any of those in the passed
 in ca_certs member file.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.SecurePushSession.start">
-<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.SecurePushSession.start" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.SecurePushSession.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a SSL connection to the iDigi Server and sends a
 ConnectionRequest message.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor_tcp.CallbackWorkerPool">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor_tcp.</code><code class="descname">CallbackWorkerPool</code><span class="sig-paren">(</span><em>write_queue=None</em>, <em>size=1</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.CallbackWorkerPool" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor_tcp.</code><code class="sig-name descname">CallbackWorkerPool</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">write_queue</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">size</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.CallbackWorkerPool" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Worker Pool implementation that creates a number of predefined threads
 used for invoking Session callbacks.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.CallbackWorkerPool.queue_callback">
-<code class="descname">queue_callback</code><span class="sig-paren">(</span><em>session</em>, <em>block_id</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.CallbackWorkerPool.queue_callback" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">queue_callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">session</span></em>, <em class="sig-param"><span class="n">block_id</span></em>, <em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.CallbackWorkerPool.queue_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Queues up a callback event to occur for a session with the given
 payload data.  Will block if the queue is full.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> – the session with a defined callback function to call.</li>
-<li><strong>block_id</strong> – the block_id of the message received.</li>
-<li><strong>data</strong> – the data payload of the message received.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – the session with a defined callback function to call.</p></li>
+<li><p><strong>block_id</strong> – the block_id of the message received.</p></li>
+<li><p><strong>data</strong> – the data payload of the message received.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.monitor_tcp.TCPClientManager">
-<em class="property">class </em><code class="descclassname">devicecloud.monitor_tcp.</code><code class="descname">TCPClientManager</code><span class="sig-paren">(</span><em>conn</em>, <em>secure=True</em>, <em>ca_certs=None</em>, <em>workers=1</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.TCPClientManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.monitor_tcp.</code><code class="sig-name descname">TCPClientManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">secure</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ca_certs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">workers</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.TCPClientManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Client for the ‘Push’ feature in Device Cloud</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.TCPClientManager.create_session">
-<code class="descname">create_session</code><span class="sig-paren">(</span><em>callback</em>, <em>monitor_id</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.TCPClientManager.create_session" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">callback</span></em>, <em class="sig-param"><span class="n">monitor_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.TCPClientManager.create_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates and Returns a PushSession instance based on the input monitor
 and callback.  When data is received, callback will be invoked.
 If neither monitor or monitor_id are specified, throws an Exception.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>callback</strong> – Callback function to call when PublishMessage
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callback</strong> – Callback function to call when PublishMessage
 messages are received. Expects 1 argument which will contain the
 payload of the pushed message.  Additionally, expects
 function to return True if callback was able to process
-the message, False or None otherwise.</li>
-<li><strong>monitor_id</strong> – The id of the Monitor, will be queried
-to understand parameters of the monitor.</li>
+the message, False or None otherwise.</p></li>
+<li><p><strong>monitor_id</strong> – The id of the Monitor, will be queried
+to understand parameters of the monitor.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.monitor_tcp.TCPClientManager.stop">
-<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.TCPClientManager.stop" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.monitor_tcp.TCPClientManager.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops all session activity.</p>
 <p>Blocks until io and writer thread dies</p>
 </dd></dl>
@@ -691,7 +666,7 @@ to understand parameters of the monitor.</li>
         <a href="ws.html" class="btn btn-neutral float-right" title="Direct Web Services API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="filesystem.html" class="btn btn-neutral" title="File System Service API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="filesystem.html" class="btn btn-neutral float-left" title="File System Service API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -700,7 +675,7 @@ to understand parameters of the monitor.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015-2018, Digi International Inc..
+        &copy; Copyright 2015-2018, Digi International Inc.
 
     </p>
   </div>
@@ -717,32 +692,16 @@ to understand parameters of the monitor.</li>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.5.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SCI (Server Command Interface) API &mdash; python-devicecloud 0.5.4 documentation</title>
+  <title>SCI (Server Command Interface) API &mdash; python-devicecloud 0.5.7 documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="File System Service API" href="filesystem.html" />
     <link rel="prev" title="FileData API" href="filedata.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.7
               </div>
             
           
@@ -170,115 +172,101 @@ sending messages to devices connected to Device Cloud.</p>
 <div class="section" id="module-devicecloud.sci">
 <span id="sci-api-documentation"></span><h2>SCI API Documentation<a class="headerlink" href="#module-devicecloud.sci" title="Permalink to this headline">¶</a></h2>
 <p>Server Command Interface functionality</p>
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.TargetABC">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">TargetABC</code><a class="headerlink" href="#devicecloud.sci.TargetABC" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">TargetABC</code><a class="headerlink" href="#devicecloud.sci.TargetABC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract base class for all target types</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.DeviceTarget">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">DeviceTarget</code><span class="sig-paren">(</span><em>device_id</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.DeviceTarget" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">DeviceTarget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">device_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.DeviceTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Target a specific device</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.AllTarget">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">AllTarget</code><a class="headerlink" href="#devicecloud.sci.AllTarget" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">AllTarget</code><a class="headerlink" href="#devicecloud.sci.AllTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Target all devices</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.TagTarget">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">TagTarget</code><span class="sig-paren">(</span><em>tag</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.TagTarget" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">TagTarget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.TagTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Target devices having a specific tag</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.GroupTarget">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">GroupTarget</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.GroupTarget" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">GroupTarget</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.GroupTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Target devices in a specific group</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.AsyncRequestProxy">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">AsyncRequestProxy</code><span class="sig-paren">(</span><em>job_id</em>, <em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.AsyncRequestProxy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">AsyncRequestProxy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">job_id</span></em>, <em class="sig-param"><span class="n">conn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.AsyncRequestProxy" title="Permalink to this definition">¶</a></dt>
 <dd><p>An object representing an asynychronous SCI request.</p>
 <p>Can be used for polling the status of the corresponding request.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>job_id</strong> – the ID in device cloud of the job</li>
-<li><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException.response" title="devicecloud.DeviceCloudHttpException.response"><strong>response</strong></a> – the response to the request if completed</li>
-<li><strong>completed</strong> – True if the request has completed, False otherwise; queries on read</li>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_id</strong> – the ID in device cloud of the job</p></li>
+<li><p><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException.response" title="devicecloud.DeviceCloudHttpException.response"><strong>response</strong></a> – the response to the request if completed</p></li>
+<li><p><strong>completed</strong> – True if the request has completed, False otherwise; queries on read</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.sci.ServerCommandInterfaceAPI">
-<em class="property">class </em><code class="descclassname">devicecloud.sci.</code><code class="descname">ServerCommandInterfaceAPI</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.sci.</code><code class="sig-name descname">ServerCommandInterfaceAPI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate Server Command Interface API</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.sci.ServerCommandInterfaceAPI.get_async_job">
-<code class="descname">get_async_job</code><span class="sig-paren">(</span><em>job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.get_async_job" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_async_job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">job_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.get_async_job" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query an asynchronous SCI job by ID</p>
 <p>This is useful if the job was not created with send_sci_async().</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The job ID to query</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The SCI response from GETting the job information</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The job ID to query</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The SCI response from GETting the job information</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.sci.ServerCommandInterfaceAPI.send_sci_async">
-<code class="descname">send_sci_async</code><span class="sig-paren">(</span><em>operation</em>, <em>target</em>, <em>payload</em>, <em>**sci_options</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.send_sci_async" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">send_sci_async</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation</span></em>, <em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">payload</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">sci_options</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.send_sci_async" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send an asynchronous SCI request, and wraps the job in an object
 to manage it</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>operation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
-file_system, data_service, and reboot}</li>
-<li><strong>target</strong> (<a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> or list of <a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+file_system, data_service, and reboot}</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> or list of <a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>TODO: document other params</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.sci.ServerCommandInterfaceAPI.send_sci">
-<code class="descname">send_sci</code><span class="sig-paren">(</span><em>operation</em>, <em>target</em>, <em>payload</em>, <em>reply=None</em>, <em>synchronous=None</em>, <em>sync_timeout=None</em>, <em>cache=None</em>, <em>allow_offline=None</em>, <em>wait_for_reconnect=None</em>, <em>attribute=None</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.send_sci" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">send_sci</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">operation</span></em>, <em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">payload</span></em>, <em class="sig-param"><span class="n">reply</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">synchronous</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sync_timeout</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">allow_offline</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wait_for_reconnect</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">attribute</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.sci.ServerCommandInterfaceAPI.send_sci" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send SCI request to 1 or more targets</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>operation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
-file_system, data_service, and reboot}</li>
-<li><strong>target</strong> (<a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> or list of <a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The operation is one of {send_message, update_firmware, disconnect, query_firmware_targets,
+file_system, data_service, and reboot}</p></li>
+<li><p><strong>target</strong> (<a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> or list of <a class="reference internal" href="#devicecloud.sci.TargetABC" title="devicecloud.sci.TargetABC"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetABC</span></code></a> instances) – The device(s) to be targeted with this request</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>TODO: document other params</p>
 </dd></dl>
 
@@ -298,7 +286,7 @@ file_system, data_service, and reboot}</li>
         <a href="filesystem.html" class="btn btn-neutral float-right" title="File System Service API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="filedata.html" class="btn btn-neutral" title="FileData API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="filedata.html" class="btn btn-neutral float-left" title="FileData API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -307,7 +295,7 @@ file_system, data_service, and reboot}</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015-2018, Digi International Inc..
+        &copy; Copyright 2015-2018, Digi International Inc.
 
     </p>
   </div>
@@ -324,32 +312,16 @@ file_system, data_service, and reboot}</li>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.5.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Cookbook &mdash; python-devicecloud 0.5.4 documentation</title>
+  <title>Cookbook &mdash; python-devicecloud 0.5.7 documentation</title>
   
 
   
@@ -17,33 +17,35 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Direct Web Services API" href="ws.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -57,7 +59,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.7
               </div>
             
           
@@ -167,8 +169,8 @@
 <p>This page is meant to show complete examples for common uses of the library.
 For more granular or specific examples of API usage check out the individual API pages.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">There are also examples checked into source control under /devicecloud/examples/*_playground.py
+<p class="admonition-title">Note</p>
+<p>There are also examples checked into source control under /devicecloud/examples/*_playground.py
 which will provide additional example uses of the library.</p>
 </div>
 <p>Each example will assume an instance of <a class="reference internal" href="core.html#devicecloud.DeviceCloud" title="devicecloud.DeviceCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.DeviceCloud</span></code></a> has been
@@ -304,8 +306,8 @@ number of students who entered the classroom that hour:</p>
 <div class="section" id="device-core-groups">
 <h2>Device Core - Groups<a class="headerlink" href="#device-core-groups" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This assumes your device is provisioned.</p>
+<p class="admonition-title">Note</p>
+<p>This assumes your device is provisioned.</p>
 </div>
 <p>First, get a reference to the device which you would like to add a specific group:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">devicecore</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;00:40:9D:50:B0:EA&#39;</span><span class="p">)</span>
@@ -324,8 +326,8 @@ number of students who entered the classroom that hour:</p>
 <div class="section" id="device-core-tags">
 <h2>Device Core - Tags<a class="headerlink" href="#device-core-tags" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This assumes your device is provisioned.</p>
+<p class="admonition-title">Note</p>
+<p>This assumes your device is provisioned.</p>
 </div>
 <p>Similar to Groups, get a reference to the device which you would like to add a specific group:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">devicecore</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;00:40:9D:50:B0:EA&#39;</span><span class="p">)</span>
@@ -353,7 +355,7 @@ number of students who entered the classroom that hour:</p>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="ws.html" class="btn btn-neutral" title="Direct Web Services API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ws.html" class="btn btn-neutral float-left" title="Direct Web Services API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -362,7 +364,7 @@ number of students who entered the classroom that hour:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015-2018, Digi International Inc..
+        &copy; Copyright 2015-2018, Digi International Inc.
 
     </p>
   </div>
@@ -379,32 +381,16 @@ number of students who entered the classroom that hour:</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.5.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

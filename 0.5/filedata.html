@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FileData API &mdash; python-devicecloud 0.5.4 documentation</title>
+  <title>FileData API &mdash; python-devicecloud 0.5.7 documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="SCI (Server Command Interface) API" href="sci.html" />
     <link rel="prev" title="Streams API" href="streams.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.5.4
+                0.5.7
               </div>
             
           
@@ -177,8 +179,8 @@ cloud, it is possible to use the FileData store in a number of different ways to
 various use cases.</p>
 <p>There are two main ways of thinking about the FileData store:</p>
 <ol class="arabic simple">
-<li>As hierarchical data store for temporarily storing data pushes from devices</li>
-<li>As a message queue</li>
+<li><p>As hierarchical data store for temporarily storing data pushes from devices</p></li>
+<li><p>As a message queue</p></li>
 </ol>
 <p>The usage for both scenarios is similar.  In the first case, it is likely that a web
 service will poll the FileData store for new files matching some criterion on a periodic
@@ -249,11 +251,11 @@ by a set of straightforward accessors.  Many of these are also available on
 <p>TODO: This functionality is not current active.</p>
 <p>There are three ways to create a new directory:</p>
 <ol class="arabic simple">
-<li>Create full path with <code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataAPI.make_dirs()</span></code>.  This will recursively
-create the full path specified.</li>
-<li>Write a file to a directory that does not yet exist.  If the path is valid,
-all directories should be created recursively.</li>
-<li>By calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataDirectory.add_subdirectory()</span></code></li>
+<li><p>Create full path with <code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataAPI.make_dirs()</span></code>.  This will recursively
+create the full path specified.</p></li>
+<li><p>Write a file to a directory that does not yet exist.  If the path is valid,
+all directories should be created recursively.</p></li>
+<li><p>By calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataDirectory.add_subdirectory()</span></code></p></li>
 </ol>
 <p>Different methods may suit your needs depending on your use cases.</p>
 </div>
@@ -261,9 +263,9 @@ all directories should be created recursively.</li>
 <h3>Writing a File<a class="headerlink" href="#writing-a-file" title="Permalink to this headline">¶</a></h3>
 <p>The following methods may be used to write a file:</p>
 <ol class="arabic simple">
-<li>Use <a class="reference internal" href="#devicecloud.filedata.FileDataAPI.write_file" title="devicecloud.filedata.FileDataAPI.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataAPI.write_file()</span></code></a>.  This requires a full path to be specified.</li>
-<li>Use <a class="reference internal" href="#devicecloud.filedata.FileDataDirectory.write_file" title="devicecloud.filedata.FileDataDirectory.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataDirectory.write_file()</span></code></a>.  As you already have a directory path
-in that case, you do not need to specify the path leading to the file.</li>
+<li><p>Use <a class="reference internal" href="#devicecloud.filedata.FileDataAPI.write_file" title="devicecloud.filedata.FileDataAPI.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataAPI.write_file()</span></code></a>.  This requires a full path to be specified.</p></li>
+<li><p>Use <a class="reference internal" href="#devicecloud.filedata.FileDataDirectory.write_file" title="devicecloud.filedata.FileDataDirectory.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataDirectory.write_file()</span></code></a>.  As you already have a directory path
+in that case, you do not need to specify the path leading to the file.</p></li>
 </ol>
 <p>Here’s a basic example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dc</span><span class="o">.</span><span class="n">filedata</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span>
@@ -278,8 +280,8 @@ in that case, you do not need to specify the path leading to the file.</li>
 <div class="section" id="viewing-file-history">
 <h3>Viewing File History<a class="headerlink" href="#viewing-file-history" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Support for programmatically getting history for files is not
+<p class="admonition-title">Note</p>
+<p>Support for programmatically getting history for files is not
 supported at this time.</p>
 </div>
 </div>
@@ -289,209 +291,193 @@ supported at this time.</p>
 <p>The filedata module provides function for reading, writing, and
 deleting “files” from Device Cloud FileData store.</p>
 <span class="target" id="module-devicecloud.filedata"></span><p>Provide access to Device Cloud filedata API</p>
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.filedata.FileDataAPI">
-<em class="property">class </em><code class="descclassname">devicecloud.filedata.</code><code class="descname">FileDataAPI</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.filedata.</code><code class="sig-name descname">FileDataAPI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate data and logic required to interact with Device Cloud file data store</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataAPI.get_filedata">
-<code class="descname">get_filedata</code><span class="sig-paren">(</span><em>condition=None</em>, <em>page_size=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.get_filedata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_filedata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">condition</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.get_filedata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a generator over all results matching the provided condition</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>condition</strong> (<a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> or None) – An <a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> which defines the condition
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>condition</strong> (<a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> or None) – An <a class="reference internal" href="core.html#devicecloud.conditions.Expression" title="devicecloud.conditions.Expression"><code class="xref py py-class docutils literal notranslate"><span class="pre">Expression</span></code></a> which defines the condition
 which must be matched on the filedata that will be retrieved from
 file data store. If a condition is unspecified, the following condition
 will be used <code class="docutils literal notranslate"><span class="pre">fd_path</span> <span class="pre">==</span> <span class="pre">'~/'</span></code>.  This condition will match all file
-data in this accounts “home” directory (a sensible root).</li>
-<li><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of results to fetch in a single page.  Regardless
+data in this accounts “home” directory (a sensible root).</p></li>
+<li><p><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of results to fetch in a single page.  Regardless
 of the size specified, <a class="reference internal" href="#devicecloud.filedata.FileDataAPI.get_filedata" title="devicecloud.filedata.FileDataAPI.get_filedata"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_filedata()</span></code></a> will continue to fetch pages
-and yield results until all items have been fetched.</li>
+and yield results until all items have been fetched.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Generator yielding <a class="reference internal" href="#devicecloud.filedata.FileDataObject" title="devicecloud.filedata.FileDataObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataObject</span></code></a> instances matching the
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Generator yielding <a class="reference internal" href="#devicecloud.filedata.FileDataObject" title="devicecloud.filedata.FileDataObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataObject</span></code></a> instances matching the
 provided conditions.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataAPI.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>path</em>, <em>name</em>, <em>data</em>, <em>content_type=None</em>, <em>archive=False</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.write_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">content_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">archive</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">raw</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.write_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a file to the file data store at the given path</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The path (directory) into which the file should be written.</li>
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the file to be written.</li>
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> (</em><em>Python2</em><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><em>bytes</em></a><em> (</em><em>Python3</em><em>)</em>) – The binary data that should be written into the file.</li>
-<li><strong>content_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a>) – The content type for the data being written to the file.  May
-be left unspecified.</li>
-<li><strong>archive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If true, history will be retained for various revisions of this
-file.  If this is not required, leave as false.</li>
-<li><strong>raw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If true, skip the FileData XML headers (necessary for binary files)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path (directory) into which the file should be written.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the file to be written.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> (</em><em>Python2</em><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><em>bytes</em></a><em> (</em><em>Python3</em><em>)</em>) – The binary data that should be written into the file.</p></li>
+<li><p><strong>content_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – The content type for the data being written to the file.  May
+be left unspecified.</p></li>
+<li><p><strong>archive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If true, history will be retained for various revisions of this
+file.  If this is not required, leave as false.</p></li>
+<li><p><strong>raw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If true, skip the FileData XML headers (necessary for binary files)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataAPI.delete_file">
-<code class="descname">delete_file</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.delete_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.delete_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a file or directory from the filedata store</p>
 <p>This method removes a file or directory (recursively) from
 the filedata store.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – The path of the file or directory to remove
-from the file data store.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – The path of the file or directory to remove
+from the file data store.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataAPI.walk">
-<code class="descname">walk</code><span class="sig-paren">(</span><em>root='~/'</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.walk" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">walk</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root</span><span class="o">=</span><span class="default_value">'~/'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataAPI.walk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Emulation of os.walk behavior against Device Cloud filedata store</p>
 <p>This method will yield tuples in the form <code class="docutils literal notranslate"><span class="pre">(dirpath,</span> <span class="pre">FileDataDirectory's,</span> <span class="pre">FileData's)</span></code>
 recursively in pre-order (depth first from top down).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The root path from which the search should commence.  By default, this
-is the root directory for this device cloud account (~).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Generator yielding 3-tuples of dirpath, directories, and files</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">3-tuple in form (dirpath, list of <a class="reference internal" href="#devicecloud.filedata.FileDataDirectory" title="devicecloud.filedata.FileDataDirectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataDirectory</span></code></a>, list of <a class="reference internal" href="#devicecloud.filedata.FileDataFile" title="devicecloud.filedata.FileDataFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataFile</span></code></a>)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The root path from which the search should commence.  By default, this
+is the root directory for this device cloud account (~).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Generator yielding 3-tuples of dirpath, directories, and files</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>3-tuple in form (dirpath, list of <a class="reference internal" href="#devicecloud.filedata.FileDataDirectory" title="devicecloud.filedata.FileDataDirectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataDirectory</span></code></a>, list of <a class="reference internal" href="#devicecloud.filedata.FileDataFile" title="devicecloud.filedata.FileDataFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataFile</span></code></a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.filedata.FileDataObject">
-<em class="property">class </em><code class="descclassname">devicecloud.filedata.</code><code class="descname">FileDataObject</code><span class="sig-paren">(</span><em>fdapi</em>, <em>json_data</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.filedata.</code><code class="sig-name descname">FileDataObject</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fdapi</span></em>, <em class="sig-param"><span class="n">json_data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate state and logic surrounding a “filedata” element</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this file or directory</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_data">
-<code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the data associated with this filedata object</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Data associated with this object or None if none exists</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a> (Python2)/bytes (Python3) or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Data associated with this object or None if none exists</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a> (Python2)/bytes (Python3) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_type">
-<code class="descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the type (file/directory) of this object</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_last_modified_date">
-<code class="descname">get_last_modified_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_last_modified_date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_last_modified_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_last_modified_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the last modified datetime of this object</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_content_type">
-<code class="descname">get_content_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_content_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_content_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_content_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the content type of this object (or None)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_customer_id">
-<code class="descname">get_customer_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_customer_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_customer_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_customer_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the customer ID associated with this object</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_created_date">
-<code class="descname">get_created_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_created_date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_created_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_created_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the datetime this object was created</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of this object</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_path">
-<code class="descname">get_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the path of this object</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_full_path">
-<code class="descname">get_full_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_full_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_full_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_full_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the full path (path and name) of this object</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataObject.get_size">
-<code class="descname">get_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_size" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataObject.get_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get this size of this object (will be 0 for directories)</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.filedata.FileDataDirectory">
-<em class="property">class </em><code class="descclassname">devicecloud.filedata.</code><code class="descname">FileDataDirectory</code><span class="sig-paren">(</span><em>fdapi</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataDirectory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.filedata.</code><code class="sig-name descname">FileDataDirectory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fdapi</span></em>, <em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataDirectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide access to a directory and its metadata in the filedata store</p>
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataDirectory.walk">
-<code class="descname">walk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataDirectory.walk" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">walk</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataDirectory.walk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Walk the directories and files rooted with this directory</p>
 <p>This method will yield tuples in the form <code class="docutils literal notranslate"><span class="pre">(dirpath,</span> <span class="pre">FileDataDirectory's,</span> <span class="pre">FileData's)</span></code>
 recursively in pre-order (depth first from top down).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Generator yielding 3-tuples of dirpath, directories, and files</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">3-tuple in form (dirpath, list of <a class="reference internal" href="#devicecloud.filedata.FileDataDirectory" title="devicecloud.filedata.FileDataDirectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataDirectory</span></code></a>, list of <a class="reference internal" href="#devicecloud.filedata.FileDataFile" title="devicecloud.filedata.FileDataFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataFile</span></code></a>)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Generator yielding 3-tuples of dirpath, directories, and files</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>3-tuple in form (dirpath, list of <a class="reference internal" href="#devicecloud.filedata.FileDataDirectory" title="devicecloud.filedata.FileDataDirectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataDirectory</span></code></a>, list of <a class="reference internal" href="#devicecloud.filedata.FileDataFile" title="devicecloud.filedata.FileDataFile"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataFile</span></code></a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="devicecloud.filedata.FileDataDirectory.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataDirectory.write_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataDirectory.write_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a file into this directory</p>
 <p>This method takes the same arguments as <a class="reference internal" href="#devicecloud.filedata.FileDataAPI.write_file" title="devicecloud.filedata.FileDataAPI.write_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">FileDataAPI.write_file()</span></code></a>
 with the exception of the <code class="docutils literal notranslate"><span class="pre">path</span></code> argument which is not needed here.</p>
@@ -499,9 +485,9 @@ with the exception of the <code class="docutils literal notranslate"><span class
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="devicecloud.filedata.FileDataFile">
-<em class="property">class </em><code class="descclassname">devicecloud.filedata.</code><code class="descname">FileDataFile</code><span class="sig-paren">(</span><em>fdapi</em>, <em>json_data</em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">devicecloud.filedata.</code><code class="sig-name descname">FileDataFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fdapi</span></em>, <em class="sig-param"><span class="n">json_data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.filedata.FileDataFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide access to a file and its metadata in the filedata store</p>
 </dd></dl>
 
@@ -519,7 +505,7 @@ with the exception of the <code class="docutils literal notranslate"><span class
         <a href="sci.html" class="btn btn-neutral float-right" title="SCI (Server Command Interface) API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="streams.html" class="btn btn-neutral" title="Streams API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="streams.html" class="btn btn-neutral float-left" title="Streams API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -528,7 +514,7 @@ with the exception of the <code class="docutils literal notranslate"><span class
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015-2018, Digi International Inc..
+        &copy; Copyright 2015-2018, Digi International Inc.
 
     </p>
   </div>
@@ -545,32 +531,16 @@ with the exception of the <code class="docutils literal notranslate"><span class
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.5.4',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
