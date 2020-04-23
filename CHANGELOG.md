@@ -1,5 +1,37 @@
 ## Python Devicecloud Library Changelog
 
+### 0.5.7 / 2020-04-22
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.6...0.5.7)
+
+Enhancement:
+
+* update requests dependency to 2.20
+* update other dependecies to "compatible" versions on install
+
+
+### 0.5.6 / 2019-07-24
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.5...0.5.6)
+
+Enhancement:
+
+* core: update package long description
+
+### 0.5.5 / 2019-07-23
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.4...0.5.5)
+
+Enhancement:
+
+* core: remove subprocess during installation (make installation Windows compatible)
+
+
+### 0.5.4 / 2019-05-22
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.3...0.5.4)
+
+Enhancement:
+
+* tests: added test for sci firmware update attributes
+
+
 ### 0.5.3 / 2018-07-24
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.1...0.5.3)
 
