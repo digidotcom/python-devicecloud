@@ -26,6 +26,7 @@ STREAM_TYPE_DOUBLE = "DOUBLE"
 STREAM_TYPE_STRING = "STRING"
 STREAM_TYPE_BINARY = "BINARY"
 STREAM_TYPE_JSON = "JSON"
+STREAM_TYPE_GEOJSON = "GEOJSON"
 STREAM_TYPE_UNKNOWN = "UNKNOWN"
 
 ROLLUP_INTERVAL_HALF = "half"
@@ -54,7 +55,8 @@ DSTREAM_TYPE_MAP = {
     STREAM_TYPE_STRING: (str, str),
     STREAM_TYPE_BINARY: (str, str),
     STREAM_TYPE_UNKNOWN: (str, str),
-    STREAM_TYPE_JSON: (json.loads, json.dumps)
+    STREAM_TYPE_JSON: (json.loads, json.dumps),
+    STREAM_TYPE_GEOJSON: (json.loads, json.dumps)
 }
 
 
