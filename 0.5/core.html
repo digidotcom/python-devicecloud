@@ -1,71 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Core API &mdash; python-devicecloud 0.5.7 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Core API &mdash; python-devicecloud 0.5.9 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="DeviceCore API" href="devicecore.html" />
     <link rel="prev" title="python-devicecloud" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> python-devicecloud
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                0.5.7
+                0.5.9
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,17 +39,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Core API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#devicecloud-core-api">DeviceCloud Core API</a></li>
@@ -100,83 +56,242 @@
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">python-devicecloud</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Core API</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/core.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="core-api">
+             
+  <section id="core-api">
 <h1>Core API<a class="headerlink" href="#core-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="devicecloud-core-api">
+<section id="devicecloud-core-api">
 <h2>DeviceCloud Core API<a class="headerlink" href="#devicecloud-core-api" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#devicecloud.DeviceCloud" title="devicecloud.DeviceCloud"><code class="xref py py-class docutils literal notranslate"><span class="pre">devicecloud.DeviceCloud</span></code></a> class contains the core interface which
 will be used by all clients using the devicecloud library.</p>
-<span class="target" id="module-devicecloud"></span><dl class="py exception">
-<dt id="devicecloud.DeviceCloudException">
-<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.</code><code class="sig-name descname">DeviceCloudException</code><a class="headerlink" href="#devicecloud.DeviceCloudException" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-devicecloud"></span><dl class="py class">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.</span></span><span class="sig-name descname"><span class="pre">DeviceCloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_delay_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_delay_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_delay_backoff_coefficient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide access to core device cloud features</p>
+<p>This class is the primary interface to Device Cloud through which access to individual
+device cloud services is provided.  Creating a <code class="docutils literal notranslate"><span class="pre">DeviceCloud</span></code> object is as easy as doing
+the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">devicecloud</span> <span class="kn">import</span> <span class="n">DeviceCloud</span>
+
+<span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">dc</span><span class="o">.</span><span class="n">has_valid_credentials</span><span class="p">():</span>
+    <span class="nb">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>From there, access to all of Device Clouds features are possible.  In some cases, methods
+for quickly performing selected actions may be provided directly via the <code class="docutils literal notranslate"><span class="pre">DeviceCloud</span></code> object
+while advanced usage requires using functionality exposed through other interfaces.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.has_valid_credentials">
+<span class="sig-name descname"><span class="pre">has_valid_credentials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.has_valid_credentials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify that Device Cloud url, username, and password are valid</p>
+<p>This method will attempt to “ping” Device Cloud in order to ensure that all
+of the provided information is correct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the credentials are valid and false if not</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.streams">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">streams</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.streams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamsAPI</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.filedata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filedata</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.filedata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataAPI</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.devicecore">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">devicecore</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.devicecore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCoreAPI</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.sci">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sci</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.sci" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerCommandInterfaceAPI</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.file_system_service">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">file_system_service</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.file_system_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="filesystem.html#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.monitor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">monitor</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.monitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <a class="reference internal" href="monitor.html#devicecloud.monitor.MonitorAPI" title="devicecloud.monitor.MonitorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorAPI</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.ws">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ws</span></span><a class="headerlink" href="#devicecloud.DeviceCloud.ws" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property providing access to the <code class="xref py py-class docutils literal notranslate"><span class="pre">WebServiceStub</span></code> with a base of <code class="docutils literal notranslate"><span class="pre">/ws</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_connection">
+<span class="sig-name descname"><span class="pre">get_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the low-level <a class="reference internal" href="#devicecloud.DeviceCloudConnection" title="devicecloud.DeviceCloudConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCloudConnection</span></code></a> for this device cloud instance</p>
+<p>This object provides a low-level interface for making authenticated requests
+to Device Cloud.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_streams_api">
+<span class="sig-name descname"><span class="pre">get_streams_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_streams_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamsAPI</span></code></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.streams" title="devicecloud.DeviceCloud.streams"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.streams</span></code></a> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Stream API object bound to this device cloud account</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamsAPI</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_filedata_api">
+<span class="sig-name descname"><span class="pre">get_filedata_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_filedata_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataAPI</span></code></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.filedata" title="devicecloud.DeviceCloud.filedata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.filedata</span></code></a> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>FileData API object bound to this device cloud account</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataAPI</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_devicecore_api">
+<span class="sig-name descname"><span class="pre">get_devicecore_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_devicecore_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCoreAPI</span></code></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.devicecore" title="devicecloud.DeviceCloud.devicecore"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.devicecore</span></code></a> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>devicecore API object bound to this device cloud account</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCoreAPI</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_sci_api">
+<span class="sig-name descname"><span class="pre">get_sci_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_sci_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerCommandInterfaceAPI</span></code></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.sci" title="devicecloud.DeviceCloud.sci"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.sci</span></code></a> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>SCI API object bound to this device cloud account</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerCommandInterfaceAPI</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_fss_api">
+<span class="sig-name descname"><span class="pre">get_fss_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_fss_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="filesystem.html#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.file_system_service" title="devicecloud.DeviceCloud.file_system_service"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.file_system_service</span></code></a> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>FSS API object bound to this device cloud account</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="filesystem.html#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_monitor_api">
+<span class="sig-name descname"><span class="pre">get_monitor_api</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_monitor_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <a class="reference internal" href="monitor.html#devicecloud.monitor.MonitorAPI" title="devicecloud.monitor.MonitorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorAPI</span></code></a> bound to this device cloud instance</p>
+<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.monitor" title="devicecloud.DeviceCloud.monitor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.monitor</span></code></a> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Monitor API object bound to this device cloud account</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="monitor.html#devicecloud.monitor.MonitorAPI" title="devicecloud.monitor.MonitorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorAPI</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloud.get_web_service_stub">
+<span class="sig-name descname"><span class="pre">get_web_service_stub</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_web_service_stub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">WebServiceStub</span></code> bound to this device cloud instance</p>
+<p>This provides access to the same API as <code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.legacy</span></code> but will create
+a new object (with a new cache) each time called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>WebServiceStub object bound to this device cloud account with a base of <code class="docutils literal notranslate"><span class="pre">/ws</span></code></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WebServiceStub</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.</span></span><span class="sig-name descname"><span class="pre">DeviceCloudException</span></span><a class="headerlink" href="#devicecloud.DeviceCloudException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for Device Cloud Exceptions</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="devicecloud.DeviceCloudHttpException">
-<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.</code><code class="sig-name descname">DeviceCloudHttpException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudHttpException" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudHttpException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.</span></span><span class="sig-name descname"><span class="pre">DeviceCloudHttpException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudHttpException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception raised when we failed a request to the DC over HTTP</p>
 <p>This exception will be raised whenever a non-success HTTP status
 code is received from Device Cloud and there is no other logic
@@ -185,9 +300,9 @@ in place for gracefully handling the error case.</p>
 cloud will respond with an error status and include additional information
 about the nature of the error in the response body.  This information
 can be accessed via the <a class="reference internal" href="#devicecloud.DeviceCloudHttpException.response" title="devicecloud.DeviceCloudHttpException.response"><code class="xref py py-attr docutils literal notranslate"><span class="pre">response</span></code></a> property.</p>
-<dl class="py method">
-<dt id="devicecloud.DeviceCloudHttpException.response">
-<em class="property">property </em><code class="sig-name descname">response</code><a class="headerlink" href="#devicecloud.DeviceCloudHttpException.response" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudHttpException.response">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">response</span></span><a class="headerlink" href="#devicecloud.DeviceCloudHttpException.response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the requests response object for the failing HTTP request</p>
 <p>This object will be an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">requests.Response</span></code> which
 in turn provides information including the content (body) of the response
@@ -204,23 +319,23 @@ and the HTTP status code:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.DeviceCloudConnection">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.</code><code class="sig-name descname">DeviceCloudConnection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">auth</span></em>, <em class="sig-param"><span class="n">base_url</span></em>, <em class="sig-param"><span class="n">throttle_retries</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">throttle_delay_init</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">throttle_delay_max</span><span class="o">=</span><span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">throttle_delay_backoff_coefficient</span><span class="o">=</span><span class="default_value">1.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.</span></span><span class="sig-name descname"><span class="pre">DeviceCloudConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_delay_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_delay_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throttle_delay_backoff_coefficient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide low-level access to Device Cloud web services</p>
 <p>This is a convenience object that provides methods that make sending requests to the
 device cloud easier.  This object is used extensively within the library but can
 also be used externally (for instance, to support an API exposed by the device
 cloud that is not currently supported in the library).</p>
 <p>This object is accessible via <a class="reference internal" href="#devicecloud.DeviceCloud.get_connection" title="devicecloud.DeviceCloud.get_connection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_connection()</span></code></a>.</p>
-<dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.hostname">
-<em class="property">property </em><code class="sig-name descname">hostname</code><a class="headerlink" href="#devicecloud.DeviceCloudConnection.hostname" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.hostname">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.hostname" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the hostname that this connection is associated with</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.iter_json_pages">
-<code class="sig-name descname">iter_json_pages</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.iter_json_pages" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.iter_json_pages">
+<span class="sig-name descname"><span class="pre">iter_json_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.iter_json_pages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator over JSON items from a paginated resource</p>
 <p>Legacy resources (prior to V1) implemented a common paging interfaces for
 several different resources.  This method handles the details of iterating
@@ -229,8 +344,8 @@ within the aggregate resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The base path to the resource being requested (e.g. /ws/Group)</p></li>
-<li><p><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of items that should be requested for each page.  A larger
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The base path to the resource being requested (e.g. /ws/Group)</p></li>
+<li><p><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of items that should be requested for each page.  A larger
 page_size may mean fewer HTTP requests but could also increase the time to get a first
 result back from Device Cloud.</p></li>
 <li><p><strong>params</strong> – These are additional query parameters that should be sent with each
@@ -241,8 +356,8 @@ request to Device Cloud.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.ping">
-<code class="sig-name descname">ping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.ping" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.ping">
+<span class="sig-name descname"><span class="pre">ping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.ping" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ping Device Cloud using the authorization provided</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -255,8 +370,8 @@ request to Device Cloud.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.get">
-<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.get" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an HTTP GET request of the specified path in Device Cloud</p>
 <p>Make an HTTP GET request against Device Cloud with this accounts
 credentials and base url.  This method uses the
@@ -266,8 +381,8 @@ and all keyword arguments will be passed on to that method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Device Cloud path to GET</p></li>
-<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of times the request should be retried if an
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Device Cloud path to GET</p></li>
+<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of times the request should be retried if an
 unsuccessful response is received.  Most likely, you should leave this at 0.</p></li>
 </ul>
 </dd>
@@ -282,8 +397,8 @@ from Device Cloud</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.get_json">
-<code class="sig-name descname">get_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.get_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.get_json">
+<span class="sig-name descname"><span class="pre">get_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.get_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an HTTP GET request with JSON headers of the specified path against Device Cloud</p>
 <p>Make an HTTP GET request against Device Cloud with this accounts
 credentials and base url.  This method uses the
@@ -295,8 +410,8 @@ JSON response from Device Cloud.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Device Cloud path to GET</p></li>
-<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of times the request should be retried if an
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Device Cloud path to GET</p></li>
+<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of times the request should be retried if an
 unsuccessful response is received.  Most likely, you should leave this at 0.</p></li>
 </ul>
 </dd>
@@ -312,8 +427,8 @@ body of the response from Device Cloud.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.post">
-<code class="sig-name descname">post</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.post" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.post" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an HTTP POST request of the specified path in Device Cloud</p>
 <p>Make an HTTP POST request against Device Cloud with this accounts
 credentials and base url.  This method uses the
@@ -323,8 +438,8 @@ and all keyword arguments will be passed on to that method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Device Cloud path to POST</p></li>
-<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of times the request should be retried if an
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Device Cloud path to POST</p></li>
+<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of times the request should be retried if an
 unsuccessful response is received.  Most likely, you should leave this at 0.</p></li>
 <li><p><strong>data</strong> – The data to be posted in the body of the POST request (see docs for
 <code class="docutils literal notranslate"><span class="pre">requests.post</span></code></p></li>
@@ -341,8 +456,8 @@ from Device Cloud</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.put">
-<code class="sig-name descname">put</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.put" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.put" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an HTTP PUT request of the specified path in Device Cloud</p>
 <p>Make an HTTP PUT request against Device Cloud with this accounts
 credentials and base url.  This method uses the
@@ -352,8 +467,8 @@ and all keyword arguments will be passed on to that method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Device Cloud path to PUT</p></li>
-<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of times the request should be retried if an
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Device Cloud path to PUT</p></li>
+<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of times the request should be retried if an
 unsuccessful response is received.  Most likely, you should leave this at 0.</p></li>
 <li><p><strong>data</strong> – The data to be posted in the body of the POST request (see docs for
 <code class="docutils literal notranslate"><span class="pre">requests.post</span></code></p></li>
@@ -370,8 +485,8 @@ from Device Cloud</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.DeviceCloudConnection.delete">
-<code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">retries</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.delete" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.DeviceCloudConnection.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloudConnection.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform an HTTP DELETE request of the specified path in Device Cloud</p>
 <p>Make an HTTP DELETE request against Device Cloud with this accounts
 credentials and base url.  This method uses the
@@ -381,8 +496,8 @@ and all keyword arguments will be passed on to that method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Device Cloud path to DELETE</p></li>
-<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of times the request should be retried if an
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Device Cloud path to DELETE</p></li>
+<li><p><strong>retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of times the request should be retried if an
 unsuccessful response is received.  Most likely, you should leave this at 0.</p></li>
 </ul>
 </dd>
@@ -398,213 +513,16 @@ from Device Cloud</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="devicecloud.DeviceCloud">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.</code><code class="sig-name descname">DeviceCloud</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">password</span></em>, <em class="sig-param"><span class="n">base_url</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">throttle_retries</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">throttle_delay_init</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">throttle_delay_max</span><span class="o">=</span><span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">throttle_delay_backoff_coefficient</span><span class="o">=</span><span class="default_value">1.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide access to core device cloud features</p>
-<p>This class is the primary interface to Device Cloud through which access to individual
-device cloud services is provided.  Creating a <code class="docutils literal notranslate"><span class="pre">DeviceCloud</span></code> object is as easy as doing
-the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">devicecloud</span> <span class="kn">import</span> <span class="n">DeviceCloud</span>
-
-<span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;pass&#39;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">dc</span><span class="o">.</span><span class="n">has_valid_credentials</span><span class="p">():</span>
-    <span class="nb">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">dc</span><span class="o">.</span><span class="n">devicecore</span><span class="o">.</span><span class="n">get_devices</span><span class="p">())</span>
-</pre></div>
-</div>
-<p>From there, access to all of Device Clouds features are possible.  In some cases, methods
-for quickly performing selected actions may be provided directly via the <code class="docutils literal notranslate"><span class="pre">DeviceCloud</span></code> object
-while advanced usage requires using functionality exposed through other interfaces.</p>
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.has_valid_credentials">
-<code class="sig-name descname">has_valid_credentials</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.has_valid_credentials" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verify that Device Cloud url, username, and password are valid</p>
-<p>This method will attempt to “ping” Device Cloud in order to ensure that all
-of the provided information is correct.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the credentials are valid and false if not</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.streams">
-<em class="property">property </em><code class="sig-name descname">streams</code><a class="headerlink" href="#devicecloud.DeviceCloud.streams" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamsAPI</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.filedata">
-<em class="property">property </em><code class="sig-name descname">filedata</code><a class="headerlink" href="#devicecloud.DeviceCloud.filedata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataAPI</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.devicecore">
-<em class="property">property </em><code class="sig-name descname">devicecore</code><a class="headerlink" href="#devicecloud.DeviceCloud.devicecore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCoreAPI</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.sci">
-<em class="property">property </em><code class="sig-name descname">sci</code><a class="headerlink" href="#devicecloud.DeviceCloud.sci" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerCommandInterfaceAPI</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.file_system_service">
-<em class="property">property </em><code class="sig-name descname">file_system_service</code><a class="headerlink" href="#devicecloud.DeviceCloud.file_system_service" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="filesystem.html#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.monitor">
-<em class="property">property </em><code class="sig-name descname">monitor</code><a class="headerlink" href="#devicecloud.DeviceCloud.monitor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <a class="reference internal" href="monitor.html#devicecloud.monitor.MonitorAPI" title="devicecloud.monitor.MonitorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorAPI</span></code></a></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.ws">
-<em class="property">property </em><code class="sig-name descname">ws</code><a class="headerlink" href="#devicecloud.DeviceCloud.ws" title="Permalink to this definition">¶</a></dt>
-<dd><p>Property providing access to the <code class="xref py py-class docutils literal notranslate"><span class="pre">WebServiceStub</span></code> with a base of <code class="docutils literal notranslate"><span class="pre">/ws</span></code></p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_connection">
-<code class="sig-name descname">get_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_connection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the low-level <a class="reference internal" href="#devicecloud.DeviceCloudConnection" title="devicecloud.DeviceCloudConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCloudConnection</span></code></a> for this device cloud instance</p>
-<p>This object provides a low-level interface for making authenticated requests
-to Device Cloud.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_streams_api">
-<code class="sig-name descname">get_streams_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_streams_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamsAPI</span></code></a> bound to this device cloud instance</p>
-<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.streams" title="devicecloud.DeviceCloud.streams"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.streams</span></code></a> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Stream API object bound to this device cloud account</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="streams.html#devicecloud.streams.StreamsAPI" title="devicecloud.streams.StreamsAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamsAPI</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_filedata_api">
-<code class="sig-name descname">get_filedata_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_filedata_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataAPI</span></code></a> bound to this device cloud instance</p>
-<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.filedata" title="devicecloud.DeviceCloud.filedata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.filedata</span></code></a> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>FileData API object bound to this device cloud account</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="filedata.html#devicecloud.filedata.FileDataAPI" title="devicecloud.filedata.FileDataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileDataAPI</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_devicecore_api">
-<code class="sig-name descname">get_devicecore_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_devicecore_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCoreAPI</span></code></a> bound to this device cloud instance</p>
-<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.devicecore" title="devicecloud.DeviceCloud.devicecore"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.devicecore</span></code></a> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>devicecore API object bound to this device cloud account</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="devicecore.html#devicecloud.devicecore.DeviceCoreAPI" title="devicecloud.devicecore.DeviceCoreAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeviceCoreAPI</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_sci_api">
-<code class="sig-name descname">get_sci_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_sci_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerCommandInterfaceAPI</span></code></a> bound to this device cloud instance</p>
-<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.sci" title="devicecloud.DeviceCloud.sci"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.sci</span></code></a> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>SCI API object bound to this device cloud account</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="sci.html#devicecloud.sci.ServerCommandInterfaceAPI" title="devicecloud.sci.ServerCommandInterfaceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerCommandInterfaceAPI</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_fss_api">
-<code class="sig-name descname">get_fss_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_fss_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="filesystem.html#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a> bound to this device cloud instance</p>
-<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.file_system_service" title="devicecloud.DeviceCloud.file_system_service"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.file_system_service</span></code></a> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>FSS API object bound to this device cloud account</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="filesystem.html#devicecloud.file_system_service.FileSystemServiceAPI" title="devicecloud.file_system_service.FileSystemServiceAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileSystemServiceAPI</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_monitor_api">
-<code class="sig-name descname">get_monitor_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_monitor_api" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <a class="reference internal" href="monitor.html#devicecloud.monitor.MonitorAPI" title="devicecloud.monitor.MonitorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorAPI</span></code></a> bound to this device cloud instance</p>
-<p>This provides access to the same API as <a class="reference internal" href="#devicecloud.DeviceCloud.monitor" title="devicecloud.DeviceCloud.monitor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.monitor</span></code></a> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Monitor API object bound to this device cloud account</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="monitor.html#devicecloud.monitor.MonitorAPI" title="devicecloud.monitor.MonitorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MonitorAPI</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="devicecloud.DeviceCloud.get_web_service_stub">
-<code class="sig-name descname">get_web_service_stub</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.DeviceCloud.get_web_service_stub" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <code class="xref py py-class docutils literal notranslate"><span class="pre">WebServiceStub</span></code> bound to this device cloud instance</p>
-<p>This provides access to the same API as <code class="xref py py-attr docutils literal notranslate"><span class="pre">DeviceCloud.legacy</span></code> but will create
-a new object (with a new cache) each time called.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>WebServiceStub object bound to this device cloud account with a base of <code class="docutils literal notranslate"><span class="pre">/ws</span></code></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">WebServiceStub</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-devicecloud.conditions">
+</section>
+<section id="module-devicecloud.conditions">
 <span id="conditions-api"></span><h2>Conditions API<a class="headerlink" href="#module-devicecloud.conditions" title="Permalink to this headline">¶</a></h2>
 <p>Module with functionality for building queries against cloud resources</p>
 <p>This functionality is somewhat poorly documented in Device Cloud documentation
 in the <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/ResourceConventions.htm#CompQueries%3FTocPath%3DDevice%20Cloud%20Programming%20Guide%7CResource%20Conventions%7C_____3">Compound Queries</a>
 section.</p>
 <dl class="py class">
-<dt id="devicecloud.conditions.Expression">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.conditions.</code><code class="sig-name descname">Expression</code><a class="headerlink" href="#devicecloud.conditions.Expression" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.conditions.Expression">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.conditions.</span></span><span class="sig-name descname"><span class="pre">Expression</span></span><a class="headerlink" href="#devicecloud.conditions.Expression" title="Permalink to this definition">¶</a></dt>
 <dd><p>A condition is an evaluable filter</p>
 <p>Examples of conditions would include the following:
 * fdType=’file’
@@ -614,87 +532,69 @@ section.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.conditions.Combination">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.conditions.</code><code class="sig-name descname">Combination</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lhs</span></em>, <em class="sig-param"><span class="n">sep</span></em>, <em class="sig-param"><span class="n">rhs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Combination" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.conditions.Combination">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.conditions.</span></span><span class="sig-name descname"><span class="pre">Combination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lhs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Combination" title="Permalink to this definition">¶</a></dt>
 <dd><p>A combination combines two expressions</p>
 <dl class="py method">
-<dt id="devicecloud.conditions.Combination.compile">
-<code class="sig-name descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Combination.compile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.conditions.Combination.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Combination.compile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compile this expression into a query string</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.conditions.Comparison">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.conditions.</code><code class="sig-name descname">Comparison</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">attribute</span></em>, <em class="sig-param"><span class="n">sep</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Comparison" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.conditions.Comparison">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.conditions.</span></span><span class="sig-name descname"><span class="pre">Comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Comparison" title="Permalink to this definition">¶</a></dt>
 <dd><p>A comparison is an expression comparing an attribute with a value using some operator</p>
 <dl class="py method">
-<dt id="devicecloud.conditions.Comparison.compile">
-<code class="sig-name descname">compile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Comparison.compile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.conditions.Comparison.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Comparison.compile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compile this expression into a query string</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.conditions.Attribute">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.conditions.</code><code class="sig-name descname">Attribute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Attribute" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.conditions.Attribute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.conditions.</span></span><span class="sig-name descname"><span class="pre">Attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.conditions.Attribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>An attribute is a piece of data on which we may perform comparisons</p>
 <p>Comparisons performed to attributes will in turn generate new
 <a class="reference internal" href="#devicecloud.conditions.Comparison" title="devicecloud.conditions.Comparison"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comparison</span></code></a> instances.</p>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="devicecore.html" class="btn btn-neutral float-right" title="DeviceCore API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="python-devicecloud" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="python-devicecloud" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="devicecore.html" class="btn btn-neutral float-right" title="DeviceCore API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2015-2018, Digi International Inc.
-
-    </p>
+    <p>&#169; Copyright 2015-2018, Digi International Inc..</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

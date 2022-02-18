@@ -1,70 +1,36 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Cookbook &mdash; python-devicecloud 0.5.7 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cookbook &mdash; python-devicecloud 0.5.9 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Direct Web Services API" href="ws.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> python-devicecloud
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                0.5.7
+                0.5.9
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,17 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a></li>
@@ -102,69 +58,31 @@
 </li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">python-devicecloud</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Cookbook</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/cookbook.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="cookbook">
+             
+  <section id="cookbook">
 <h1>Cookbook<a class="headerlink" href="#cookbook" title="Permalink to this headline">¶</a></h1>
 <p>This page is meant to show complete examples for common uses of the library.
 For more granular or specific examples of API usage check out the individual API pages.</p>
@@ -178,7 +96,7 @@ created with something like so:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dc</span> <span class="o">=</span> <span class="n">DeviceCloud</span><span class="p">(</span><span class="o">&lt;</span><span class="n">username</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="streams-creating-streams-and-data-points">
+<section id="streams-creating-streams-and-data-points">
 <h2>Streams - Creating Streams and Data Points<a class="headerlink" href="#streams-creating-streams-and-data-points" title="Permalink to this headline">¶</a></h2>
 <p>For this example, let’s create a DataStream that represents a class room.  As students
 enter the classroom there is a DataPoint representing them written to the stream.</p>
@@ -226,16 +144,16 @@ as a batch which only uses one HTTP request (up to 250 data points):</p>
 <span class="nb">print</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">most_recent_student</span><span class="o">.</span><span class="n">get_data</span><span class="p">())[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>  <span class="c1"># Prints &#39;Henry&#39;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="streams-deleting">
+</section>
+<section id="streams-deleting">
 <h2>Streams - Deleting<a class="headerlink" href="#streams-deleting" title="Permalink to this headline">¶</a></h2>
 <p>Let’s delete the classroom stream from the above example so we can start fresh in the
 next example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">classroom</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="streams-roll-up-data">
+</section>
+<section id="streams-roll-up-data">
 <h2>Streams - Roll-up Data<a class="headerlink" href="#streams-roll-up-data" title="Permalink to this headline">¶</a></h2>
 <p>Roll-up data is a way to group data points based on time intervals in which they
 were written to the cloud.  From our previous example lets figure out which students
@@ -302,8 +220,8 @@ number of students who entered the classroom that hour:</p>
  <span class="mi">23</span><span class="p">:</span> <span class="mi">11</span><span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="device-core-groups">
+</section>
+<section id="device-core-groups">
 <h2>Device Core - Groups<a class="headerlink" href="#device-core-groups" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -322,8 +240,8 @@ number of students who entered the classroom that hour:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">device</span><span class="o">.</span><span class="n">remove_from_group</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="device-core-tags">
+</section>
+<section id="device-core-tags">
 <h2>Device Core - Tags<a class="headerlink" href="#device-core-tags" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -343,54 +261,37 @@ number of students who entered the classroom that hour:</p>
 <span class="n">device</span><span class="o">.</span><span class="n">get_tags</span><span class="p">()</span>  <span class="c1"># prints [] (DC sometimes needs a second to catch up)</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="ws.html" class="btn btn-neutral float-left" title="Direct Web Services API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ws.html" class="btn btn-neutral float-left" title="Direct Web Services API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2015-2018, Digi International Inc.
-
-    </p>
+    <p>&#169; Copyright 2015-2018, Digi International Inc..</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

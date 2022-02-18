@@ -1,71 +1,37 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Streams API &mdash; python-devicecloud 0.5.7 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streams API &mdash; python-devicecloud 0.5.9 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="FileData API" href="filedata.html" />
     <link rel="prev" title="DeviceCore API" href="devicecore.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> python-devicecloud
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                0.5.7
+                0.5.9
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -73,17 +39,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="core.html">Core API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devicecore.html">DeviceCore API</a></li>
@@ -108,71 +64,33 @@
 <li class="toctree-l1"><a class="reference internal" href="cookbook.html">Cookbook</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">python-devicecloud</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Streams API</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/streams.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="streams-api">
+             
+  <section id="streams-api">
 <h1>Streams API<a class="headerlink" href="#streams-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="streams-overview">
+<section id="streams-overview">
 <h2>Streams Overview<a class="headerlink" href="#streams-overview" title="Permalink to this headline">¶</a></h2>
 <p>Data Streams on Device Cloud provide a mechanism for storing time-series
 values over a long period of time.  Each individual value in the time series
@@ -180,7 +98,7 @@ is known as a Data Point.</p>
 <p>There are a few basic operations supported by Device Cloud on streams which
 are supported by Device Cloud and this library.  Here we give examples of
 each.</p>
-<div class="section" id="listing-streams">
+<section id="listing-streams">
 <h3>Listing Streams<a class="headerlink" href="#listing-streams" title="Permalink to this headline">¶</a></h3>
 <p>Although it is not recommended for production applications, it is often useful
 when building tools to be able to fetch a list of all streams.  This can be
@@ -191,8 +109,8 @@ done by using <a class="reference internal" href="#devicecloud.streams.StreamsAP
                       <span class="n">stream</span><span class="o">.</span><span class="n">get_description</span><span class="p">())</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="creating-a-stream">
+</section>
+<section id="creating-a-stream">
 <h3>Creating a Stream<a class="headerlink" href="#creating-a-stream" title="Permalink to this headline">¶</a></h3>
 <p>Streams can be created in two ways, both of which are supported by this library.</p>
 <ol class="arabic simple">
@@ -221,8 +139,8 @@ that does not yet exist and write a datapoint to it.</p></li>
 <span class="p">))</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="getting-information-about-a-stream">
+</section>
+<section id="getting-information-about-a-stream">
 <h3>Getting Information About A Stream<a class="headerlink" href="#getting-information-about-a-stream" title="Permalink to this headline">¶</a></h3>
 <p>Whether we know a stream by id and have gotten a reference using
 <a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_stream" title="devicecloud.streams.StreamsAPI.get_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">StreamsAPI.get_stream()</span></code></a> or have discovered it using
@@ -245,79 +163,79 @@ you may need.  Here we show several of them:</p>
 default and will make a web service call to get the most recent current
 value unless <code class="docutils literal notranslate"><span class="pre">use_cached</span></code> is set to True when called.</p>
 </div>
-</div>
-<div class="section" id="deleting-a-stream">
+</section>
+<section id="deleting-a-stream">
 <h3>Deleting a Stream<a class="headerlink" href="#deleting-a-stream" title="Permalink to this headline">¶</a></h3>
 <p>Deleting a data stream is possible by calling <a class="reference internal" href="#devicecloud.streams.DataStream.delete" title="devicecloud.streams.DataStream.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DataStream.delete()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">strm</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">streams</span><span class="o">.</span><span class="n">get_stream</span><span class="p">(</span><span class="s2">&quot;doomed&quot;</span><span class="p">)</span>
 <span class="n">strm</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="updating-stream-metadata">
+</section>
+<section id="updating-stream-metadata">
 <h3>Updating Stream Metadata<a class="headerlink" href="#updating-stream-metadata" title="Permalink to this headline">¶</a></h3>
 <p>This feature is currently not supported.  Some stream information may
 be updated by writing a <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></a> and including updated
 stream info elements.</p>
-</div>
-<div class="section" id="datapoint-objects">
+</section>
+<section id="datapoint-objects">
 <h3>DataPoint objects<a class="headerlink" href="#datapoint-objects" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></a> class encapsulates all information required for
 both writing data points as well as retrieving information about data
 points stored on Device Cloud.</p>
-</div>
-</div>
-<div class="section" id="module-devicecloud.streams">
+</section>
+</section>
+<section id="module-devicecloud.streams">
 <span id="api-documentation"></span><h2>API Documentation<a class="headerlink" href="#module-devicecloud.streams" title="Permalink to this headline">¶</a></h2>
 <p>Module providing classes for interacting with device cloud data streams</p>
 <dl class="py exception">
-<dt id="devicecloud.streams.StreamException">
-<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.streams.</code><code class="sig-name descname">StreamException</code><a class="headerlink" href="#devicecloud.streams.StreamException" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.streams.</span></span><span class="sig-name descname"><span class="pre">StreamException</span></span><a class="headerlink" href="#devicecloud.streams.StreamException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for stream related exceptions</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="devicecloud.streams.NoSuchStreamException">
-<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.streams.</code><code class="sig-name descname">NoSuchStreamException</code><a class="headerlink" href="#devicecloud.streams.NoSuchStreamException" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.NoSuchStreamException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.streams.</span></span><span class="sig-name descname"><span class="pre">NoSuchStreamException</span></span><a class="headerlink" href="#devicecloud.streams.NoSuchStreamException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Failure to find a stream based on a given id</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="devicecloud.streams.InvalidRollupDatatype">
-<em class="property">exception </em><code class="sig-prename descclassname">devicecloud.streams.</code><code class="sig-name descname">InvalidRollupDatatype</code><a class="headerlink" href="#devicecloud.streams.InvalidRollupDatatype" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.InvalidRollupDatatype">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.streams.</span></span><span class="sig-name descname"><span class="pre">InvalidRollupDatatype</span></span><a class="headerlink" href="#devicecloud.streams.InvalidRollupDatatype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Roll-up’s are only valid on numerical data types</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.streams.StreamsAPI">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.streams.</code><code class="sig-name descname">StreamsAPI</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamsAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.streams.</span></span><span class="sig-name descname"><span class="pre">StreamsAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide interface for interacting with device cloud streams API</p>
 <p>For further information, see <a class="reference internal" href="#module-devicecloud.streams" title="devicecloud.streams"><code class="xref py py-mod docutils literal notranslate"><span class="pre">devicecloud.streams</span></code></a>.</p>
 <dl class="py method">
-<dt id="devicecloud.streams.StreamsAPI.create_stream">
-<code class="sig-name descname">create_stream</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream_id</span></em>, <em class="sig-param"><span class="n">data_type</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_ttl</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rollup_ttl</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">units</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.create_stream" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamsAPI.create_stream">
+<span class="sig-name descname"><span class="pre">create_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_ttl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rollup_ttl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.create_stream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new data stream on Device Cloud</p>
 <p>This method will attempt to create a new data stream on Device Cloud.
 This method will only succeed if the stream does not already exist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stream_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path/id of the stream being created on Device Cloud.</p></li>
-<li><p><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of this stream.  This must be in the set
+<li><p><strong>stream_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The path/id of the stream being created on Device Cloud.</p></li>
+<li><p><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The type of this stream.  This must be in the set
 <cite>{ INTEGER, LONG, FLOAT, DOUBLE, STRING, BINARY, UNKNOWN }</cite>.  These values are
 available in constants like <code class="xref py py-attr docutils literal notranslate"><span class="pre">STREAM_TYPE_INTEGER</span></code>.</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – An optional description of this stream. See <a class="reference internal" href="#devicecloud.streams.DataStream.get_description" title="devicecloud.streams.DataStream.get_description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_description()</span></code></a>.</p></li>
-<li><p><strong>data_ttl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The TTL for data points in this stream. See <a class="reference internal" href="#devicecloud.streams.DataStream.get_data_ttl" title="devicecloud.streams.DataStream.get_data_ttl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data_ttl()</span></code></a>.</p></li>
-<li><p><strong>rollup_ttl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The TTL for performing rollups on data. See :meth:~DataStream.get_rollup_ttl`.</p></li>
-<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Units for data in this stream.  See <a class="reference internal" href="#devicecloud.streams.DataStream.get_units" title="devicecloud.streams.DataStream.get_units"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_units()</span></code></a></p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – An optional description of this stream. See <a class="reference internal" href="#devicecloud.streams.DataStream.get_description" title="devicecloud.streams.DataStream.get_description"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_description()</span></code></a>.</p></li>
+<li><p><strong>data_ttl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The TTL for data points in this stream. See <a class="reference internal" href="#devicecloud.streams.DataStream.get_data_ttl" title="devicecloud.streams.DataStream.get_data_ttl"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_data_ttl()</span></code></a>.</p></li>
+<li><p><strong>rollup_ttl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The TTL for performing rollups on data. See :meth:~DataStream.get_rollup_ttl`.</p></li>
+<li><p><strong>units</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Units for data in this stream.  See <a class="reference internal" href="#devicecloud.streams.DataStream.get_units" title="devicecloud.streams.DataStream.get_units"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_units()</span></code></a></p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.StreamsAPI.get_streams">
-<code class="sig-name descname">get_streams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream_prefix</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_streams" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamsAPI.get_streams">
+<span class="sig-name descname"><span class="pre">get_streams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_streams" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the iterator over streams preset on device cloud.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -330,8 +248,8 @@ available in constants like <code class="xref py py-attr docutils literal notran
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.StreamsAPI.get_stream">
-<code class="sig-name descname">get_stream</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_stream" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamsAPI.get_stream">
+<span class="sig-name descname"><span class="pre">get_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_stream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a reference to a stream with the given <code class="docutils literal notranslate"><span class="pre">stream_id</span></code></p>
 <p>Note that the requested stream may not exist yet.  If this is the
 case, later calls on the stream itself may fail.  To ensure that the
@@ -343,8 +261,8 @@ return None if the stream is not already created.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if the stream_id provided is the wrong type</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if the stream_id is not properly formed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – if the stream_id provided is the wrong type</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the stream_id is not properly formed</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns</dt>
@@ -357,8 +275,8 @@ return None if the stream is not already created.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.StreamsAPI.get_stream_if_exists">
-<code class="sig-name descname">get_stream_if_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_stream_if_exists" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamsAPI.get_stream_if_exists">
+<span class="sig-name descname"><span class="pre">get_stream_if_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.get_stream_if_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a reference to a stream with the given <code class="docutils literal notranslate"><span class="pre">stream_id</span></code> if it exists</p>
 <p>This works similar to <a class="reference internal" href="#devicecloud.streams.StreamsAPI.get_stream" title="devicecloud.streams.StreamsAPI.get_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_stream()</span></code></a> but will return None if the
 stream is not already created.</p>
@@ -368,8 +286,8 @@ stream is not already created.</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if the stream_id provided is the wrong type</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if the stream_id is not properly formed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – if the stream_id provided is the wrong type</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the stream_id is not properly formed</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns</dt>
@@ -382,8 +300,8 @@ stream is not already created.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.StreamsAPI.bulk_write_datapoints">
-<code class="sig-name descname">bulk_write_datapoints</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datapoints</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.bulk_write_datapoints" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.StreamsAPI.bulk_write_datapoints">
+<span class="sig-name descname"><span class="pre">bulk_write_datapoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.StreamsAPI.bulk_write_datapoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a bulk write (or set of writes) of a collection of data points</p>
 <p>This method takes a list (or other iterable) of datapoints and writes them
 to Device Cloud in an efficient manner, minimizing the number of HTTP
@@ -409,12 +327,12 @@ consider using <a class="reference internal" href="#devicecloud.streams.DataStre
 need to make multiple calls to Device Cloud (in chunks of 250).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>datapoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – a list of datapoints to be written to Device Cloud</p>
+<dd class="field-odd"><p><strong>datapoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – a list of datapoints to be written to Device Cloud</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.8)"><strong>TypeError</strong></a> – if a list of datapoints is not provided</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if any of the provided data points do not have all required
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.10)"><strong>TypeError</strong></a> – if a list of datapoints is not provided</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if any of the provided data points do not have all required
 information (such as information about the stream)</p></li>
 <li><p><a class="reference internal" href="core.html#devicecloud.DeviceCloudHttpException" title="devicecloud.DeviceCloudHttpException"><strong>DeviceCloudHttpException</strong></a> – in the case of an unexpected error in communicating
 with Device Cloud.</p></li>
@@ -426,25 +344,25 @@ with Device Cloud.</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.streams.DataPoint">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.streams.</code><code class="sig-name descname">DataPoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">stream_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timestamp</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quality</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">units</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dp_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">customer_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">server_timestamp</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.streams.</span></span><span class="sig-name descname"><span class="pre">DataPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">customer_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server_timestamp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulate information about a single data point</p>
 <p>This class encapsulates the data required for both pushing data points to the
 device cloud as well as for storing and provding methods to access data from
 streams that has been retrieved from Device Cloud.</p>
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.from_json">
-<em class="property">classmethod </em><code class="sig-name descname">from_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream</span></em>, <em class="sig-param"><span class="n">json_data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.from_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.from_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new DataPoint object from device cloud JSON data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stream</strong> (<a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><em>DataStream</em></a>) – The <a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataStream</span></code></a> out of which this data is coming</p></li>
-<li><p><strong>json_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Deserialized JSON data from Device Cloud about this device</p></li>
+<li><p><strong>json_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Deserialized JSON data from Device Cloud about this device</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if the data is malformed</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the data is malformed</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>(<a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></a>) newly created <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></a></p>
@@ -453,18 +371,18 @@ streams that has been retrieved from Device Cloud.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.from_rollup_json">
-<em class="property">classmethod </em><code class="sig-name descname">from_rollup_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream</span></em>, <em class="sig-param"><span class="n">json_data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.from_rollup_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.from_rollup_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rollup_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.from_rollup_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rollup json data from the server looks slightly different</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stream</strong> (<a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><em>DataStream</em></a>) – The <a class="reference internal" href="#devicecloud.streams.DataStream" title="devicecloud.streams.DataStream"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataStream</span></code></a> out of which this data is coming</p></li>
-<li><p><strong>json_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Deserialized JSON data from Device Cloud about this device</p></li>
+<li><p><strong>json_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Deserialized JSON data from Device Cloud about this device</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><strong>ValueError</strong></a> – if the data is malformed</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><strong>ValueError</strong></a> – if the data is malformed</p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>(<a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></a>) newly created <a class="reference internal" href="#devicecloud.streams.DataPoint" title="devicecloud.streams.DataPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataPoint</span></code></a></p>
@@ -473,8 +391,8 @@ streams that has been retrieved from Device Cloud.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_id">
-<code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_id">
+<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the ID of this data point if available</p>
 <p>The ID will only exist for data points retrieved from the data point and should
 not be set on data points that are being created.  This value is not designed
@@ -482,76 +400,76 @@ to be set when creating data points.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_data">
-<code class="sig-name descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the actual data value associated with this data point</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_data">
-<code class="sig-name descname">set_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_data">
+<span class="sig-name descname"><span class="pre">set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the data for this data point</p>
 <p>This data may be converted upon access at a later point in time based
 on the data type of this stream (if set).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_stream_id">
-<code class="sig-name descname">get_stream_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_stream_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_stream_id">
+<span class="sig-name descname"><span class="pre">get_stream_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_stream_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the stream ID for this data point if available</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_stream_id">
-<code class="sig-name descname">set_stream_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stream_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_stream_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_stream_id">
+<span class="sig-name descname"><span class="pre">set_stream_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_stream_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the stream id associated with this data point</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_description">
-<code class="sig-name descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_description" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the description associated with this data point if available</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_description">
-<code class="sig-name descname">set_description</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">description</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_description" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_description">
+<span class="sig-name descname"><span class="pre">set_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the description for this data point</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_timestamp">
-<code class="sig-name descname">get_timestamp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_timestamp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the timestamp of this datapoint as a <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> object</p>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_timestamp">
+<span class="sig-name descname"><span class="pre">get_timestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the timestamp of this datapoint as a <a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> object</p>
 <p>This is the client assigned timestamp for this datapoint.  If this was not
 set by the client, it will be the same as the server timestamp.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_timestamp">
-<code class="sig-name descname">set_timestamp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timestamp</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_timestamp" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_timestamp">
+<span class="sig-name descname"><span class="pre">set_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_timestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the timestamp for this data point</p>
 <p>The provided value should be either None, a datetime.datetime object, or a
 string with either ISO8601 or unix timestamp form.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_server_timestamp">
-<code class="sig-name descname">get_server_timestamp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_server_timestamp" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_server_timestamp">
+<span class="sig-name descname"><span class="pre">get_server_timestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_server_timestamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the date and time at which the server received this data point</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_quality">
-<code class="sig-name descname">get_quality</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_quality" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_quality">
+<span class="sig-name descname"><span class="pre">get_quality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_quality" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the quality as an integer</p>
 <p>This is a user-defined value whose meaning (if any) could vary per stream.  May
 not always be set.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_quality">
-<code class="sig-name descname">set_quality</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">quality</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_quality" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_quality">
+<span class="sig-name descname"><span class="pre">set_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quality</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_quality" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the quality for this sample</p>
 <p>Quality is stored on Device Cloud as a 32-bit integer, so the input
 to this function should be either None, an integer, or a string that can
@@ -559,16 +477,16 @@ be converted to an integer.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_location">
-<code class="sig-name descname">get_location</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_location" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_location">
+<span class="sig-name descname"><span class="pre">get_location</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_location" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the location for this data point</p>
 <p>The location will be either None or a 3-tuple of floats in the form
 (latitude-degrees, longitude-degrees, altitude-meters).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_location">
-<code class="sig-name descname">set_location</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_location" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_location">
+<span class="sig-name descname"><span class="pre">set_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_location" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the location for this data point</p>
 <p>The location must be either None (if no location data is known) or a
 3-tuple of floating point values in the form
@@ -576,8 +494,8 @@ be converted to an integer.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_data_type">
-<code class="sig-name descname">get_data_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_data_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_data_type">
+<span class="sig-name descname"><span class="pre">get_data_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_data_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the data type for this data point</p>
 <p>The data type is associted with the stream itself but may also be
 included in data point writes.  The data type information in the point
@@ -586,8 +504,8 @@ the data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_data_type">
-<code class="sig-name descname">set_data_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_data_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_data_type">
+<span class="sig-name descname"><span class="pre">set_data_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_data_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the data type for ths data point</p>
 <p>The data type is actually associated with the stream itself and should
 not (generally) vary on a point-per-point basis.  That being said, if
@@ -598,14 +516,14 @@ include this information.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.get_units">
-<code class="sig-name descname">get_units</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_units" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.get_units">
+<span class="sig-name descname"><span class="pre">get_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.get_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the units of this datapoints stream if available</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.set_units">
-<code class="sig-name descname">set_units</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">unit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_units" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.set_units">
+<span class="sig-name descname"><span class="pre">set_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.set_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the unit for this data point</p>
 <p>Unit, as with data_type, are actually associated with the stream and not
 the individual data point.  As such, changing this within a stream is
@@ -614,8 +532,8 @@ stream might be created with the write of a data point.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataPoint.to_xml">
-<code class="sig-name descname">to_xml</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.to_xml" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataPoint.to_xml">
+<span class="sig-name descname"><span class="pre">to_xml</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataPoint.to_xml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert this datapoint into a form suitable for pushing to device cloud</p>
 <p>An XML string will be returned that will contain all pieces of information
 set on this datapoint.  Values not set (e.g. quality) will be ommitted.</p>
@@ -624,26 +542,26 @@ set on this datapoint.  Values not set (e.g. quality) will be ommitted.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="devicecloud.streams.DataStream">
-<em class="property">class </em><code class="sig-prename descclassname">devicecloud.streams.</code><code class="sig-name descname">DataStream</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">stream_id</span></em>, <em class="sig-param"><span class="n">cached_data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">devicecloud.streams.</span></span><span class="sig-name descname"><span class="pre">DataStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cached_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulation of a DataStream’s methods and attributes</p>
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_stream_id">
-<code class="sig-name descname">get_stream_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_stream_id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_stream_id">
+<span class="sig-name descname"><span class="pre">get_stream_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_stream_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the id/path of this stream</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>id/path of this stream</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_data_type">
-<code class="sig-name descname">get_data_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_cached</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_data_type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_data_type">
+<span class="sig-name descname"><span class="pre">get_data_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_data_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the data type of this stream if it exists</p>
 <p>The data type is the type of data stored in this data stream. Valid types include:</p>
 <ul class="simple">
@@ -661,44 +579,44 @@ with this type maps to a python float.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
+<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
 If True, the device will not make a request if it already has cached data.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The data type of this stream as a string</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_units">
-<code class="sig-name descname">get_units</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_cached</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_units" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_units">
+<span class="sig-name descname"><span class="pre">get_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_units" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the unit of this stream if it exists</p>
 <p>Units are a user-defined field stored as a string</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
+<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
 If True, the device will not make a request if it already has cached data.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The unit of this stream as a string</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_description">
-<code class="sig-name descname">get_description</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_cached</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_description" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the description associated with this data stream</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
+<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
 If True, the device will not make a request if it already has cached data.</p>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -711,20 +629,20 @@ If True, the device will not make a request if it already has cached data.</p>
 <dd class="field-odd"><p>The description associated with this stream</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_data_ttl">
-<code class="sig-name descname">get_data_ttl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_cached</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_data_ttl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_data_ttl">
+<span class="sig-name descname"><span class="pre">get_data_ttl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_data_ttl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the dataTTL for this stream</p>
 <p>The dataTtl is the time to live (TTL) in seconds for data points stored in the data stream.
 A data point expires after the configured amount of time and is automatically deleted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
+<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
 If True, the device will not make a request if it already has cached data.</p>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -737,21 +655,21 @@ If True, the device will not make a request if it already has cached data.</p>
 <dd class="field-odd"><p>The dataTtl associated with this stream in seconds</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_rollup_ttl">
-<code class="sig-name descname">get_rollup_ttl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_cached</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_rollup_ttl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_rollup_ttl">
+<span class="sig-name descname"><span class="pre">get_rollup_ttl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_rollup_ttl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the rollupTtl for this stream</p>
 <p>The rollupTtl is the time to live (TTL) in seconds for the aggregate roll-ups of data points
 stored in the stream. A roll-up expires after the configured amount of time and is
 automatically deleted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
+<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
 If True, the device will not make a request if it already has cached data.</p>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -764,19 +682,19 @@ If True, the device will not make a request if it already has cached data.</p>
 <dd class="field-odd"><p>The rollupTtl associated with this stream in seconds</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.get_current_value">
-<code class="sig-name descname">get_current_value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">use_cached</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_current_value" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.get_current_value">
+<span class="sig-name descname"><span class="pre">get_current_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_cached</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.get_current_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the most recent DataPoint value written to a stream</p>
 <p>The current value is the last recorded data point for this stream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
+<dd class="field-odd"><p><strong>use_cached</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If False, the function will always request the latest from Device Cloud.
 If True, the device will not make a request if it already has cached data.</p>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -795,8 +713,8 @@ If True, the device will not make a request if it already has cached data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.delete">
-<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.delete" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this stream from Device Cloud along with its history</p>
 <p>This call will return None on success and raise an exception in the event of an error
 performing the deletion.</p>
@@ -811,8 +729,8 @@ performing the deletion.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.delete_datapoint">
-<code class="sig-name descname">delete_datapoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datapoint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.delete_datapoint" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.delete_datapoint">
+<span class="sig-name descname"><span class="pre">delete_datapoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.delete_datapoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete the provided datapoint from this stream</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
@@ -822,8 +740,8 @@ performing the deletion.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.delete_datapoints_in_time_range">
-<code class="sig-name descname">delete_datapoints_in_time_range</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_dt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end_dt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.delete_datapoints_in_time_range" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.delete_datapoints_in_time_range">
+<span class="sig-name descname"><span class="pre">delete_datapoints_in_time_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.delete_datapoints_in_time_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete datapoints from this stream between the provided start and end times</p>
 <p>If neither a start or end time is specified, all data points in the stream
 will be deleted.</p>
@@ -843,8 +761,8 @@ if all data points until the current time should be deleted.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.bulk_write_datapoints">
-<code class="sig-name descname">bulk_write_datapoints</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datapoints</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.bulk_write_datapoints" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.bulk_write_datapoints">
+<span class="sig-name descname"><span class="pre">bulk_write_datapoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoints</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.bulk_write_datapoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a bulk write of a number of datapoints to this stream</p>
 <p>It is assumed that all datapoints here are to be written to this
 stream and the stream_id on each will be set by this method to
@@ -853,14 +771,14 @@ datapoints which span multiple streams, use <code class="xref py py-meth docutil
 instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>datapoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – A list of datapoints to be written into this stream</p>
+<dd class="field-odd"><p><strong>datapoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) – A list of datapoints to be written into this stream</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datapoint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.write" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write some raw data to a stream using the DataPoint API</p>
 <p>This method will mutate the datapoint provided to populate it with information
 available from the stream as it is available (but without making any new HTTP
@@ -875,8 +793,8 @@ type if it is available so that proper type conversion happens.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="devicecloud.streams.DataStream.read">
-<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end_time</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_client_timeline</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">newest_first</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">rollup_interval</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rollup_method</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timezone</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.read" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="devicecloud.streams.DataStream.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_client_timeline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newest_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rollup_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rollup_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#devicecloud.streams.DataStream.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one or more DataPoints from a stream</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -888,32 +806,32 @@ the result set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or None) – The start time for the window of data points to read.  None means
+<li><p><strong>start_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or None) – The start time for the window of data points to read.  None means
 that we should start with the oldest data available.</p></li>
-<li><p><strong>end_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or None) – The end time for the window of data points to read.  None means
+<li><p><strong>end_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> or None) – The end time for the window of data points to read.  None means
 that we should include all points received until this point in time.</p></li>
-<li><p><strong>use_client_timeline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If True, the times used will be those provided by
+<li><p><strong>use_client_timeline</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If True, the times used will be those provided by
 clients writing data points into the cloud (which also default to server time
 if the a timestamp was not included by the client).  This is usually what you
 want.  If False, the server timestamp will be used which records when the data
 point was received.</p></li>
-<li><p><strong>newest_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If True, results will be ordered from newest to oldest (descending order).
+<li><p><strong>newest_first</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If True, results will be ordered from newest to oldest (descending order).
 If False, results will be returned oldest to newest.</p></li>
-<li><p><strong>rollup_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – the roll-up interval that should be used if one is desired at all.  Rollups
+<li><p><strong>rollup_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>None</em>) – the roll-up interval that should be used if one is desired at all.  Rollups
 will not be performed if None is specified for the interval.  Valid roll-up interval values
 are None, “half”, “hourly”, “day”, “week”, and “month”.  See <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints">DataPoints documentation</a>
 for additional details on these values.</p></li>
-<li><p><strong>rollup_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – The aggregation applied to values in the points within the specified
+<li><p><strong>rollup_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>None</em>) – The aggregation applied to values in the points within the specified
 rollup_interval.  Available methods are None, “sum”, “average”, “min”, “max”, “count”, and
 “standarddev”.  See <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#DataPoints">DataPoint documentation</a>
 for additional details on these values.</p></li>
-<li><p><strong>timezone</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – timezone for calculating roll-ups. This determines roll-up interval
+<li><p><strong>timezone</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>None</em>) – timezone for calculating roll-ups. This determines roll-up interval
 boundaries and only applies to roll-ups of a day or larger (for example, day,
 week, or month). Note that it does not apply to the startTime and endTime parameters.
 See the <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#timestamp">Timestamps</a>
 and <a class="reference external" href="http://ftp1.digi.com/support/documentation/html/90002008/90002008_P/Default.htm#ProgrammingTopics/DataStreams.htm#TimeZones">Supported Time Zones</a>
 sections for more information.</p></li>
-<li><p><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of results that we should attempt to retrieve from the
+<li><p><strong>page_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of results that we should attempt to retrieve from the
 device cloud in each page.  Generally, this can be left at its default value unless
 you have a good reason to change the parameter for performance reasons.</p></li>
 </ul>
@@ -926,56 +844,38 @@ you have a good reason to change the parameter for performance reasons.</p></li>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="filedata.html" class="btn btn-neutral float-right" title="FileData API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="devicecore.html" class="btn btn-neutral float-left" title="DeviceCore API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="devicecore.html" class="btn btn-neutral float-left" title="DeviceCore API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="filedata.html" class="btn btn-neutral float-right" title="FileData API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2015-2018, Digi International Inc.
-
-    </p>
+    <p>&#169; Copyright 2015-2018, Digi International Inc..</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
