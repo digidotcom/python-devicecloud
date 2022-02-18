@@ -1,5 +1,22 @@
 ## Python Devicecloud Library Changelog
 
+
+### 0.5.9 / 2021-02-18
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.8...0.5.9)
+
+Enhancement:
+
+* core: update other dependecies to "compatible" versions on install
+
+
+### 0.5.8 / 2021-02-17
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.7...0.5.8)
+
+Enhancement:
+
+* datastreams: add "GEOJSON" format type to DataStreams
+
+
 ### 0.5.7 / 2020-04-22
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.6...0.5.7)
 
