@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Install/Upgrade Build Tools and Dependencies
-pip install --upgrade setuptools wheel
-pip install --upgrade twine
+python -m pip install --upgrade setuptools wheel
+python -m pip install --upgrade twine
 
 # Build distribution
 python setup.py sdist bdist_wheel
