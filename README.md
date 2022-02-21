@@ -3,20 +3,19 @@ Python Device Cloud Library
 
 [![Build Status](https://travis-ci.org/digidotcom/python-devicecloud.svg?branch=master)](https://travis-ci.org/digidotcom/python-devicecloud)
 [![Coverage Status](https://img.shields.io/coveralls/digidotcom/python-devicecloud.svg)](https://coveralls.io/r/digidotcom/python-devicecloud)
-[![Code Climate](https://img.shields.io/codeclimate/github/digidotcom/python-devicecloud.svg)](https://codeclimate.com/github/digidotcom/python-devicecloud)
 [![Latest Version](https://img.shields.io/pypi/v/devicecloud.svg)](https://pypi.python.org/pypi/devicecloud/)
 [![License](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/digidotcom/python-devicecloud/blob/master/LICENSE)
 
-Be sure to check out the [full documentation](http://digidotcom.github.io/python-devicecloud). A [Changelog](https://github.com/digidotcom/python-devicecloud/blob/master/CHANGELOG.md) is also available.
+Be sure to check out the [full documentation](https://digidotcom.github.io/python-devicecloud). A [Changelog](https://github.com/digidotcom/python-devicecloud/blob/master/CHANGELOG.md) is also available.
 
 Overview
 --------
 
-Python-devicecloud is a library providing simple, intuitive access to [Digi Device Cloud(sm)](http://www.digi.com/products/cloud/digi-device-cloud) for clients written in Python.
+Python-devicecloud is a library providing simple, intuitive access to [Digi Device Cloud(sm)](https://www.digi.com/products/cloud/digi-device-cloud) for clients written in Python.
 
-The library wraps Device Cloud's REST API and hides the details of forming HTTP requests in order to gain access to device information, file data, streams, and other features of Device Cloud. The API can be found [here](http://ftp1.digi.com/support/documentation/90002008_redirect.htm).
+The library wraps Device Cloud's REST API and hides the details of forming HTTP requests in order to gain access to device information, file data, streams, and other features of Device Cloud. The API can be found [here](https://ftp1.digi.com/support/documentation/90002008_redirect.htm).
 
-The primary target audience for this library is individuals interfacing with Device Cloud from the server side or developers writing tools to aid device development. For efficient connectivity from devices, we suggest that you first look at using the [Device Cloud Connector](http://www.digi.com/support/productdetail?pid=5575). That being said, this library could also be used on devices if deemed suitable.
+The primary target audience for this library is individuals interfacing with Device Cloud from the server side or developers writing tools to aid device development. For efficient connectivity from devices, we suggest that you first look at using the [Device Cloud Connector](https://www.digi.com/support/productdetail?pid=5575). That being said, this library could also be used on devices if deemed suitable.
 
 Example
 -------
@@ -126,7 +125,7 @@ This software is open-source software.
 
 Copyright (c) 2015-2018 Digi International Inc.
 
-This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one at http://mozilla.org/MPL/2.0/.
+This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one at https://mozilla.org/MPL/2.0/.
 
 Digi, Digi International, the Digi logo, the Digi website, Digi Device Cloud, Digi Remote Manager, and Digi Cloud Connector are trademarks or registered trademarks of Digi International Inc. in the United States and other countries worldwide. All other trademarks are the property of their respective owners.
 
