@@ -2,14 +2,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Copyright (c) 2015-2018 Digi International Inc.
+# Copyright (c) 2015-2025 Digi International Inc.
 
 import logging
 import time
 import json
 
 from devicecloud.util import validate_type
-from requests.auth import HTTPBasicAuth
+from requests.auth import HTTPBasicAuth, AuthBase
 import requests
 from devicecloud.version import __version__
 import six
@@ -344,21 +344,35 @@ class DeviceCloud(object):
         if dc.has_valid_credentials():
             print list(dc.devicecore.get_devices())
 
+    It's also possible to authenticate using API keys::
+
+        dc = DeviceCloud(api_key_id='my-id', api_key_secret='my-secret')
+
     From there, access to all of Device Clouds features are possible.  In some cases, methods
     for quickly performing selected actions may be provided directly via the ``DeviceCloud`` object
     while advanced usage requires using functionality exposed through other interfaces.
 
     """
 
-    def __init__(self, username, password, base_url=None,
+    def __init__(self, username=None, password=None,
+                 api_key_id=None, api_key_secret=None,
+                 base_url=None,
                  throttle_retries=DEFAULT_THROTTLE_RETRIES,
                  throttle_delay_init=DEFAULT_THROTTLE_DELAY_INIT,
                  throttle_delay_max=DEFAULT_THROTTLE_DELAY_MAX,
                  throttle_delay_backoff_coefficient=DEFAULT_THROTTLE_DELAY_BACKOFF_COEFFICIENT):
         if base_url is None:
             base_url = "https://devicecloud.digi.com"
+
+        if username and password:
+            auth = HTTPBasicAuth(username, password)
+        elif api_key_id and api_key_secret:
+            auth = ApiKeyAuth(api_key_id, api_key_secret)
+        else:
+            raise ValueError("Must provide either username/password or api_key_id/api_key_secret")
+
         self._conn = DeviceCloudConnection(
-            auth=HTTPBasicAuth(username, password),
+            auth=auth,
             base_url=base_url,
             throttle_retries=throttle_retries,
             throttle_delay_init=throttle_delay_init,
@@ -543,3 +557,16 @@ class DeviceCloud(object):
         from devicecloud.ws import WebServiceStub
 
         return WebServiceStub(self._conn, "/ws")
+
+
+class ApiKeyAuth(AuthBase):
+    """Custom Auth class for API key authentication."""
+
+    def __init__(self, api_key_id: str, api_key_secret: str):
+        self.api_key_id = api_key_id
+        self.api_key_secret = api_key_secret
+
+    def __call__(self, r):
+        r.headers["X-API-KEY-ID"] = self.api_key_id
+        r.headers["X-API-KEY-SECRET"] = self.api_key_secret
+        return r

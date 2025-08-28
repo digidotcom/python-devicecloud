@@ -47,6 +47,9 @@ quick example of what the API looks like::
 
     dc = DeviceCloud('user', 'pass')
 
+    # You can also use API keys for the authentication
+    # dc = DeviceCloud(api_key_id='my-id', api_key_secret='my-secret')
+
     # show the MAC address of all devices that are currently connected
     #
     # This is done using Device Cloud DeviceCore functionality
