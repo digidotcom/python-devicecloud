@@ -1,6 +1,15 @@
 ## Python Devicecloud Library Changelog
 
 
+### 0.5.10 / 2025-08-28
+[Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.9...0.5.10)
+
+Enhancement:
+
+* core: loosen all package versions in requirements.txt
+* core: add support for authentication using API keys
+
+
 ### 0.5.9 / 2021-02-18
 [Full Changelog](https://github.com/digidotcom/python-devicecloud/compare/0.5.8...0.5.9)
 

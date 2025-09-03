@@ -1,8 +1,6 @@
 Python Device Cloud Library
 ===========================
 
-[![Build Status](https://travis-ci.org/digidotcom/python-devicecloud.svg?branch=master)](https://travis-ci.org/digidotcom/python-devicecloud)
-[![Coverage Status](https://img.shields.io/coveralls/digidotcom/python-devicecloud.svg)](https://coveralls.io/r/digidotcom/python-devicecloud)
 [![Latest Version](https://img.shields.io/pypi/v/devicecloud.svg)](https://pypi.python.org/pypi/devicecloud/)
 [![License](https://img.shields.io/badge/license-MPL%202.0-blue.svg)](https://github.com/digidotcom/python-devicecloud/blob/master/LICENSE)
 
@@ -11,11 +9,11 @@ Be sure to check out the [full documentation](https://digidotcom.github.io/pytho
 Overview
 --------
 
-Python-devicecloud is a library providing simple, intuitive access to [Digi Device Cloud(sm)](https://www.digi.com/products/cloud/digi-device-cloud) for clients written in Python.
+Python-devicecloud is a library providing simple, intuitive access to [Digi Remote Manager](https://www.digi.com/products/iot-software-services/digi-remote-manager) for clients written in Python.
 
-The library wraps Device Cloud's REST API and hides the details of forming HTTP requests in order to gain access to device information, file data, streams, and other features of Device Cloud. The API can be found [here](https://ftp1.digi.com/support/documentation/90002008_redirect.htm).
+The library wraps Digi Remote Manager's REST API and hides the details of forming HTTP requests in order to gain access to device information, file data, streams, and other features of Digi Remote Manager. The API can be found [here](https://doc-remotemanager.digi.com/).
 
-The primary target audience for this library is individuals interfacing with Device Cloud from the server side or developers writing tools to aid device development. For efficient connectivity from devices, we suggest that you first look at using the [Device Cloud Connector](https://www.digi.com/support/productdetail?pid=5575). That being said, this library could also be used on devices if deemed suitable.
+The primary target audience for this library is individuals interfacing with Digi Remote Manager from the server side or developers writing tools to aid device development.
 
 Example
 -------
@@ -44,7 +42,7 @@ for stream in dc.streams.get_streams():
         print "%s -> %s" % (stream.get_stream_id(), stream.get_current_value())
 ```
 
-For more examples and detailed documentation, be sure to checkout out the [Full API Documentation](https://digidotcom.github.io/python-devicecloud).
+For more examples and detailed documentation, be sure to check out the [Full API Documentation](https://digidotcom.github.io/python-devicecloud).
 
 Installation
 ------------
@@ -123,7 +121,7 @@ License
 
 This software is open-source software.
 
-Copyright (c) 2015-2018 Digi International Inc.
+Copyright (c) 2015-2025 Digi International Inc.
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one at https://mozilla.org/MPL/2.0/.
 
